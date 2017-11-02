@@ -11,7 +11,7 @@ tags:
 - 安卓 SSR客户端 [下载地址](https://github.com/shadowsocksr-backup/shadowsocksr-android/releases) [备用下载地址](https://nofile.io/f/GRWw7PbADrc#1c6c32f969e7f5d9)
 <!--more-->
 ## 开始搭建
-> 搭建步骤分三步：
+> 搭建步骤分为三步：
 1.购买VPS服务器
 2.一键部署VPS服务器
 3.一键加速VPS服务器 （谷歌BBR加速，推荐）
