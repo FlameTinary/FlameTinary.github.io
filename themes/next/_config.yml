@@ -106,7 +106,7 @@ menu_icons:
 # scheme: Muse
 # scheme: Mist
 scheme: Pisces
-#scheme: Gemini
+# scheme: Gemini
 
 
 # ---------------------------------------------------------------
@@ -786,5 +786,5 @@ css: css
 js: js
 images: images
 
-# Theme version
+# Theme versionnnn
 version: 5.1.3
