@@ -4,19 +4,20 @@ date: 2017-10-01 22:30:54
 tags:
 ---
 
-## 获取SSR客户端 
+# 获取SSR客户端 
 - Windows客户端地址 [download](https://github.com/shadowsocksr-backup/shadowsocksr-csharp/releases)  [备用地址](https://nofile.io/f/6Jm7WJCyOVv/ShadowsocksR-4.7.0-win.7z) 
 - Mac客户端地址 [download](https://github.com/shadowsocksr-backup/ShadowsocksX-NG/releases) [备用地址](https://nofile.io/f/jgMWFwCBonU#ab0d3c3b6ac54482)
 - Linux客户端一键安装配置 [使用脚本](https://github.com/the0demiurge/CharlesScripts/blob/master/charles/bin/ssr) (使用方法见注释) 或者采用图形界面的[linux ssr客户端](https://github.com/erguotou520/electron-ssr/releases)
 - 安卓 SSR客户端 [下载地址](https://github.com/shadowsocksr-backup/shadowsocksr-android/releases) [备用下载地址](https://nofile.io/f/GRWw7PbADrc#1c6c32f969e7f5d9)
 <!--more-->
-## 开始搭建
+
+# 开始搭建
 > 搭建步骤分为三步：
 1.购买VPS服务器
 2.一键部署VPS服务器
 3.一键加速VPS服务器 （谷歌BBR加速，推荐）
 
-### 第一步：购买VPS服务器
+## 第一步：购买VPS服务器
 VPS服务器需要选择国外的，首选国际知名的vultr，速度不错、稳定且性价比高。
 
 vultr注册地址： http://www.vultr.com/?ref=7048874 （全球15个服务器位置可选，KVM框架）
@@ -56,7 +57,14 @@ vultr实际上是折算成小时来计费的，比如服务器是5美元1个月�
 ![img](https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B06.png)
 
 
-### 第二步：部署VPS服务器
+## 第二步：远程连接VPS服务器
+
+### Mac连接远程服务器:
+1. 打开terminal,输入`ssh root@ip地址`;`root`为远程服务器的username,`ip地址`为远程服务器的ip.
+2. 联通后,提示输入密码,然后输入服务器的密码.
+3. 开始部署ssr代码
+
+### Windows连接远程服务器:
 
 购买服务器后，需要部署一下。因为你买的是虚拟东西，而且又远在国外，我们需要一个叫Xshell的软件来远程部署。Xshell windows版下载地址：
 
@@ -65,10 +73,6 @@ vultr实际上是折算成小时来计费的，比如服务器是5美元1个月�
 [国外云盘下载](https://nofile.io/f/FQaBa7fT3dy#32cbadc45982d2f3)
 
 [百度软件中心](http://rj.baidu.com/soft/detail/15201.html?ald)
-
-如果你是苹果电脑操作系统，请自行搜索并下载能远程连接vps服务器的软件的MAC版，关键词可以这样搜索“Mac OS X 平台有哪些好用的 SSH 客户端"
-
-#### 部署教程：
 
 下载xshell软件并安装后，打开软件
 ![img](https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell11.png)
@@ -91,7 +95,9 @@ vultr实际上是折算成小时来计费的，比如服务器是5美元1个月�
 
 分享两个好用的代码，选择其中一个即可。建议两个脚本先大致都看一下功能,然后再选择。
 
-#####【第1个一键部署ssr代码】
+## 第三步: 部署ssr代码
+
+### 第1种方式:
 ```
 yum -y install wget
 
@@ -130,7 +136,7 @@ chmod +x shadowsocksR.sh
 
 下面再分享第二个脚本，这个脚本装一遍即可，方便以后想修改密码、端口什么的，而且功能更多。
 
-#####【第2个一键部署ssr代码】
+### 第2种方式:
 
 CentOS/Debian/Ubuntu ShadowsocksR单/多端口一键管理脚本：
 
@@ -197,7 +203,7 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/dou
 
 第2个脚本的演示结束。
 
-### 第三步：一键加速VPS服务器
+## 第四步：一键加速VPS服务器
 
 此加速教程为谷歌BBR加速 ，vultr的服务器可以装谷歌bbr。
 
@@ -247,7 +253,7 @@ chmod +x bbr.sh
 
 ----
 
-### 常见问题参考解决方法：
+# 常见问题参考解决方法：
 
 1、用了一段时间发现ssr账号用不了了？
 
