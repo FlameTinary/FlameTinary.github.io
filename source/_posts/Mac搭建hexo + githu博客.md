@@ -1,7 +1,12 @@
 ---
-title: Mac搭建hexo + githu博客
+title: Mac搭建hexo + github博客
 date: 2015-09-01 10:30:54
+categories:
+- Hexo
 tags:
+- Hexo
+- Mac
+
 ---
 
 # 环境配置
@@ -25,7 +30,8 @@ Hexo部署到GitHub上的文件，是.md（你的博文）转化之后的.html�
 2. 创建两个分支：`master` 与 `hexo`；
 3. 设置`hexo`为默认分支（我们只需要手动管理这个分支上的Hexo网站文件）；
 4. 使用`git clone git@github.com:FlameTinary/FlameTinary.github.io.git`拷贝仓库；
-5. 在本地`Flametinary.github.io`文件夹下通过`Git bash`依次执行`npm install hexo`、`hexo init`、`npm install` 和 `npm install hexo-deployer-git`（此时当前分支应显示为`hexo`）;
+5. 在本地`Flametinary.github.io`文件夹下通过`Git bash`依次执行`npm install -g hexo-cli
+`、`hexo init`、`npm install` 和 `npm install hexo-deployer-git`（此时当前分支应显示为`hexo`）;
 6. 修改`_config.yml`中的`deploy`参数，分支应为`master`；
 7. 依次执行`git add .`、`git commit -m “…”`、`git push origin hexo`提交网站相关的文件；
 8. 执行`hexo generate -d`生成网站并部署到GitHub上。

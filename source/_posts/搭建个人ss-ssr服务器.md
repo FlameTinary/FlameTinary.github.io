@@ -1,7 +1,11 @@
 ---
 title: 搭建个人ss-ssr服务器
 date: 2017-10-01 22:30:54
+categories:
+- 服务器
 tags:
+- ssr
+- 服务器
 ---
 
 # 获取SSR客户端 
@@ -9,6 +13,7 @@ tags:
 - Mac客户端地址 [download](https://github.com/shadowsocksr-backup/ShadowsocksX-NG/releases) [备用地址](https://nofile.io/f/jgMWFwCBonU#ab0d3c3b6ac54482)
 - Linux客户端一键安装配置 [使用脚本](https://github.com/the0demiurge/CharlesScripts/blob/master/charles/bin/ssr) (使用方法见注释) 或者采用图形界面的[linux ssr客户端](https://github.com/erguotou520/electron-ssr/releases)
 - 安卓 SSR客户端 [下载地址](https://github.com/shadowsocksr-backup/shadowsocksr-android/releases) [备用下载地址](https://nofile.io/f/GRWw7PbADrc#1c6c32f969e7f5d9)
+
 <!--more-->
 
 # 开始搭建
