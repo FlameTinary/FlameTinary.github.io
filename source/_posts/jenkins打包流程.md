@@ -2,9 +2,9 @@
 title: jenkins 打包流程
 date: 2019-08-12 15:02:02
 tags:
-- Jenkins
+- hide
 catergories:
-- iOS
+- hide
 ---
 
 ## 安装jenkins
