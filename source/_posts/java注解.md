@@ -3,8 +3,8 @@ title: java注解
 date: 2019-08-12 15:29:19
 tags:
 - hide
-catergories:
--hide
+categories:
+- hide
 ---
 ## 什么是注解
 注解，顾名思义，注解,就是对某一事物进行添加注释说明，会存放一些信息，这些信息可能对以后某个时段来说是很有用处的。

@@ -3,7 +3,7 @@ title: kvocontroller使用和解析
 date: 2019-08-12 15:27:59
 tags:
 - hide
-catergories:
+categories:
 - hide
 ---
 [facebook/KVOController](https://github.com/facebook/KVOController)是对Cocoa中KVO的封装。它提供简单、现代的API，并且是线程安全的。优点如下：

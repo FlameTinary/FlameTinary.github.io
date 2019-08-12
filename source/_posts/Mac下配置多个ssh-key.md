@@ -3,7 +3,7 @@ title: Mac下配置多个ssh-key
 date: 2019-08-12 15:02:02
 tags:
 - Mac
-catergories:
+categories:
 - iOS
 ---
 

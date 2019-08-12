@@ -3,7 +3,7 @@ title: Command Line Tools 使用
 date: 2019-08-12 15:31:06
 tags:
 - hide
-catergories:
+categories:
 - hide
 ---
 

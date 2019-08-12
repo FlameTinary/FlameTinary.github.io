@@ -3,7 +3,7 @@ title: Notification与多线程
 date: 2019-08-12 15:26:06
 tags:
 - hide
-catergories:
+categories:
 - hide
 ---
 原文：
