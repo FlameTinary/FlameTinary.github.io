@@ -6,7 +6,7 @@ categories:
 tags:
 - Hexo
 - Next
-photo: https://i.imgur.com/OE5CXF7.png
+photo: https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565606728410&di=b1442e48f92a7be8ffd64d698ac83a6b&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D888502118%2C2306802280%26fm%3D214%26gp%3D0.jpg
 ---
 > hexo安装好后，默认的主题是[landscape](https://github.com/hexojs/hexo-theme-landscape)，如果不喜欢，我们也可以进行更换。本文主要配置Next([GitHub](https://github.com/iissnan/hexo-theme-next)，[官方文档](http://theme-next.iissnan.com/))主题。
 
