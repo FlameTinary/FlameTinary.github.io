@@ -14,6 +14,8 @@ jenkins是很好用的一个自动化测试和执行代码的工具，[查看如
 
 那么，怎么使用jenkins来直接执行我们存放在GitHub中的代码呢？
 
+<!--more-->
+
 ## jenkins 创建一个任务
 ![jenkins创建任务](https://s2.ax1x.com/2019/08/13/mCdKhR.jpg)
 
