@@ -5,6 +5,7 @@ tags:
 - git
 categories:
 - git
+photo: https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565690725162&di=3eec234e3893c3d1ff4a7a3fc9b3bc1d&imgtype=0&src=http%3A%2F%2Fimage.mamicode.com%2Finfo%2F201812%2F20181205235203581870.png
 ---
 
 我们使用git有时候会有这种情况：
