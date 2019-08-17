@@ -150,28 +150,6 @@ if ([database isOpened]) {
 
 对于一个特定路径的数据库，WCDB会在所有对象对其的引用结束时，自动关闭数据库，并且回收内存和SQLite连接。因此，大多数的时候，开发者并**不需要手动关闭数据库**。
 
-##### 文件操作
-WCDB提供了删除数据库、移动数据库、获取数据库占用空间和使用路径的文件操作接口。
-
-```OBJC
-- (BOOL)removeFilesWithError:(WCTError **)error;
-- (BOOL)moveFilesToDirectory:(NSString *)directory withExtraFiles:(NSArray<NSString *> *)extraFiles andError:(WCTError **)error;
-- (NSArray<NSString *> *)getPaths;
-- (NSUInteger)getFilesSizeWithError:(WCTError **)error;
-```
-
-若是一个线程正在操作数据库，而另一个线程进行移动数据库的操作，可能会导致数据库的损坏；因此，文件操作通常放在关闭数据库后。
-
-```OBJC
-[database close:^{
-  WCTError *error = nil;
-  BOOL ret = [database moveFilesToDirectory:otherDirectory withError:&error];
-  if (!ret) {
-      NSLog(@"Move files Error %@", error);
-  }
-}];
-```
-
 #### WCTTable
 表示一个表。等价于预设了`class`和`tableName`的`WCTDatabase`，仅可以进行数据库的CRUD。
 
@@ -309,4 +287,25 @@ WCTDatabase* database1 = [[WCTDatabase alloc] initWithPath:path];
 WCTDatabase* database2 = [[WCTDatabase alloc] initWithPath:path];
 database1.tag = 1;
 NSLog(@"%d", database2.tag);//print 1
+```
+
+#### 文件操作
+WCDB提供了删除数据库、移动数据库、获取数据库占用空间和使用路径的文件操作接口。
+
+```OBJC
+- (BOOL)removeFilesWithError:(WCTError **)error;
+- (BOOL)moveFilesToDirectory:(NSString *)directory withExtraFiles:(NSArray<NSString *> *)extraFiles andError:(WCTError **)error;
+- (NSArray<NSString *> *)getPaths;
+- (NSUInteger)getFilesSizeWithError:(WCTError **)error;
+```
+若是一个线程正在操作数据库，而另一个线程进行移动数据库的操作，可能会导致数据库的损坏；因此，文件操作通常放在关闭数据库后。
+
+```OBJC
+[database close:^{
+  WCTError *error = nil;
+  BOOL ret = [database moveFilesToDirectory:otherDirectory withError:&error];
+  if (!ret) {
+      NSLog(@"Move files Error %@", error);
+  }
+}];
 ```
