@@ -35,6 +35,44 @@ WCDB覆盖了数据库使用过程中大多数的使用场景和需求；
 4. 打开workspace
 5. 引入头文件'#import <WCDB/WCDB.h>'
 
+## 使用
+
+使用WCD分为2部分：ORM和CRUD
+
+### ORM
+
+ORM的作用就是映射数据库字段和我们的数据模型；WCDB使用内置的宏来连接类、属性与表、字段。共有三类宏，分别对应数据库的字段、索引和约束。
+
+#### 字段宏
+
+字段宏以WCDB_SYNTHESIZE开头，定义了类属性与字段之间的联系。
+- `WCDB_SYNTHESIZE(className, propertyName)`是最简单的的用法，直接使用propertyName作为数据库中字段的名称。
+- `WCDB_SYNTHESIZE_COLUMN(className, propertyName, columnName)`支持自定义字段名。
+- `WCDB_SYNTHESIZE_DEFAULT(className, propertyName, defaultValue)`自定义字段默认值（可以是任意C类型或NSString, NSData, NSNumber, NSNull）。
+- `WCDB_SYNTHESIZE_COLUMN_DEFAULT(className, propertyName, cloumnName, defaultValue)`。
+[字段宏参考](https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORM.mm)
+
+#### 索引宏
+
+索引宏以WCDB_INDEX开头，定义了数据库的索引属性。支持定义索引的排序方式。
+
+- `WCDB_INDEX(className, indexSubfixName, propertyName)`是基础用法，直接指定某个字段为索引。同时，WCDB会将tableName + indexSubfixName作为该索引的名字。
+- `WCDB_INDEX_ASC(className, indexSubfixName, propertyName)`升序。
+- `WCDB_INDEX_DESC(className, indexSubfixName, propertyName)`降序。
+- `WCDB_UNIQUE_INDEX(className, indexSubfixName, propertyName)`唯一索引。
+- `WCDB_UNIQUE_INDEX_ASC(className, indexSubfixName, propertyName)`唯一索引升序排列。
+- `WCDB_UNIQUE_INDEX_DESC(className, indexSubfixName, propertyName)`唯一索引降序排列。
+
+WCDB通过`indexSubfixName`匹配多索引。相同的`indexSubfixName`会被组合为多字段索引。
+
+例如：
+
+```
+WCDB_INDEX(WCTSampleORMIndex, "_multiIndexSubfix", multiIndexPart1)
+WCDB_INDEX(WCTSampleORMIndex, "_multiIndexSubfix", multiIndexPart2)
+```
+[索引宏例子](https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORMIndex.mm)
+
 
 
 
