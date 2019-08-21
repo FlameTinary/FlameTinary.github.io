@@ -16,8 +16,8 @@ photo: https://s2.ax1x.com/2019/08/19/m3QaxU.jpg
 
 ### 布局
 
-- [Masonry](https://github.com/SnapKit/Masonry)
-- [UITableView-FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) tableview 自适应高度
+- [Masonry](https://github.com/SnapKit/Masonry) 代码布局
+- [UITableView-FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) tableview自适应高度
 
 ### 指示器
 
@@ -44,16 +44,16 @@ photo: https://s2.ax1x.com/2019/08/19/m3QaxU.jpg
 
 ### 推送
 
-- JPush
+- JPush 极光
 
 ### 分享
 
-- UMengSocial
+- UMengSocial 友盟
 
 ### 图片
 
-- [SDWebImage](https://github.com/SDWebImage/SDWebImage)
-- [MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser)
+- [SDWebImage](https://github.com/SDWebImage/SDWebImage) 图片下载和缓存
+- [MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser) 图片浏览
 - [FLAnimatedImage](https://github.com/Flipboard/FLAnimatedImage) gif动图加载
 - [SDCycleScrollView](https://github.com/gsdios/SDCycleScrollView) 轮播图
 
@@ -63,7 +63,7 @@ photo: https://s2.ax1x.com/2019/08/19/m3QaxU.jpg
 
 ### 字符串处理
 
-- [TTTAttributedLabel](https://github.com/TTTAttributedLabel/TTTAttributedLabel)
+- [TTTAttributedLabel](https://github.com/TTTAttributedLabel/TTTAttributedLabel) 富文本
 - [YYText](https://github.com/ibireme/YYText)
 
 ### 动画
@@ -78,16 +78,17 @@ photo: https://s2.ax1x.com/2019/08/19/m3QaxU.jpg
 ### 系统
 
 - Bugly
-- [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
+- [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore) 钥匙串API
 - [Reachability](https://github.com/tonymillion/Reachability) 网络情况监测
 - [CocoaLumberjack](https://github.com/CocoaLumberjack/CocoaLumberjack) Mac和iOS上一个简捷、强大、灵活的日志框架
+- [DoraemonKit](https://github.com/didi/DoraemonKit) 一款功能齐全的客户端（ iOS 、Android ）研发助手
 - [MLeaksFinder](https://github.com/Tencent/MLeaksFinder) 内存泄露
-- [SAMKeychain](https://github.com/soffes/SAMKeychain)
+- [SAMKeychain](https://github.com/soffes/SAMKeychain) 钥匙串API
 - [FLEX](https://github.com/Flipboard/FLEX) 可以在app中进行debug
 
 ## 其他
 
 - [YYKit](https://github.com/ibireme/YYKit)
-- [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)
-- [ReactiveObjC](https://github.com/ReactiveCocoa/ReactiveObjC)
+- [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager) 键盘管理
+- [ReactiveObjC](https://github.com/ReactiveCocoa/ReactiveObjC) RAC
 - [BlocksKit](https://github.com/BlocksKit/BlocksKit)
