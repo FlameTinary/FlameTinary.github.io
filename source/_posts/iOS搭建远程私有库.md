@@ -16,7 +16,7 @@ photo: https://s2.ax1x.com/2019/08/19/m3QaxU.jpg
 
 > 这个库的作用是存放索引文件
 
-## 二、将远程索引库下载到本地
+## 二、将远程索引库链接（下载）到本地
 
 ```bash
 pod repo add <仓库名> <仓库源地址（SSH地址）>
@@ -33,8 +33,8 @@ pod lib create <pod库名字>
 执行结果
 
 ```bash
-Cloning `https://github.com/CocoaPods/pod-template.git` into `ArtDB`.
-Configuring ArtDB template.
+Cloning `https://github.com/CocoaPods/pod-template.git` into `<我的pod库名称，手动马赛克>`.
+Configuring <我的pod库名称，手动马赛克> template.
 
 ------------------------------
 
@@ -61,7 +61,7 @@ Would you like to do view based testing? [ Yes / No ]
  > Yes
 
 What is your class prefix?
- > Art
+ > TY
 
 Running pod install on your new library.
 
@@ -95,8 +95,22 @@ To learn more about creating a new pod, see `https://guides.cocoapods.org/making
 
 ### 4. 提交
 
-提交代码到pod库
+提交代码到本地pod库
+
+```bash
+git add .
+git commit -m "add file"
+git remote add origin <远端pod库地址:https://gitlab.com/xxx.git>
+git push -u origin master
+```
+
 打tag并提交tag到origin
+
+```bash
+git tag 0.1.0
+git push --tags
+```
+
 验证本地spec文件是否有误
 
 ```bash
