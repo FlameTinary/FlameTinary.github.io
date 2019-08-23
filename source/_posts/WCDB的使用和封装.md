@@ -91,6 +91,8 @@ WCDB_INDEX(WCTSampleORMIndex, "_multiIndexSubfix", multiIndexPart2)
 非空约束：`WCDB_NOT_NULL(className, propertyName)`，当该字段插入数据为空时，数据库会返回错误。
 唯一约束：`WCDB_UNIQUE(className, propertyName)`，当该字段插入数据与其他列冲突时，数据库会返回错误。
 
+**注意：**使用了主键自增后，创建的模型必须设置`isAutoIncrement`为YES。
+
 ##### 表约束
 
 多主键约束以`WCDB_MULTI_PRIMARY`开头，定义了数据库的多主键，支持自定义每个主键的排序方式。
