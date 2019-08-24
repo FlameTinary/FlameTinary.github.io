@@ -128,3 +128,5 @@ pod spec lint
 ```bash
 pod repo push <索引库名称> <.podspec文件名称>  --allow-warnings --use-libraries --verbose
 ```
+
+**tip: **消除pod库警告`inhibit_all_warnings!`。
