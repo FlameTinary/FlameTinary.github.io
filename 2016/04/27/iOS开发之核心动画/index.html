@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Core Animation,中文翻译为核心动画,它是一组非常强大的动画处理API,使用它能做出非常绚丽的动画效果,而且往往事半功倍.也就是说,使用少量的代码就可以实现非常强大的功能.">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发之核心动画">
+<meta property="og:url" content="http://yoursite.com/2016/04/27/iOS开发之核心动画/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="Core Animation,中文翻译为核心动画,它是一组非常强大的动画处理API,使用它能做出非常绚丽的动画效果,而且往往事半功倍.也就是说,使用少量的代码就可以实现非常强大的功能.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-2193280/2dlyp18yyw.png?imageView2/2/w/1620">
+<meta property="og:updated_time" content="2024-02-18T09:27:10.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS开发之核心动画">
+<meta name="twitter:description" content="Core Animation,中文翻译为核心动画,它是一组非常强大的动画处理API,使用它能做出非常绚丽的动画效果,而且往往事半功倍.也就是说,使用少量的代码就可以实现非常强大的功能.">
+<meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/yehe-2193280/2dlyp18yyw.png?imageView2/2/w/1620">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/04/27/iOS开发之核心动画/">
+
+
+
+
+
+  <title>iOS开发之核心动画 | Sheldon's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/FlameTinary" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sheldon's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/27/iOS开发之核心动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sheldon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sheldon's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS开发之核心动画</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-27T12:31:08+08:00">
+                2016-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/27/iOS开发之核心动画/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2016/04/27/iOS开发之核心动画/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016/04/27/iOS开发之核心动画/" class="leancloud_visitors" data-flag-title="iOS开发之核心动画">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox" href="https://ask.qcloudimg.com/http-save/yehe-2193280/2dlyp18yyw.png?imageView2/2/w/1620" rel="gallery_clsrbi0j3002uu8zbpp7ykxeu" itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="https://ask.qcloudimg.com/http-save/yehe-2193280/2dlyp18yyw.png?imageView2/2/w/1620" itemprop="contentUrl">
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <blockquote>
+<p>Core Animation,中文翻译为核心动画,它是一组非常强大的动画处理API,使用它能做出非常绚丽的动画效果,而且往往事半功倍.也就是说,使用少量的代码就可以实现非常强大的功能.</p>
+</blockquote>
+<a id="more"></a>
+<ul>
+<li>Core Animation的动画执行过程都是在后台操作的,不会阻塞主线程</li>
+<li>Core Animation是直接作用在CALayer上的,并非UIView</li>
+</ul>
+<p><em>所以在了解Core Animation之前,先要了解什么是CALayer</em></p>
+<h2 id="CALayer"><a href="#CALayer" class="headerlink" title="CALayer"></a>CALayer</h2><blockquote>
+<p>在iOS中,你能看得见摸得着的东西基本上都是UIView,比如:按钮,文本标签等等;其实UIView之所以能显示在屏幕上,完全是因为它内部的一个图层</p>
+</blockquote>
+<ul>
+<li>在创建UIView对象时,UIView内部会自动创建一个图层(即CALayer对象),通过UIView的layer属性可以访问这个层</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">readonly</span>,<span class="keyword">retain</span>) <span class="built_in">CALayer</span> *layer; </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">- 当<span class="built_in">UIView</span>需要显示到屏幕上时，会调用drawRect:方法进行绘图，并且会将所有内容绘制在自己的图层上，绘图完毕后，系统会将图层拷贝到屏幕上，于是就完成了<span class="built_in">UIView</span>的显示;<span class="built_in">UIView</span>本身不具备显示的功能，是它内部的层才有显示功能</span><br><span class="line">- <span class="built_in">CALayer</span>的一些属性</span><br><span class="line"></span><br><span class="line">```objc</span><br><span class="line"><span class="comment">//宽度和高度</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CGRect</span> bounds;</span><br><span class="line"><span class="comment">//位置(默认指中点，具体由anchorPoint决定)</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> position;</span><br><span class="line"><span class="comment">//锚点(x,y的范围都是0-1)，决定了position的含义</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> anchorPoint;</span><br><span class="line"><span class="comment">//背景颜色(CGColorRef类型)</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CGColorRef</span> backgroundColor;</span><br><span class="line"><span class="comment">//形变属性</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CATransform3D</span> transform;</span><br><span class="line"><span class="comment">//边框颜色(CGColorRef类型)</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CGColorRef</span> borderColor;</span><br><span class="line"><span class="comment">//边框宽度</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CGFloat</span> borderWidth;</span><br><span class="line"><span class="comment">//圆角半径</span></span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">CGColorRef</span> borderColor;</span><br><span class="line"><span class="comment">//内容(比如设置为图片CGImageRef)</span></span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">retain</span>) <span class="keyword">id</span> contents;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>UIView和CALayer的选择</p>
+</blockquote>
+<p>通过CALayer，就能做出跟UIImageView一样的界面效果<br>既然CALayer和UIView都能实现相同的显示效果，那究竟该选择谁好呢？<br>其实，对比CALayer，UIView多了一个事件处理的功能。也就是说，CALayer不能处理用户的触摸事件，而UIView可以.<br>所以，如果显示出来的东西需要跟用户进行交互的话，用UIView；如果不需要跟用户进行交互，用UIView或者CALayer都可以.<br>当然，CALayer的性能会高一些，因为它少了事件处理的功能，更加轻量级.</p>
+<blockquote>
+<p>position和anchorPoint</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> position;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>用来设置CALayer在父层中的位置</li>
+</ol>
+<ul>
+<li>以父层的左上角为原点(0, 0)</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> anchorPoint;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>称为“定位点”、“锚点”</li>
+</ol>
+<ul>
+<li>决定着CALayer身上的哪个点会在position属性所指的位置</li>
+<li>以自己的左上角为原点(0, 0)</li>
+<li>它的x、y取值范围都是0~1，默认值为（0.5, 0.5）</li>
+</ul>
+<blockquote>
+<p>隐式动画</p>
+</blockquote>
+<ul>
+<li>每一个UIView内部都默认关联着一个CALayer，我们可用称这个Layer为Root Layer（根层）</li>
+<li>所有的非Root Layer，也就是手动创建的CALayer对象，都存在着隐式动画</li>
+<li>什么是隐式动画？<ul>
+<li>当对非Root Layer的部分属性进行修改时，默认会自动产生一些动画效果</li>
+<li>而这些属性称为Animatable Properties(可动画属性)</li>
+<li>列举几个常见的Animatable Properties：<ol>
+<li>bounds：用于设置CALayer的宽度和高度。修改这个属性会产生缩放动画</li>
+</ol>
+<ul>
+<li>backgroundColor：用于设置CALayer的背景色。修改这个属性会产生背景色的渐变动画</li>
+<li>position：用于设置CALayer的位置。修改这个属性会产生平移动画</li>
+</ul>
+</li>
+<li>可以通过动画事务(CATransaction)关闭默认的隐式动画效果</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="built_in">CATransaction</span> begin];</span><br><span class="line">[<span class="built_in">CATransaction</span> setDisableActions:<span class="literal">YES</span>];</span><br><span class="line"><span class="keyword">self</span>.myview.layer.position = <span class="built_in">CGPointMake</span>(<span class="number">10</span>, <span class="number">10</span>);</span><br><span class="line">[<span class="built_in">CATransaction</span> commit];</span><br></pre></td></tr></table></figure>
+<h2 id="Core-Animation"><a href="#Core-Animation" class="headerlink" title="Core Animation"></a>Core Animation</h2><p><img src="http://7xtfqf.com2.z0.glb.clouddn.com/Snip20160427_1.png" alt="Core Animation结构图"></p>
+<ul>
+<li>核心动画中所有类都遵守CAMediaTiming</li>
+<li>CAAnaimation是个抽象类，不具备动画效果，必须用它的子类才有动画效果</li>
+<li>CAAnimationGroup和CATransition才有动画效果<ul>
+<li>CAAnimationGroup是个动画组，可以同时进行缩放，旋转。</li>
+<li>CATransition是转场动画，界面之间跳转都可以用转场动画。</li>
+</ul>
+</li>
+<li>CAPropertyAnimation也是个抽象类，本身不具备动画效果，只有子类才有<ul>
+<li>CABasicAnimation和CAKeyframeAnimation<ol>
+<li>CABasicAnimation基本动画，做一些简单效果</li>
+</ol>
+<ul>
+<li>CAKeyframeAnimation帧动画，做一些连续的流畅的动画</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>开发步骤</p>
+</blockquote>
+<p><em>如果不是xcode5之后的版本，使用它需要先添QuartzCore.framework和引入对应的框架<quartzcore quartzcore.h></quartzcore></em></p>
+<ol>
+<li>首先得有CALayer</li>
+</ol>
+<ul>
+<li>初始化一个CAAnimation对象，并设置一些动画相关属性</li>
+<li>通过调用CALayer的addAnimation:forKey:方法，增加CAAnimation对象到CALayer中，这样就能开始执行动画了</li>
+<li>通过调用CALayer的removeAnimationForKey:方法可以停止CALayer中的动画</li>
+</ul>
+<h3 id="CAAnimation"><a href="#CAAnimation" class="headerlink" title="CAAnimation"></a>CAAnimation</h3><blockquote>
+<p>简介</p>
+</blockquote>
+<ul>
+<li>是所有动画对象的父类，负责控制动画的持续时间和速度，是个抽象类，不能直接使用，应该使用它具体的子类</li>
+<li>属性说明：(红色代表来自CAMediaTiming协议的属性)<ul>
+<li>duration：动画的持续时间</li>
+<li>repeatCount：重复次数，无限循环可以设置HUGE_VALF或者MAXFLOAT</li>
+<li>repeatDuration：重复时间</li>
+<li>removedOnCompletion：默认为YES，代表动画执行完毕后就从图层上移除，图形会恢复到动画执行前的状态。如果想让图层保持显示动画执行后的状态，那就设置为NO，不过还要设置fillMode为kCAFillModeForwards</li>
+<li>fillMode：决定当前对象在非active时间段的行为。比如动画开始之前或者动画结束之后</li>
+<li>beginTime：可以用来设置动画延迟执行时间，若想延迟2s，就设置为CACurrentMediaTime()+2，CACurrentMediaTime()为图层的当前时间</li>
+<li>timingFunction：速度控制函数，控制动画运行的节奏</li>
+<li>delegate：动画代理</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#pragma mark 暂停CALayer的动画</span></span><br><span class="line">-(<span class="keyword">void</span>)pauseLayer:(<span class="built_in">CALayer</span>*)layer</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">CFTimeInterval</span> pausedTime = [layer convertTime:<span class="built_in">CACurrentMediaTime</span>() fromLayer:<span class="literal">nil</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 让CALayer的时间停止走动</span></span><br><span class="line">      layer.speed = <span class="number">0.0</span>;</span><br><span class="line">    <span class="comment">// 让CALayer的时间停留在pausedTime这个时刻</span></span><br><span class="line">    layer.timeOffset = pausedTime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#pragma mark 恢复CALayer的动画</span></span><br><span class="line">-(<span class="keyword">void</span>)resumeLayer:(<span class="built_in">CALayer</span>*)layer</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">CFTimeInterval</span> pausedTime = layer.timeOffset;</span><br><span class="line">    <span class="comment">// 1. 让CALayer的时间继续行走</span></span><br><span class="line">      layer.speed = <span class="number">1.0</span>;</span><br><span class="line">    <span class="comment">// 2. 取消上次记录的停留时刻</span></span><br><span class="line">      layer.timeOffset = <span class="number">0.0</span>;</span><br><span class="line">    <span class="comment">// 3. 取消上次设置的时间</span></span><br><span class="line">      layer.beginTime = <span class="number">0.0</span>;    </span><br><span class="line">    <span class="comment">// 4. 计算暂停的时间(这里也可以用CACurrentMediaTime()-pausedTime)</span></span><br><span class="line">    <span class="built_in">CFTimeInterval</span> timeSincePause = [layer convertTime:<span class="built_in">CACurrentMediaTime</span>() fromLayer:<span class="literal">nil</span>] - pausedTime;</span><br><span class="line">    <span class="comment">// 5. 设置相对于父坐标系的开始时间(往后退timeSincePause)</span></span><br><span class="line">      layer.beginTime = timeSincePause;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>动画填充模式</p>
+</blockquote>
+<ul>
+<li>fillMode属性值（要想fillMode有效，最好设置removedOnCompletion = NO）</li>
+<li>kCAFillModeRemoved 这个是默认值，也就是说当动画开始前和动画结束后，动画对layer都没有影响，动画结束后，layer会恢复到之前的状态</li>
+<li>kCAFillModeForwards 当动画结束后，layer会一直保持着动画最后的状态 </li>
+<li>kCAFillModeBackwards 在动画开始前，只需要将动画加入了一个layer，layer便立即进入动画的初始状态并等待动画开始。</li>
+<li>kCAFillModeBoth 这个其实就是上面两个的合成.动画加入后开始之前，layer便处于动画初始状态，动画结束后layer保持动画最后的状态</li>
+</ul>
+<blockquote>
+<p>速度控制函数</p>
+</blockquote>
+<ul>
+<li>速度控制函数(CAMediaTimingFunction) <ol>
+<li>kCAMediaTimingFunctionLinear（线性）：匀速，给你一个相对静态的感觉</li>
+</ol>
+<ul>
+<li>kCAMediaTimingFunctionEaseIn（渐进）：动画缓慢进入，然后加速离开</li>
+<li>kCAMediaTimingFunctionEaseOut（渐出）：动画全速进入，然后减速的到达目的地</li>
+<li>kCAMediaTimingFunctionEaseInEaseOut（渐进渐出）：动画缓慢的进入，中间加速，然后减速的到达目的地。这个是默认的动画行为。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>动画代理方法</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSObject</span> (<span class="title">CAAnimationDelegate</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Called when the animation begins its active duration. */</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)animationDidStart:(<span class="built_in">CAAnimation</span> *)anim;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Called when the animation either completes its active duration or</span></span><br><span class="line"><span class="comment"> * is removed from the object it is attached to (i.e. the layer). 'flag'</span></span><br><span class="line"><span class="comment"> * is true if the animation reached the end of its active duration</span></span><br><span class="line"><span class="comment"> * without being removed. */</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)animationDidStop:(<span class="built_in">CAAnimation</span> *)anim finished:(<span class="built_in">BOOL</span>)flag;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-CAPropertyAnimation"><a href="#1-CAPropertyAnimation" class="headerlink" title="1. CAPropertyAnimation"></a>1. CAPropertyAnimation</h4><ul>
+<li><p>是CAAnimation的子类，也是个抽象类，要想创建动画对象，应该使用它的两个子类：</p>
+<ol>
+<li>CABasicAnimation</li>
+</ol>
+<ul>
+<li>CAKeyframeAnimation</li>
+</ul>
+</li>
+<li><p>属性说明：</p>
+<ul>
+<li>keyPath：通过指定CALayer的一个属性名称为keyPath（NSString类型），并且对CALayer的这个属性的值进行修改，达到相应的动画效果。比如，指定@“position”为keyPath，就修改CALayer的position属性的值，以达到平移的动画效果</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>CABasicAnimation</p>
+</blockquote>
+<ul>
+<li><p>基本动画,是CAPropertyAnimation的子类</p>
+</li>
+<li><p>属性说明:</p>
+<ul>
+<li>fromValue：keyPath相应属性的初始值</li>
+<li>toValue：keyPath相应属性的结束值</li>
+</ul>
+</li>
+<li><p>动画过程说明：</p>
+<ul>
+<li>随着动画的进行，在长度为duration的持续时间内，keyPath相应属性的值从fromValue渐渐地变为toValue</li>
+<li>keyPath内容是CALayer的可动画Animatable属性</li>
+<li>如果fillMode=kCAFillModeForwards同时removedOnComletion=NO，那么在动画执行完毕后，图层会保持显示动画执行后的状态。但在实质上，图层的属性值还是动画执行前的初始值，并没有真正被改变。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>关键帧动画</p>
+</blockquote>
+<ul>
+<li><p>关键帧动画，也是CAPropertyAnimation的子类，与CABasicAnimation的区别是：</p>
+<ul>
+<li>CABasicAnimation只能从一个数值（fromValue）变到另一个数值（toValue），而CAKeyframeAnimation会使用一个NSArray保存这些数值</li>
+</ul>
+</li>
+<li><p>属性说明：</p>
+<ul>
+<li>values：上述的NSArray对象。里面的元素称为“关键帧”(keyframe)。动画对象会在指定的时间（duration）内，依次显示values数组中的每一个关键帧</li>
+<li>path：可以设置一个CGPathRef、CGMutablePathRef，让图层按照路径轨迹移动。path只对CALayer的anchorPoint和position起作用。如果设置了path，那么values将被忽略</li>
+<li>keyTimes：可以为对应的关键帧指定对应的时间点，其取值范围为0到1.0，keyTimes中的每一个时间值都对应values中的每一帧。如果没有设置keyTimes，各个关键帧的时间是平分的</li>
+</ul>
+</li>
+</ul>
+<p><em>CABasicAnimation可看做是只有2个关键帧的CAKeyframeAnimation</em></p>
+<h4 id="2-CAAnimationGroup"><a href="#2-CAAnimationGroup" class="headerlink" title="2. CAAnimationGroup"></a>2. CAAnimationGroup</h4><ul>
+<li><p>动画组，是CAAnimation的子类，可以保存一组动画对象，将CAAnimationGroup对象加入层后，组中所有动画对象可以同时并发运行</p>
+</li>
+<li><p>属性说明：</p>
+<ul>
+<li>animations：用来保存一组动画对象的NSArray</li>
+<li>默认情况下，一组动画对象是同时运行的，也可以通过设置动画对象的beginTime属性来更改动画的开始时间</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-CATransition"><a href="#3-CATransition" class="headerlink" title="3. CATransition"></a>3. CATransition</h4><ul>
+<li>CATransition是CAAnimation的子类，用于做转场动画，能够为层提供移出屏幕和移入屏幕的动画效果。iOS比Mac OS X的转场动画效果少一点</li>
+<li>UINavigationController就是通过CATransition实现了将控制器的视图推入屏幕的动画效果</li>
+<li>动画属性:<ul>
+<li>type：动画过渡类型</li>
+<li>subtype：动画过渡方向</li>
+<li>startProgress：动画起点(在整体动画的百分比)</li>
+<li>endProgress：动画终点(在整体动画的百分比)</li>
+<li>转场动画过渡效果</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型字符串</th>
+<th style="text-align:center">效果说明</th>
+<th style="text-align:center">关键字</th>
+<th style="text-align:center">方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">fade</td>
+<td style="text-align:center">交叉淡化过渡</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">push</td>
+<td style="text-align:center">新视图把旧视图推出去</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">moveIn</td>
+<td style="text-align:center">新视图移到旧视图上面</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">reveal</td>
+<td style="text-align:center">将旧视图移开,显示下面的新视图</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">cube</td>
+<td style="text-align:center">立方体翻滚效果</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">oglFlip</td>
+<td style="text-align:center">上下左右翻转效果</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">suckEffect</td>
+<td style="text-align:center">收缩效果，如一块布被抽走</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">rippleEffect</td>
+<td style="text-align:center">水滴效果</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">pageCurl</td>
+<td style="text-align:center">向上翻页效果</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">pageUnCurl</td>
+<td style="text-align:center">向下翻页效果</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">facameraIrisHollowOpende</td>
+<td style="text-align:center">相机镜头打开效果</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">cameraIrisHollowClose</td>
+<td style="text-align:center">相机镜头关闭效果</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">NO</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>使用UIView动画函数实现转场动画——单视图</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)transitionWithView:(<span class="built_in">UIView</span> *)view duration:(<span class="built_in">NSTimeInterval</span>)duration options:(<span class="built_in">UIViewAnimationOptions</span>)options animations:(<span class="keyword">void</span> (^)(<span class="keyword">void</span>))animations completion:(<span class="keyword">void</span> (^)(<span class="built_in">BOOL</span> finished))completion;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数说明：<ul>
+<li>duration：动画的持续时间</li>
+<li>view：需要进行转场动画的视图</li>
+<li>options：转场动画的类型</li>
+<li>animations：将改变视图属性的代码放在这个block中</li>
+<li>completion：动画结束后，会自动调用这个block</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>使用UIView动画函数实现转场动画——双视图</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)transitionFromView:(<span class="built_in">UIView</span> *)fromView toView:(<span class="built_in">UIView</span> *)toView duration:(<span class="built_in">NSTimeInterval</span>)duration options:(<span class="built_in">UIViewAnimationOptions</span>)options completion:(<span class="keyword">void</span> (^)(<span class="built_in">BOOL</span> finished))completion;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数说明：<ul>
+<li>duration：动画的持续时间</li>
+<li>options：转场动画的类型</li>
+<li>animations：将改变视图属性的代码放在这个block中</li>
+<li>completion：动画结束后，会自动调用这个block</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------感谢您的阅读<i class="fa fa-paw"></i>-------------</div>
+    
+</div>
+  
+</div>
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"><i class="fa fa-tag"></i> iOS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/18/iOS开发之混合开发简单介绍/" rel="next" title="iOS开发之混合开发简单介绍">
+                <i class="fa fa-chevron-left"></i> iOS开发之混合开发简单介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/27/iOS开发之触摸事件/" rel="prev" title="iOS开发之触摸事件">
+                iOS开发之触摸事件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.JPG" alt="Sheldon">
+            
+              <p class="site-author-name" itemprop="name">Sheldon</p>
+              <p class="site-description motion-element" itemprop="description">一个iOS开发猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://sheldon.top/2019/03/28/curriculumVitae/" target="_blank" title="个人简历">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>个人简历</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/FlameTinary" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tinarychina@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/a1e222f75cc7" target="_blank" title="简书">
+                      
+                        <i class="fa fa-fw fa-heartbeat"></i>简书</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.im/user/5c4bccb55188253a7e5ee544" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-heartbeat"></i>掘金</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐阅读
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://swift.org/" title="Swift" target="_blank">Swift</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://developer.apple.com/documentation/objectivec" title="Objective-C" target="_blank">Objective-C</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.liaoxuefeng.com/" title="廖雪峰" target="_blank">廖雪峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://developer.apple.com/documentation" title="Apple Developer Documentation" target="_blank">Apple Developer Documentation</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CALayer"><span class="nav-number">1.</span> <span class="nav-text">CALayer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Core-Animation"><span class="nav-number">2.</span> <span class="nav-text">Core Animation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAAnimation"><span class="nav-number">2.1.</span> <span class="nav-text">CAAnimation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-CAPropertyAnimation"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. CAPropertyAnimation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-CAAnimationGroup"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. CAAnimationGroup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-CATransition"><span class="nav-number">2.1.3.</span> <span class="nav-text">3. CATransition</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-apple"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sheldon</span>
+
+  
+</div>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+
+  <span class="post-meta-divider">|</span>
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共58.7k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'xPhmC7WpRYMQ1r266ycJFQMX-gzGzoHsz',
+        appKey: '0e72gqe7e5GRqvtuCpE8IvrA',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("xPhmC7WpRYMQ1r266ycJFQMX-gzGzoHsz", "0e72gqe7e5GRqvtuCpE8IvrA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
