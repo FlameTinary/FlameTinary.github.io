@@ -1,0 +1,977 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="使用NSURLConnection实现下载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS网络编程--文件下载">
+<meta property="og:url" content="http://yoursite.com/2016/04/12/iOS%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="使用NSURLConnection实现下载">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-04-12T08:50:37.000Z">
+<meta property="article:modified_time" content="2026-06-15T12:34:33.439Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>iOS网络编程--文件下载 - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="iOS网络编程--文件下载"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-04-12 16:50" pubdate>
+          2016年4月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          94 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">iOS网络编程--文件下载</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>使用NSURLConnection实现下载</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="1-小文件下载"><a href="#1-小文件下载" class="headerlink" title="1. 小文件下载"></a>1. 小文件下载</h3><ol>
+<li>第一种方式（NSData）<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">//使用NSDta直接加载网络上的url资源（不考虑线程） </span><br>-(<span class="hljs-type">void</span>)dataDownload &#123; <br><span class="hljs-comment">//1.确定资源路径 </span><br><span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://tupian.qqjay.com/u/2013/1127/19_222949_14.jpg&quot;</span>]; <br><span class="hljs-comment">//2.根据URL加载对应的资源 </span><br><span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url]; <br><span class="hljs-comment">//3.转换并显示数据 </span><br><span class="hljs-built_in">UIImage</span> *image = [<span class="hljs-built_in">UIImage</span> imageWithData:data]; <br><span class="hljs-keyword">self</span>.imageView.image = image; <br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>第二种方式（NSURLConnection-sendAsync）<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">//使用NSURLConnection发送异步请求下载文件资源 </span><br>-(<span class="hljs-type">void</span>)connectDownload &#123; <br><span class="hljs-comment">//1.确定请求路径 </span><br><span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://tupian.qqjay.com/u/2013/1127/19_222949_14.jpg&quot;</span>]; <br><span class="hljs-comment">//2.创建请求对象 </span><br><span class="hljs-built_in">NSURLRequest</span> *request = [<span class="hljs-built_in">NSURLRequest</span> requestWithURL:url]; <br><span class="hljs-comment">//3.使用NSURLConnection发送一个异步请求 </span><br>[<span class="hljs-built_in">NSURLConnection</span> sendAsynchronousRequest:request queue:[<span class="hljs-built_in">NSOperationQueue</span> mainQueue] completionHandler:^(<span class="hljs-built_in">NSURLResponse</span> * _Nullable response, <span class="hljs-built_in">NSData</span> * _Nullable data, <span class="hljs-built_in">NSError</span> * _Nullable connectionError) &#123; <br><span class="hljs-comment">//4.拿到并处理数据 </span><br><span class="hljs-built_in">UIImage</span> *image = [<span class="hljs-built_in">UIImage</span> imageWithData:data]; <br><span class="hljs-keyword">self</span>.imageView.image = image; <br>&#125;]; <br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>第三种方式（NSURLConnection-delegate）<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-comment">//使用NSURLConnection设置代理发送异步请求的方式下载文件 </span><br><span class="hljs-operator">-</span>(void)connectionDelegateDownload &#123; <br><span class="hljs-comment">//1.确定请求路径 </span><br><span class="hljs-type">NSURL</span> <span class="hljs-operator">*</span>url <span class="hljs-operator">=</span> [<span class="hljs-type">NSURL</span> <span class="hljs-type">URLWithString</span>:@<span class="hljs-string">&quot;下载文件的URL地址&quot;</span>]; <br><span class="hljs-comment">//2.创建请求对象 </span><br><span class="hljs-type">NSURLRequest</span> <span class="hljs-operator">*</span>request <span class="hljs-operator">=</span> [<span class="hljs-type">NSURLRequest</span> requestWithURL:url]; <br><span class="hljs-comment">//3.使用NSURLConnection设置代理并发送异步请求 </span><br>[<span class="hljs-type">NSURLConnection</span> connectionWithRequest:request delegate:<span class="hljs-keyword">self</span>]; <br>&#125;<br>pragma mark<span class="hljs-operator">--</span><span class="hljs-type">NSURLConnectionDataDelegate</span><br><span class="hljs-comment">//当接收到服务器响应的时候调用，该方法只会调用一次</span><br><span class="hljs-operator">-</span>(void)connection:(<span class="hljs-type">NSURLConnection</span> <span class="hljs-operator">*</span>)connection didReceiveResponse:(<span class="hljs-type">NSURLResponse</span> <span class="hljs-operator">*</span>)response<br>&#123;<br>    <span class="hljs-comment">//创建一个容器，用来接收服务器返回的数据</span><br>    <span class="hljs-keyword">self</span>.fileData <span class="hljs-operator">=</span> [<span class="hljs-type">NSMutableData</span> data];<br>    <span class="hljs-comment">//获得当前要下载文件的总大小（通过响应头得到）</span><br>    <span class="hljs-type">NSHTTPURLResponse</span> <span class="hljs-operator">*</span>res <span class="hljs-operator">=</span> (<span class="hljs-type">NSHTTPURLResponse</span> <span class="hljs-operator">*</span>)response;<br>    <span class="hljs-keyword">self</span>.totalLength <span class="hljs-operator">=</span> res.expectedContentLength;<br>    <span class="hljs-type">NSLog</span>(@<span class="hljs-string">&quot;%zd&quot;</span>,<span class="hljs-keyword">self</span>.totalLength);<br>    <span class="hljs-comment">//拿到服务器端推荐的文件名称</span><br>    <span class="hljs-keyword">self</span>.fileName <span class="hljs-operator">=</span> res.suggestedFilename;<br>&#125;<br><span class="hljs-comment">//当接收到服务器返回的数据时会调用</span><br><span class="hljs-comment">//该方法可能会被调用多次</span><br><span class="hljs-operator">-</span>(void)connection:(<span class="hljs-type">NSURLConnection</span> <span class="hljs-operator">*</span>)connection didReceiveData:(<span class="hljs-type">NSData</span> <span class="hljs-operator">*</span>)data<br>&#123;<br><span class="hljs-comment">//    NSLog(@&quot;%s&quot;,__func__);</span><br>    <span class="hljs-comment">//拼接每次下载的数据</span><br>    [<span class="hljs-keyword">self</span>.fileData appendData:data];<br>    <span class="hljs-comment">//计算当前下载进度并刷新UI显示</span><br>    <span class="hljs-keyword">self</span>.currentLength <span class="hljs-operator">=</span> <span class="hljs-keyword">self</span>.fileData.length;<br>    <span class="hljs-type">NSLog</span>(@<span class="hljs-string">&quot;%f&quot;</span>,<span class="hljs-number">1.0</span><span class="hljs-operator">*</span> <span class="hljs-keyword">self</span>.currentLength<span class="hljs-operator">/</span><span class="hljs-keyword">self</span>.totalLength);<br>    <span class="hljs-keyword">self</span>.progressView.progress <span class="hljs-operator">=</span> <span class="hljs-number">1.0</span><span class="hljs-operator">*</span> <span class="hljs-keyword">self</span>.currentLength<span class="hljs-operator">/</span><span class="hljs-keyword">self</span>.totalLength;<br>&#125;<br><span class="hljs-comment">//当网络请求结束之后调用</span><br><span class="hljs-operator">-</span>(void)connectionDidFinishLoading:(<span class="hljs-type">NSURLConnection</span> <span class="hljs-operator">*</span>)connection<br>&#123;<br>    <span class="hljs-comment">//文件下载完毕把接受到的文件数据写入到沙盒中保存</span><br>    <span class="hljs-comment">//1.确定要保存文件的全路径</span><br>    <span class="hljs-comment">//caches文件夹路径</span><br>    <span class="hljs-type">NSString</span> <span class="hljs-operator">*</span>caches <span class="hljs-operator">=</span> [<span class="hljs-type">NSSearchPathForDirectoriesInDomains</span>(<span class="hljs-type">NSCachesDirectory</span>, <span class="hljs-type">NSUserDomainMask</span>, <span class="hljs-type">YES</span>) lastObject];<br>    <span class="hljs-type">NSString</span> <span class="hljs-operator">*</span>fullPath <span class="hljs-operator">=</span> [caches stringByAppendingPathComponent:<span class="hljs-keyword">self</span>.fileName];<br>    <span class="hljs-comment">//2.写数据到文件中</span><br>    [<span class="hljs-keyword">self</span>.fileData writeToFile:fullPath atomically:<span class="hljs-type">YES</span>];<br>    <span class="hljs-type">NSLog</span>(@<span class="hljs-string">&quot;%@&quot;</span>,fullPath);<br>&#125;<br><span class="hljs-comment">//当请求失败的时候调用该方法</span><br><span class="hljs-operator">-</span>(void)connection:(<span class="hljs-type">NSURLConnection</span> <span class="hljs-operator">*</span>)connection didFailWithError:(<span class="hljs-type">NSError</span> <span class="hljs-operator">*</span>)error<br>&#123;<br>    <span class="hljs-type">NSLog</span>(@<span class="hljs-string">&quot;%s&quot;</span>,__func__);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="2-大文件下载"><a href="#2-大文件下载" class="headerlink" title="2. 大文件下载"></a>2. 大文件下载</h3><ol>
+<li>实现思路<br>边接收数据边写文件以解决内存越来越大的问题</li>
+<li>核心代码<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">//当接收到服务器响应的时候调用，该方法只会调用一次 </span><br>-(<span class="hljs-type">void</span>)connection:(<span class="hljs-built_in">NSURLConnection</span> *)connection didReceiveResponse:(<span class="hljs-built_in">NSURLResponse</span> *)response &#123; <br><span class="hljs-comment">//0.获得当前要下载文件的总大小（通过响应头得到） </span><br><span class="hljs-built_in">NSHTTPURLResponse</span> *res = (<span class="hljs-built_in">NSHTTPURLResponse</span> *)response; <br><span class="hljs-keyword">self</span>.totalLength = res.expectedContentLength; <br><span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;%zd&quot;</span>,<span class="hljs-keyword">self</span>.totalLength); <br><span class="hljs-comment">//创建一个新的文件，用来当接收到服务器返回数据的时候往该文件中写入数据 //1.获取文件管理者 </span><br><span class="hljs-built_in">NSFileManager</span> *manager = [<span class="hljs-built_in">NSFileManager</span> defaultManager]; <br><span class="hljs-comment">//2.拼接文件的全路径 </span><br><span class="hljs-comment">//caches文件夹路径 </span><br><span class="hljs-built_in">NSString</span> *caches = [<span class="hljs-built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="hljs-built_in">NSCachesDirectory</span>, <span class="hljs-built_in">NSUserDomainMask</span>, <span class="hljs-literal">YES</span>) lastObject]; <br><span class="hljs-built_in">NSString</span> *fullPath = [caches stringByAppendingPathComponent:res.suggestedFilename]; <br><span class="hljs-keyword">self</span>.fullPath = fullPath; <br><span class="hljs-comment">//3.创建一个空的文件 </span><br>[manager createFileAtPath:fullPath contents:<span class="hljs-literal">nil</span> attributes:<span class="hljs-literal">nil</span>]; <br>&#125; <br><span class="hljs-comment">//当接收到服务器返回的数据时会调用 </span><br><span class="hljs-comment">//该方法可能会被调用多次 </span><br>-(<span class="hljs-type">void</span>)connection:(<span class="hljs-built_in">NSURLConnection</span> *)connection didReceiveData:(<span class="hljs-built_in">NSData</span> *)data &#123; <br><span class="hljs-comment">//1.创建一个用来向文件中写数据的文件句柄 </span><br><span class="hljs-comment">//注意当下载完成之后，该文件句柄需要关闭，调用closeFile方法 </span><br><span class="hljs-built_in">NSFileHandle</span> *handle = [<span class="hljs-built_in">NSFileHandle</span> fileHandleForWritingAtPath:<span class="hljs-keyword">self</span>.fullPath]; <br><span class="hljs-comment">//2.设置写数据的位置(追加) </span><br>[handle seekToEndOfFile]; <br><span class="hljs-comment">//3.写数据 [handle writeData:data]; </span><br><span class="hljs-comment">//4.计算当前文件的下载进度 </span><br><span class="hljs-keyword">self</span>.currentLength += data.length; <br><span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;%f&quot;</span>,<span class="hljs-number">1.0</span>* <span class="hljs-keyword">self</span>.currentLength/<span class="hljs-keyword">self</span>.totalLength); <br><span class="hljs-keyword">self</span>.progressView.progress = <span class="hljs-number">1.0</span>* <span class="hljs-keyword">self</span>.currentLength/<span class="hljs-keyword">self</span>.totalLength;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="3-大文件断点续传"><a href="#3-大文件断点续传" class="headerlink" title="3. 大文件断点续传"></a>3. 大文件断点续传</h3><ol>
+<li>实现思路<br>在下载文件的时候不再是整块的从头开始下载，而是看当前文件已经下载到哪个地方，然后从该地方接着往后面下载。可以通过在请求对象中设置请求头实现。</li>
+<li>解决方案（设置请求头）<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">//2.创建请求对象 </span><br><span class="hljs-built_in">NSMutableURLRequest</span> *request = [<span class="hljs-built_in">NSMutableURLRequest</span> requestWithURL:url]; <br><span class="hljs-comment">//2.1 设置下载文件的某一部分 </span><br><span class="hljs-comment">// 只要设置HTTP请求头的Range属性, 就可以实现从指定位置开始下载 </span><br><span class="hljs-comment">/* </span><br><span class="hljs-comment">表示头500个字节：Range: bytes=0-499 </span><br><span class="hljs-comment">表示第二个500字节：Range: bytes=500-999 </span><br><span class="hljs-comment">表示最后500个字节：Range: bytes=-500 </span><br><span class="hljs-comment">表示500字节以后的范围：Range: bytes=500- </span><br><span class="hljs-comment">*/</span> <br><span class="hljs-built_in">NSString</span> *range = [<span class="hljs-built_in">NSString</span> stringWithFormat:<span class="hljs-string">@&quot;bytes=%zd-&quot;</span>,<span class="hljs-keyword">self</span>.currentLength]; <br>[request setValue:range forHTTPHeaderField:<span class="hljs-string">@&quot;Range&quot;</span>];<br></code></pre></td></tr></table></figure></li>
+<li>注意点（下载进度并判断是否需要重新创建文件）<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">//获得当前要下载文件的总大小（通过响应头得到） </span><br><span class="hljs-built_in">NSHTTPURLResponse</span> *res = (<span class="hljs-built_in">NSHTTPURLResponse</span> *)response; <br><span class="hljs-comment">//注意点：res.expectedContentLength获得是本次请求要下载的文件的大小（并非是完整的文件的大小） </span><br><span class="hljs-comment">//因此：文件的总大小 == 本次要下载的文件大小+已经下载的文件的大小 </span><br><span class="hljs-keyword">self</span>.totalLength = res.expectedContentLength + <span class="hljs-keyword">self</span>.currentLength; <br><span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;----------------------------%zd&quot;</span>,<span class="hljs-keyword">self</span>.totalLength); <br><span class="hljs-comment">//0 判断当前是否已经下载过，如果当前文件已经存在，那么直接返回</span><br> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.currentLength &gt;<span class="hljs-number">0</span>) &#123; <span class="hljs-keyword">return</span>; &#125;<br></code></pre></td></tr></table></figure></li>
+<li>输出流<br>1. 使用输出流也可以实现和NSFileHandle相同的功能</li>
+</ol>
+<pre><code class="hljs">2. 如何使用
+</code></pre>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs glsl"><span class="hljs-comment">//1.创建一个数据输出流</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数：二进制的流数据要写入到哪里</span><br><span class="hljs-comment">第二个参数：采用什么样的方式写入流数据，如果YES则表示追加，如果是NO则表示覆盖</span><br><span class="hljs-comment">*/</span><br>NSOutputStream *<span class="hljs-keyword">stream</span> = [NSOutputStream outputStreamToFileAtPath:fullPath append:YES];<br><span class="hljs-comment">//只要调用了该方法就会往文件中写数据</span><br><span class="hljs-comment">//如果文件不存在，那么会自动的创建一个</span><br>[<span class="hljs-keyword">stream</span> open];<br>self.<span class="hljs-keyword">stream</span> = <span class="hljs-keyword">stream</span>;<br><span class="hljs-comment">//2.当接收到数据的时候写数据</span><br><span class="hljs-comment">//使用输出流写数据</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数：要写入的二进制数据</span><br><span class="hljs-comment">第二个参数：要写入的数据的大小</span><br><span class="hljs-comment">*/</span><br>[self.<span class="hljs-keyword">stream</span> write:data.bytes maxLength:data.<span class="hljs-built_in">length</span>];<br><span class="hljs-comment">//3.当文件下载完毕的时候关闭输出流</span><br><span class="hljs-comment">//关闭输出流</span><br>[self.<span class="hljs-keyword">stream</span> close];<br>self.<span class="hljs-keyword">stream</span> = nil;<br></code></pre></td></tr></table></figure>
+<ol start="5">
+<li>使用多线程下载文件的思路</li>
+</ol>
+<ul>
+<li>01 开启多条线程，每条线程都只下载文件的一部分（通过设置请求头中的Range来实现）</li>
+<li>02 创建一个和需要下载文件大小一致的文件，判断当前是那个线程，根据当前的线程来判断下载的数据应该写入到文件中的哪个位置。（假设开5条线程来下载10M的文件，那么线程1下载0-2M，线程2下载2-4M一次类推，当接收到服务器返回的数据之后应该先判断当前线程是哪个线程，假如当前线程是线程2，那么在写数据的时候就从文件的2M位置开始写入）</li>
+<li>03 代码相关：使用NSFileHandle这个类的seekToFileOfSet方法，来向文件中特定的位置写入数据。</li>
+<li>04 技术相关<br>   a.每个线程通过设置请求头下载文件中的某一个部分<br>   b.通过NSFileHandle向文件中的指定位置写数据</li>
+</ul>
+<hr>
+<blockquote>
+<p>使用NSURLSession实现下载</p>
+</blockquote>
+<h3 id="1-NSURLSession下载文件-代理"><a href="#1-NSURLSession下载文件-代理" class="headerlink" title="1. NSURLSession下载文件-代理"></a>1. NSURLSession下载文件-代理</h3><ol>
+<li>创建NSURLSession对象，设置代理（默认配置）<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">//1.创建NSURLSession,并设置代理 </span><br><span class="hljs-comment">/* </span><br><span class="hljs-comment">第一个参数：session对象的全局配置设置，一般使用默认配置就可以 </span><br><span class="hljs-comment">第二个参数：谁成为session对象的代理 </span><br><span class="hljs-comment">第三个参数：代理方法在哪个队列中执行（在哪个线程中调用）,如果是主队列那么在主线程中执行，如果是非主队列，那么在子线程中执行 </span><br><span class="hljs-comment">*/</span> <br><span class="hljs-built_in">NSURLSession</span> *session = [<span class="hljs-built_in">NSURLSession</span> sessionWithConfiguration:[<span class="hljs-built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration] delegate:<span class="hljs-keyword">self</span> delegateQueue:[<span class="hljs-built_in">NSOperationQueue</span> mainQueue]];<br></code></pre></td></tr></table></figure></li>
+<li>根据Session对象创建一个NSURLSessionDataTask任务（post和get选择）<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">//创建task</span><br><span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://tupian.qqjay.com/u/2013/1127/19_222949_14.jpg&quot;</span>];<br><span class="hljs-comment">//注意：如果要发送POST请求，那么请使用dataTaskWithRequest,设置一些请求头信息</span><br><span class="hljs-built_in">NSURLSessionDataTask</span> *dataTask = [session dataTaskWithURL:url];<br></code></pre></td></tr></table></figure></li>
+<li>执行任务（其它方法，如暂停、取消等）</li>
+</ol>
+<pre><code class="hljs">//启动task
+//[dataTask resume];
+//其它方法，如取消任务，暂停任务等
+//[dataTask cancel];
+//[dataTask suspend];
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">4</span>. 遵守代理协议，实现代理方法（<span class="hljs-number">3</span>个相关的代理方法）<br></code></pre></td></tr></table></figure>
+/* 
+1.当接收到服务器响应的时候调用 
+session：发送请求的session对象 
+dataTask：根据NSURLSession创建的task任务 
+response:服务器响应信息（响应头） 
+completionHandler：通过该block回调，告诉服务器端是否接收返回的数据 
+*/
+-(void)URLSession:(nonnull NSURLSession *)session dataTask:(nonnull NSURLSessionDataTask *)dataTask didReceiveResponse:(nonnull NSURLResponse *)response completionHandler:(nonnull void (^)(NSURLSessionResponseDisposition))completionHandler
+/*
+2.当接收到服务器返回的数据时调用 该方法可能会被调用多次 
+*/
+-(void)URLSession:(nonnull NSURLSession *)session dataTask:(nonnull NSURLSessionDataTask *)dataTask didReceiveData:(nonnull NSData *)data
+/* 
+3.当请求完成之后调用该方法 不论是请求成功还是请求失败都调用该方法，如果请求失败，那么error对象有值，否则那么error对象为空 
+*/
+-(void)URLSession:(nonnull NSURLSession *)session task:(nonnull NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">5.</span> 当接收到服务器响应的时候，告诉服务器接收数据（调用block）<br></code></pre></td></tr></table></figure>
+//默认情况下，当接收到服务器响应之后，服务器认为客户端不需要接收数据，所以后面的代理方法不会调用 
+//如果需要继续接收服务器返回的数据，那么需要调用block,并传入对应的策略 
+/* 
+NSURLSessionResponseCancel = 0, 取消任务 
+NSURLSessionResponseAllow = 1, 接收任务 
+NSURLSessionResponseBecomeDownload = 2, 转变成下载 
+NSURLSessionResponseBecomeStream NS_ENUM_AVAILABLE(10_11, 9_0) = 3, 转变成流 
+*/ 
+completionHandler(NSURLSessionResponseAllow);
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>###<span class="hljs-number">2.</span> NSURLSessionDownloadTask实现大文件下载<br><span class="hljs-number">1.</span> 使用NSURLSession和NSURLSessionDownload可以很方便的实现文件下载操作<br></code></pre></td></tr></table></figure>
+/*
+    第一个参数：要下载文件的url路径
+    第二个参数：当接收完服务器返回的数据之后调用该block
+    location:下载的文件的保存地址（默认是存储在沙盒中tmp文件夹下面，随时会被删除）
+    response：服务器响应信息，响应头
+    error：该请求的错误信息
+    */
+    //说明：downloadTaskWithURL方法已经实现了在下载文件数据的过程中边下载文件数据，边写入到沙盒文件的操作
+    NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL * __nullable location, NSURLResponse * __nullable response, NSError * __nullable error)
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">2.</span> downloadTaskWithURL内部默认已经实现了变下载边写入操作，所以不用开发人员担心内存问题<br><span class="hljs-bullet">3.</span> 文件下载后默认保存在tmp文件目录，需要开发人员手动的剪切到合适的沙盒目录<br><span class="hljs-bullet">4.</span> 缺点：没有办法监控下载进度<br><br><span class="hljs-section">###3. 使用NSURLSessionDownloadTask实现大文件下载-监听下载进度</span><br><span class="hljs-bullet">1.</span> 创建NSURLSession并设置代理，通过NSURLSessionDownloadTask并以代理的方式来完成大文件的下载<br></code></pre></td></tr></table></figure>
+//1.创建NSULRSession,设置代理
+self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+//2.创建task
+NSURL *url = [NSURL URLWithString:@&quot;URL字符串&quot;];
+self.downloadTask = [self.session downloadTaskWithURL:url];
+//3.执行task
+[self.downloadTask resume];
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">2.</span> 常用代理方法的说明<br></code></pre></td></tr></table></figure>
+/* 
+1.当接收到下载数据的时候调用,可以在该方法中监听文件下载的进度 
+该方法会被调用多次 
+totalBytesWritten:已经写入到文件中的数据大小 
+totalBytesExpectedToWrite:目前文件的总大小 
+bytesWritten:本次下载的文件数据大小 
+*/
+-(void)URLSession:(nonnull NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+/* 
+2.恢复下载的时候调用该方法 
+fileOffset:恢复之后，要从文件的什么地方开发下载 
+expectedTotalBytes：该文件数据的总大小 
+*/
+-(void)URLSession:(nonnull NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+/* 
+3.下载完成之后调用该方法 
+*/
+-(void)URLSession:(nonnull NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(nonnull NSURL *)location
+/* 
+4.请求完成之后调用 
+如果请求失败，那么error有值 
+*/
+-(void)URLSession:(nonnull NSURLSession *)session task:(nonnull NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">3.</span> 实现断点下载相关代码<br></code></pre></td></tr></table></figure>
+//如果任务，取消了那么以后就不能恢复了
+// [self.downloadTask cancel];
+//如果采取这种方式来取消任务，那么该方法会通过resumeData保存当前文件的下载信息
+//只要有了这份信息，以后就可以通过这些信息来恢复下载
+[self.downloadTask cancelByProducingResumeData:^(NSData * __nullable resumeData) { self.resumeData = resumeData;}];
+//继续下载
+//首先通过之前保存的resumeData信息，创建一个下载任务
+self.downloadTask = [self.session downloadTaskWithResumeData:self.resumeData]; 
+[self.downloadTask resume];
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">4.</span> 计算当前下载进度<br></code></pre></td></tr></table></figure>
+//获取文件下载进度
+self.progress.progress = 1.0 * totalBytesWritten/totalBytesExpectedToWrite;
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">5.</span> 局限性<br><span class="hljs-bullet">  -</span> 如果用户点击暂停之后退出程序，那么需要把恢复下载的数据写一份到沙盒，代码复杂度更高<br><span class="hljs-bullet">  -</span> 如果用户在下载中途未保存恢复下载数据即退出程序，则不具备可操作性<br><br><span class="hljs-section">###4. 使用NSURLSessionDataTask实现大文件离线断点下载（完整）</span><br><br><span class="hljs-bullet">1.</span> 关于NSOutputStream的使用<br></code></pre></td></tr></table></figure>
+//1. 创建一个输入流,数据追加到文件的屁股上
+//把数据写入到指定的文件地址，如果当前文件不存在，则会自动创建
+NSOutputStream *stream = [[NSOutputStream alloc]initWithURL:[NSURL fileURLWithPath:[self fullPath]] append:YES];
+//2. 打开流
+[stream open];
+//3. 写入流数据
+[stream write:data.bytes maxLength:data.length];
+//4.当不需要的时候应该关闭流
+[stream close];
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">2.</span> 关于网络请求请求头的设置（可以设置请求下载文件的某一部分）<br></code></pre></td></tr></table></figure>
+//1. 设置请求对象
+//1.1 创建请求路径
+NSURL *url = [NSURL URLWithString:@&quot;URL字符串&quot;];
+//1.2 创建可变请求对象
+NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+//1.3 拿到当前文件的残留数据大小
+self.currentContentLength = [self FileSize];
+//1.4 告诉服务器从哪个地方开始下载文件数据
+NSString *range = [NSString stringWithFormat:@&quot;bytes=%zd-&quot;,self.currentContentLength];
+NSLog(@&quot;%@&quot;,range);
+//1.5 设置请求头
+[request setValue:range forHTTPHeaderField:@&quot;Range&quot;];
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">3.</span> NSURLSession对象的释放<br></code></pre></td></tr></table></figure>
+-(void)dealloc{ 
+//在最后的时候应该把session释放，以免造成内存泄露 
+// NSURLSession设置过代理后，需要在最后（比如控制器销毁的时候）调用session的invalidateAndCancel或者resetWithCompletionHandler，才不会有内存泄露 
+// [self.session invalidateAndCancel];
+ [self.session resetWithCompletionHandler:^{ NSLog(@&quot;释放---&quot;);
+ }];
+}
+```
+4. 优化部分
+  - 关于文件下载进度的实时更新
+  - 方法的独立与抽取
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/iOS/" class="category-chain-item">iOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>iOS网络编程--文件下载</div>
+      <div>http://yoursite.com/2016/04/12/iOS网络编程-文件下载/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Sheldon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2016年4月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2016/04/12/iOS%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="iOS网络编程--文件上传">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iOS网络编程--文件上传</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2016/04/12/iOS%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/" title="iOS网络编程--基础使用">
+                        <span class="hidden-mobile">iOS网络编程--基础使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

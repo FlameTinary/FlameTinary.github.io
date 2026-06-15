@@ -1,0 +1,988 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="首先，在了解多线程之前要了解什么是进程，什么是线程进程是指在系统中正在运行的一个应用程序。每个进程之间是独立的，每个进程均运行在其专用且受保护的内存空间内。一个进程要想执行任务，必须得有至少一个线程，线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。一个线程中任务的执行是串行的，如果要在1个线程中执行多个任务，那么只能一个一个地按顺序执行这些任务。也就是说，在同一时间内，1个线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS之多线程">
+<meta property="og:url" content="http://yoursite.com/2016/04/09/iOS%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="首先，在了解多线程之前要了解什么是进程，什么是线程进程是指在系统中正在运行的一个应用程序。每个进程之间是独立的，每个进程均运行在其专用且受保护的内存空间内。一个进程要想执行任务，必须得有至少一个线程，线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。一个线程中任务的执行是串行的，如果要在1个线程中执行多个任务，那么只能一个一个地按顺序执行这些任务。也就是说，在同一时间内，1个线">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1319710-e5f9963ace128177.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2016-04-09T07:02:35.000Z">
+<meta property="article:modified_time" content="2026-06-15T12:34:33.437Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1319710-e5f9963ace128177.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+  
+  
+  <title>iOS之多线程 - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="iOS之多线程"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-04-09 15:02" pubdate>
+          2016年4月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          15k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          124 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">iOS之多线程</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>首先，在了解多线程之前要了解什么是进程，什么是线程<br>进程是指在系统中正在运行的一个应用程序。每个进程之间是独立的，每个进程均运行在其专用且受保护的内存空间内。<br>一个进程要想执行任务，必须得有至少一个线程，线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。<br>一个线程中任务的执行是串行的，如果要在1个线程中执行多个任务，那么只能一个一个地按顺序执行这些任务。也就是说，在同一时间内，1个线程只能执行1个任务。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="什么是多线程？"><a href="#什么是多线程？" class="headerlink" title="什么是多线程？"></a>什么是多线程？</h2><p>即在一个进程（程序）中可以开启多条线程，每条线程可以并行（同时）执行不同的任务。</p>
+<p>并行即同时执行。比如同时开启3条线程分别下载3个文件（分别是文件A、文件B、文件C）。</p>
+<p>在同一时间里，CPU只能处理一条线程，只有一条线程在工作（执行）。多线程并发（同时）执行，其实是CPU快速地在多条线程之间快速切换，如果CPU调度线程的时间足够快，就造成了多线程并发执行的假象。</p>
+<h2 id="多线程优缺点"><a href="#多线程优缺点" class="headerlink" title="多线程优缺点"></a>多线程优缺点</h2><p>优点:</p>
+<ol>
+<li>能适当提高程序的执行效率。</li>
+<li>能适当提高资源利用率（CPU、内存利用率）</li>
+</ol>
+<p>缺点:</p>
+<ol>
+<li>开启线程需要占用一定的内存空间（默认情况下，主线程占用1M，子线程占用512KB），如果开启大量的线程，会占用大量的内存空间，降低程序的性能。</li>
+<li>线程越多，CPU在调度线程上的开销就越大。</li>
+<li>程序设计更加复杂：比如线程之间的通信、多线程的数据共享</li>
+</ol>
+<h2 id="开启多线程的方式"><a href="#开启多线程的方式" class="headerlink" title="开启多线程的方式"></a>开启多线程的方式</h2><p>当一个iOS程序运行后，默认会开启1条线程，称为“主线程”或“UI线程”；它的作用就是刷新显示UI,处理UI事件。</p>
+<ol>
+<li>不要将耗时操作放到主线程中去处理，会卡住线程。</li>
+<li>和UI相关的刷新操作必须放到主线程中进行处理。</li>
+</ol>
+<h3 id="pthread"><a href="#pthread" class="headerlink" title="pthread"></a>pthread</h3><p>特点：</p>
+<ol>
+<li>一套通用的多线程API</li>
+<li>适用于Unix\Linux\Windows等系统</li>
+<li>跨平台\可移植</li>
+</ol>
+<p>使用难度：*****<br>使用语言：c语言<br>使用频率：几乎不用<br>线程生命周期：由程序员进行管理</p>
+<p>使用说明：pthread的基本使用（需要包含头文件）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-string">&lt;pthread.h&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>具体实现代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//使用pthread创建线程对象</span><br>pthread_t thread;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数:线程对象</span><br><span class="hljs-comment">第二个参数:线程属性,NULL</span><br><span class="hljs-comment">第三个参数:指向函数的指针</span><br><span class="hljs-comment">第四个参数:前一个参数()方法中需要接受的参数</span><br><span class="hljs-comment">*/</span><br>pthread_create(&amp;thread, <span class="hljs-literal">NULL</span>, run, <span class="hljs-literal">NULL</span>);<br></code></pre></td></tr></table></figure>
+
+<h3 id="NSThread"><a href="#NSThread" class="headerlink" title="NSThread"></a>NSThread</h3><p>特点：</p>
+<ol>
+<li>使用更加面向对象</li>
+<li>简单易用，可直接操作线程对象</li>
+</ol>
+<p>使用难度：***<br>使用语言：OC语言<br>使用频率：偶尔使用<br>线程生命周期：由程序员进行管理</p>
+<h4 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h4><p>第一种创建线程的方式：<code>alloc init</code></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//特点：需要手动开启线程，可以拿到线程对象进行详细的设置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数：目标对象</span><br><span class="hljs-comment">第二个参数：选择器，线程启动要调用哪个方法</span><br><span class="hljs-comment">第三个参数：前面方法要接收的参数（最多只能接收一个参数，没有则传nil）</span><br><span class="hljs-comment">*/</span><br><span class="hljs-built_in">NSThread</span> *newThread = [[<span class="hljs-built_in">NSThread</span> alloc] initWithTarget:<span class="hljs-keyword">self</span> selector:<span class="hljs-keyword">@selector</span>(run) object:<span class="hljs-literal">nil</span>];<br><span class="hljs-comment">//启动线程</span><br>[newThread start];<br></code></pre></td></tr></table></figure>
+
+<p>第二种创建线程的方式：分离出一条子线程</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//特点：不需要手动开启线程，不可以对线程对象进行详细的设置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> 第一个参数：选择器，线程启动要调用哪个方法</span><br><span class="hljs-comment"> 第二个参数：目标对象</span><br><span class="hljs-comment"> 第三个参数：前面方法要接收的参数</span><br><span class="hljs-comment">*/</span><br>[<span class="hljs-built_in">NSThread</span> detachNewThreadSelector:<span class="hljs-keyword">@selector</span>(run) toTarget:<span class="hljs-keyword">self</span> withObject:<span class="hljs-literal">nil</span>];<br></code></pre></td></tr></table></figure>
+<p>第三种创建线程的方式：后台线程</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//特点：自动启动线程，不能对线程对象进行详细的设置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数：线程启动后调用的方法</span><br><span class="hljs-comment">第二个参数：方法接收的参数</span><br><span class="hljs-comment">*/</span><br>[<span class="hljs-keyword">self</span> performSelectorInBackground:<span class="hljs-keyword">@selector</span>(run) withObject:<span class="hljs-literal">nil</span>];<br></code></pre></td></tr></table></figure>
+
+<h4 id="设置线程的属性"><a href="#设置线程的属性" class="headerlink" title="设置线程的属性"></a>设置线程的属性</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//设置线程的属性</span><br><span class="hljs-comment">//设置线程的名称</span><br>thread.name = <span class="hljs-string">@&quot;线程A&quot;</span>;<br><span class="hljs-comment">//设置线程的优先级,注意线程优先级的取值范围为0.0~1.0之间，1.0表示线程的优先级最高,如果不设置该值，那么理想状态下默认为0.5</span><br>thread.threadPriority = <span class="hljs-number">1.0</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h4><p>线程的各种状态：新建-就绪-运行-阻塞-死亡</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//常用的控制线程状态的方法</span><br>[<span class="hljs-built_in">NSThread</span> exit];<span class="hljs-comment">//退出当前线程</span><br>[<span class="hljs-built_in">NSThread</span> sleepForTimeInterval:<span class="hljs-number">2.0</span>];<span class="hljs-comment">//阻塞线程</span><br>[<span class="hljs-built_in">NSThread</span> sleepUntilDate:[<span class="hljs-built_in">NSDate</span> dateWithTimeIntervalSinceNow:<span class="hljs-number">2.0</span>]];<span class="hljs-comment">//阻塞线程</span><br><span class="hljs-comment">//注意：线程死了不能复生</span><br></code></pre></td></tr></table></figure>
+<h4 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h4><p>前提：多个线程访问同一块资源会发生数据安全问题<br>解决方案：加互斥锁<br>相关代码：@synchronized(self){}<br>专业术语-线程同步<br>原子和非原子属性（是否对setter方法加锁）</p>
+<h4 id="线程间通信"><a href="#线程间通信" class="headerlink" title="线程间通信"></a>线程间通信</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs objc">-(<span class="hljs-type">void</span>)touchesBegan:(<span class="hljs-keyword">nonnull</span> <span class="hljs-built_in">NSSet</span>&lt;<span class="hljs-built_in">UITouch</span> *&gt; *)touches withEvent:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">UIEvent</span> *)event<br>&#123;<br>    <span class="hljs-comment">//开启一条子线程来下载图片</span><br>    [<span class="hljs-built_in">NSThread</span> detachNewThreadSelector:<span class="hljs-keyword">@selector</span>(downloadImage) toTarget:<span class="hljs-keyword">self</span> withObject:<span class="hljs-literal">nil</span>];<br>&#125;<br>-(<span class="hljs-type">void</span>)downloadImage<br>&#123;<br>    <span class="hljs-comment">//1.确定要下载网络图片的url地址，一个url唯一对应着网络上的一个资源</span><br>    <span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://http://p2.wmpic.me/article/2016/03/17/1458205813_mEsdeUon.jpg&quot;</span>];<br>    <span class="hljs-comment">//2.根据url地址下载图片数据到本地（二进制数据）</span><br>    <span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url];<br>    <span class="hljs-comment">//3.把下载到本地的二进制数据转换成图片</span><br>    <span class="hljs-built_in">UIImage</span> *image = [<span class="hljs-built_in">UIImage</span> imageWithData:data];<br>    <span class="hljs-comment">//4.回到主线程刷新UI</span><br>    <span class="hljs-comment">//4.1 第一种方式</span><br><span class="hljs-comment">//    [self performSelectorOnMainThread:@selector(showImage:) withObject:image waitUntilDone:YES];</span><br>    <span class="hljs-comment">//4.2 第二种方式</span><br><span class="hljs-comment">//    [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];</span><br>    <span class="hljs-comment">//4.3 第三种方式</span><br>    [<span class="hljs-keyword">self</span>.imageView performSelector:<span class="hljs-keyword">@selector</span>(setImage:) onThread:[<span class="hljs-built_in">NSThread</span> mainThread] withObject:image waitUntilDone:<span class="hljs-literal">YES</span>];<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="如何计算代码段的执行时间"><a href="#如何计算代码段的执行时间" class="headerlink" title="如何计算代码段的执行时间"></a>如何计算代码段的执行时间</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//第一种方法</span><br><span class="hljs-built_in">NSDate</span> *start = [<span class="hljs-built_in">NSDate</span> date];<br><span class="hljs-comment">//2.根据url地址下载图片数据到本地（二进制数据）</span><br><span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url];<br><span class="hljs-built_in">NSDate</span> *end = [<span class="hljs-built_in">NSDate</span> date];<br><span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;第二步操作花费的时间为%f&quot;</span>,[end timeIntervalSinceDate:start]);<br><span class="hljs-comment">//第二种方法</span><br><span class="hljs-built_in">CFTimeInterval</span> start = <span class="hljs-built_in">CFAbsoluteTimeGetCurrent</span>();<br><span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url];<br><span class="hljs-built_in">CFTimeInterval</span> end = <span class="hljs-built_in">CFAbsoluteTimeGetCurrent</span>();<br><span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;第二步操作花费的时间为%f&quot;</span>,end - start);<br></code></pre></td></tr></table></figure>
+
+<h3 id="GCD"><a href="#GCD" class="headerlink" title="GCD"></a>GCD</h3><p>特点：</p>
+<ol>
+<li>旨在替代NSThread等线程技术</li>
+<li>充分利用设备的多核（自动）</li>
+</ol>
+<p>使用难度：**<br>使用语言：C语言<br>使用频率：经常使用<br>线程生命周期：自动管理</p>
+<h4 id="GCD基本使用"><a href="#GCD基本使用" class="headerlink" title="GCD基本使用"></a>GCD基本使用</h4><p>异步函数+并发队列：开启多条线程，并发执行任务<br>异步函数+串行队列：开启一条线程，串行执行任务<br>同步函数+并发队列：不开线程，串行执行任务<br>同步函数+串行队列：不开线程，串行执行任务<br>异步函数+主队列：不开线程，在主线程中串行执行任务<br>同步函数+主队列：不开线程，串行执行任务（注意死锁发生）</p>
+<p>注意同步函数和异步函数在执行顺序上面的差异</p>
+<h4 id="GCD线程间通信"><a href="#GCD线程间通信" class="headerlink" title="GCD线程间通信"></a>GCD线程间通信</h4><p>创建串行队列</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数:C语言的字符传,标签</span><br><span class="hljs-comment">第二个参数:队列的类型</span><br><span class="hljs-comment">*/</span><br><span class="hljs-built_in">dispatch_queue_t</span> queue2 = dispatch_queue_create(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *label, DISPATCH_QUEUE_SERIAL);<br></code></pre></td></tr></table></figure>
+
+<p>创建并发队列</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数:C语言的字符传,标签</span><br><span class="hljs-comment">第二个参数:队列的类型</span><br><span class="hljs-comment">*/</span><br><span class="hljs-built_in">dispatch_queue_t</span> queue2 = dispatch_queue_create(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *label, DISPATCH_QUEUE_CONCURRENT);<br></code></pre></td></tr></table></figure>
+
+<p>创建全局队列</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//0.获取一个全局的队列</span><br><span class="hljs-built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br><span class="hljs-comment">//1.先开启一个线程，把下载图片的操作放在子线程中处理</span><br><span class="hljs-built_in">dispatch_async</span>(queue, ^&#123;<br>    <span class="hljs-comment">//2.下载图片</span><br>    <span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://p2.wmpic.me/article/2016/03/17/1458205813_mEsdeUon.jpg&quot;</span>];<br>    <span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url];<br>    <span class="hljs-built_in">UIImage</span> *image = [<span class="hljs-built_in">UIImage</span> imageWithData:data];<br><br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;下载操作所在的线程--%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br><br>    <span class="hljs-comment">//3.回到主线程刷新UI</span><br>    <span class="hljs-built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;<br>        <span class="hljs-keyword">self</span>.imageView.image = image;<br>        <span class="hljs-comment">//打印查看当前线程</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;刷新UI---%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<h4 id="GCD其它常用函数"><a href="#GCD其它常用函数" class="headerlink" title="GCD其它常用函数"></a>GCD其它常用函数</h4><p>栅栏函数（控制任务的执行顺序）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs objc">dispatch_barrier_async(queue, ^&#123;<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;--dispatch_barrier_async-&quot;</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>延迟执行（延迟·控制在哪个线程执行）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs objc">dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(<span class="hljs-number">2.0</span> * <span class="hljs-built_in">NSEC_PER_SEC</span>)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="hljs-number">0</span>), ^&#123;<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;---%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>一次性代码（注意不能放到懒加载）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs objc">-(<span class="hljs-type">void</span>)once<br>&#123;<br>    <span class="hljs-comment">//整个程序运行过程中只会执行一次</span><br>    <span class="hljs-comment">//onceToken用来记录该部分的代码是否被执行过</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-built_in">dispatch_once_t</span> onceToken;<br>    <span class="hljs-built_in">dispatch_once</span>(&amp;onceToken, ^&#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;-----&quot;</span>);<br>    &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>快速迭代（开多个线程并发完成迭代操作）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs objc">dispatch_apply(subpaths.count, queue, ^(size_t index) &#123;<br><br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>队列组（同栅栏函数）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//创建队列组</span><br>    dispatch_group_t group = dispatch_group_create();<br>    <span class="hljs-comment">//队列组中的任务执行完毕之后，执行该函数</span><br>    dispatch_group_notify(dispatch_group_t group,<br>	<span class="hljs-built_in">dispatch_queue_t</span> queue,<br>	dispatch_block_t block);<br></code></pre></td></tr></table></figure>
+
+<h4 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h4><p>在iOS6.0之前，在GCD中凡是使用了带Crearte和retain的函数在最后都需要做一次release操作。而主队列和全局并发队列不需要我们手动release。在iOS6.0之后GCD已经被纳入到了ARC的内存管理范畴中，即便是使用retain或者create函数创建的对象也不再需要开发人员手动释放，我们像对待普通OC对象一样对待GCD就OK。</p>
+<p>在使用栅栏函数的时候，苹果官方明确规定栅栏函数只有在和使用create函数自己的创建的并发队列一起使用的时候才有效</p>
+<h3 id="NSOperation"><a href="#NSOperation" class="headerlink" title="NSOperation"></a>NSOperation</h3><p>特点：</p>
+<ol>
+<li>基于GCD（底层是GCD）</li>
+<li>比GCD多了一些更简单实用的功能</li>
+<li>使用更加面向对象</li>
+</ol>
+<p>使用难度：**<br>使用语言：OC语言<br>使用频率：经常使用<br>线程生命周期：自动管理</p>
+<p>NSOperation是对GCD的包装，其本身是只是抽象类，只有它的子类（三个子类分别是：NSBlockOperation、NSInvocationOperation以及自定义继承自NSOperation的类）才能创建对象</p>
+<h4 id="NSInvocationOperation"><a href="#NSInvocationOperation" class="headerlink" title="NSInvocationOperation"></a>NSInvocationOperation</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//1.封装操作</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">第一个参数：目标对象</span><br><span class="hljs-comment">第二个参数：该操作要调用的方法，最多接受一个参数</span><br><span class="hljs-comment">第三个参数：调用方法传递的参数，如果方法不接受参数，那么该值传nil</span><br><span class="hljs-comment">*/</span><br><span class="hljs-built_in">NSInvocationOperation</span> *operation = [[<span class="hljs-built_in">NSInvocationOperation</span> alloc]initWithTarget:<span class="hljs-keyword">self</span> selector:<span class="hljs-keyword">@selector</span>(run) object:<span class="hljs-literal">nil</span>];<br><span class="hljs-comment">//2.启动操作</span><br>[operation start];<br></code></pre></td></tr></table></figure>
+
+<h4 id="NSBlockOperation"><a href="#NSBlockOperation" class="headerlink" title="NSBlockOperation"></a>NSBlockOperation</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//1.封装操作</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">  NSBlockOperation提供了一个类方法，在该类方法中封装操作</span><br><span class="hljs-comment">*/</span><br><span class="hljs-built_in">NSBlockOperation</span> *operation = [<span class="hljs-built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;<br>    <span class="hljs-comment">//在主线程中执行</span><br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;---download1--%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>&#125;];<br><span class="hljs-comment">//2.追加操作，追加的操作在子线程中执行</span><br>[operation addExecutionBlock:^&#123;<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;---download2--%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>&#125;];<br>[operation addExecutionBlock:^&#123;<br>      <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;---download3--%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>&#125;];<br><span class="hljs-comment">//3.启动执行操作</span><br>[operation start];<br></code></pre></td></tr></table></figure>
+<h4 id="自定义NSOperation"><a href="#自定义NSOperation" class="headerlink" title="自定义NSOperation"></a>自定义NSOperation</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//如何封装操作？</span><br><span class="hljs-comment">//自定义的NSOperation,通过重写内部的main方法实现封装操作</span><br>-(<span class="hljs-type">void</span>)main<br>&#123;<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;--main--%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>&#125;<br><span class="hljs-comment">//如何使用？</span><br><span class="hljs-comment">//1.实例化一个自定义操作对象</span><br>TYOperation *op = [[TYOperation alloc]init];<br><span class="hljs-comment">//2.执行操作</span><br>[op start];<br></code></pre></td></tr></table></figure>
+
+<h4 id="NSOperationQueue"><a href="#NSOperationQueue" class="headerlink" title="NSOperationQueue"></a>NSOperationQueue</h4><p>NSOperation中的两种队列</p>
+<ul>
+<li>主队列 通过mainQueue获得，凡是放到主队列中的任务都将在主线程执行</li>
+<li>非主队列 直接alloc init出来的队列。非主队列同时具备了并发和串行的功能，通过设置最大并发数属性来控制任务是并发执行还是串行执行</li>
+</ul>
+<h5 id="NSInvocationOperation-1"><a href="#NSInvocationOperation-1" class="headerlink" title="NSInvocationOperation"></a>NSInvocationOperation</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs objc">- (<span class="hljs-type">void</span>)invocation<br>&#123;<br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">     GCD中的队列：</span><br><span class="hljs-comment">     串行队列：自己创建的，主队列</span><br><span class="hljs-comment">     并发队列：自己创建的，全局并发队列</span><br><span class="hljs-comment">     NSOperationQueue</span><br><span class="hljs-comment">     主队列：[NSOperationQueue mainqueue];凡事放在主队列中的操作都在主线程中执行</span><br><span class="hljs-comment">     非主队列：[[NSOperationQueue alloc]init]，并发和串行，默认是并发执行的</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-comment">//1.创建队列</span><br>    <span class="hljs-built_in">NSOperationQueue</span> *queue = [[<span class="hljs-built_in">NSOperationQueue</span> alloc]init];<br>    <span class="hljs-comment">//2.封装操作</span><br>    <span class="hljs-built_in">NSInvocationOperation</span> *op1 = [[<span class="hljs-built_in">NSInvocationOperation</span> alloc]initWithTarget:<span class="hljs-keyword">self</span> selector:<span class="hljs-keyword">@selector</span>(download1) object:<span class="hljs-literal">nil</span>];<br>    <span class="hljs-built_in">NSInvocationOperation</span> *op2 = [[<span class="hljs-built_in">NSInvocationOperation</span> alloc]initWithTarget:<span class="hljs-keyword">self</span> selector:<span class="hljs-keyword">@selector</span>(download2) object:<span class="hljs-literal">nil</span>];<br>    <span class="hljs-built_in">NSInvocationOperation</span> *op3 = [[<span class="hljs-built_in">NSInvocationOperation</span> alloc]initWithTarget:<span class="hljs-keyword">self</span> selector:<span class="hljs-keyword">@selector</span>(download3) object:<span class="hljs-literal">nil</span>];<br>    <span class="hljs-comment">//3.把封装好的操作添加到队列中</span><br>    [queue addOperation:op1];<br>    [queue addOperation:op2];<br>    [queue addOperation:op3];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="NSBlockOperation-1"><a href="#NSBlockOperation-1" class="headerlink" title="NSBlockOperation"></a>NSBlockOperation</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs objc">- (<span class="hljs-type">void</span>)freeBlock<br>&#123;<br>    <span class="hljs-comment">//1.创建队列</span><br>    <span class="hljs-built_in">NSOperationQueue</span> *queue = [[<span class="hljs-built_in">NSOperationQueue</span> alloc]init];<br>    <span class="hljs-comment">//2.封装操作</span><br>    <span class="hljs-built_in">NSBlockOperation</span> *op1 = [<span class="hljs-built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;1----%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;];<br>    <span class="hljs-built_in">NSBlockOperation</span> *op2 = [<span class="hljs-built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;2----%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;];<br>    [op2 addExecutionBlock:^&#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;3----%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;];<br>    [op2 addExecutionBlock:^&#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;4----%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;];<br>    <span class="hljs-comment">//3.添加操作到队列中</span><br>    [queue addOperation:op1];<br>    [queue addOperation:op2]<br>    <span class="hljs-comment">//补充：简便方法</span><br>    [queue addOperationWithBlock:^&#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;5----%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="自定义NSOperation-1"><a href="#自定义NSOperation-1" class="headerlink" title="自定义NSOperation"></a>自定义NSOperation</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs objc">-(<span class="hljs-type">void</span>)freeOperation<br>&#123;<br><span class="hljs-comment">//1.创建队列</span><br><span class="hljs-built_in">NSOperationQueue</span> *queue = [[<span class="hljs-built_in">NSOperationQueue</span> alloc]init];<br><span class="hljs-comment">//2.封装操作</span><br><span class="hljs-comment">//好处：1.信息隐蔽</span><br><span class="hljs-comment">//     2.代码复用</span><br>TYOperation *op1 = [[TYOperation alloc]init];<br>TYOperation *op2 = [[TYOperation alloc]init];<br><span class="hljs-comment">//3.添加操作到队列中</span><br>[queue addOperation:op1];<br>[queue addOperation:op2];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="NSOperation其它用法"><a href="#NSOperation其它用法" class="headerlink" title="NSOperation其它用法"></a>NSOperation其它用法</h4><h5 id="设置最大并发数-最大并发数关系着队列是串行还是并行"><a href="#设置最大并发数-最大并发数关系着队列是串行还是并行" class="headerlink" title="设置最大并发数[最大并发数关系着队列是串行还是并行]"></a>设置最大并发数[最大并发数关系着队列是串行还是并行]</h5><p>创建队列</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-built_in">NSOperationQueue</span> *queue = [[<span class="hljs-built_in">NSOperationQueue</span> alloc]init];<br></code></pre></td></tr></table></figure>
+
+<p>设置最大并发数</p>
+<ol>
+<li>该属性需要在任务添加到队列中之前进行设置</li>
+<li>该属性控制队列是串行执行还是并发执行</li>
+<li>如果最大并发数等于1，那么该队列是串行的，如果大于1那么是并行的<br>4.系统的最大并发数有个默认的值，为-1，如果该属性设置为0，那么不会执行任何任务</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc">queue.maxConcurrentOperationCount = <span class="hljs-number">2</span>;<br></code></pre></td></tr></table></figure>
+
+<h5 id="暂停和恢复以及取消"><a href="#暂停和恢复以及取消" class="headerlink" title="暂停和恢复以及取消"></a>暂停和恢复以及取消</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//设置暂停和恢复</span><br><span class="hljs-comment">//suspended设置为YES表示暂停，suspended设置为NO表示恢复</span><br><span class="hljs-comment">//暂停表示不继续执行队列中的下一个任务，暂停操作是可以恢复的</span><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.queue.isSuspended) &#123;<br>    <span class="hljs-keyword">self</span>.queue.suspended = <span class="hljs-literal">NO</span>;<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>    <span class="hljs-keyword">self</span>.queue.suspended = <span class="hljs-literal">YES</span>;<br>&#125;<br><span class="hljs-comment">//取消队列里面的所有操作</span><br><span class="hljs-comment">//取消之后，当前正在执行的操作的下一个操作将不再执行，而且永远都不在执行，就像后面的所有任务都从队列里面移除了一样</span><br><span class="hljs-comment">//取消操作是不可以恢复的</span><br>[<span class="hljs-keyword">self</span>.queue cancelAllOperations];<br>---------自定义<span class="hljs-built_in">NSOperation</span>取消操作--------------------------<br>-(<span class="hljs-type">void</span>)main<br>&#123;<br>    <span class="hljs-comment">//耗时操作1</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i&lt;<span class="hljs-number">1000</span>; i++) &#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;任务1-%d--%@&quot;</span>,i,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;+++++++++++++++++++++++++++++++++&quot;</span>);<br><br>    <span class="hljs-comment">//苹果官方建议，每当执行完一次耗时操作之后，就查看一下当前队列是否为取消状态，如果是，那么就直接退出</span><br>    <span class="hljs-comment">//好处是可以提高程序的性能</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.isCancelled) &#123;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">//耗时操作2</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i&lt;<span class="hljs-number">1000</span>; i++) &#123;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;任务1-%d--%@&quot;</span>,i,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;<br><br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;+++++++++++++++++++++++++++++++++&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="NSOperation实现线程间通信"><a href="#NSOperation实现线程间通信" class="headerlink" title="NSOperation实现线程间通信"></a>NSOperation实现线程间通信</h4><h5 id="开子线程下载图片"><a href="#开子线程下载图片" class="headerlink" title="开子线程下载图片"></a>开子线程下载图片</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//1.创建队列</span><br><span class="hljs-built_in">NSOperationQueue</span> *queue = [[<span class="hljs-built_in">NSOperationQueue</span> alloc]init];<br><br><span class="hljs-comment">//2.使用简便方法封装操作并添加到队列中</span><br>[queue addOperationWithBlock:^&#123;<br>    <span class="hljs-comment">//3.在该block中下载图片</span><br>    <span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://p2.wmpic.me/article/2016/03/17/1458205813_mEsdeUon.jpg&quot;</span>];<br>    <span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url];<br>    <span class="hljs-built_in">UIImage</span> *image = [<span class="hljs-built_in">UIImage</span> imageWithData:data];<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;下载图片操作--%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    <span class="hljs-comment">//4.回到主线程刷新UI</span><br>    [[<span class="hljs-built_in">NSOperationQueue</span> mainQueue] addOperationWithBlock:^&#123;<br>        <span class="hljs-keyword">self</span>.imageView.image = image;<br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;刷新UI操作---%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>    &#125;];<br>&#125;];<br></code></pre></td></tr></table></figure>
+
+<h5 id="下载多张图片合成综合案例（设置操作依赖）"><a href="#下载多张图片合成综合案例（设置操作依赖）" class="headerlink" title="下载多张图片合成综合案例（设置操作依赖）"></a>下载多张图片合成综合案例（设置操作依赖）</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs objc">- (<span class="hljs-type">void</span>)download<br>&#123;<br>    <span class="hljs-comment">//1.创建队列</span><br>    <span class="hljs-built_in">NSOperationQueue</span> *queue = [[<span class="hljs-built_in">NSOperationQueue</span> alloc]init];<br>    <span class="hljs-comment">//2.封装操作下载图片1</span><br>    <span class="hljs-built_in">NSBlockOperation</span> *op1 = [<span class="hljs-built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;<br>        <span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://p2.wmpic.me/article/2016/03/14/1457926891_nZGraHTj.jpg&quot;</span>];<br>        <span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url];<br>        <span class="hljs-comment">//拿到图片数据</span><br>        <span class="hljs-keyword">self</span>.image1 = [<span class="hljs-built_in">UIImage</span> imageWithData:data];<br>    &#125;];<br>    <span class="hljs-comment">//3.封装操作下载图片2</span><br>    <span class="hljs-built_in">NSBlockOperation</span> *op2 = [<span class="hljs-built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;<br>        <span class="hljs-built_in">NSURL</span> *url = [<span class="hljs-built_in">NSURL</span> URLWithString:<span class="hljs-string">@&quot;http://p3.wmpic.me/article/2016/01/08/1452222281_PmFnXZHU.jpg&quot;</span>];<br>        <span class="hljs-built_in">NSData</span> *data = [<span class="hljs-built_in">NSData</span> dataWithContentsOfURL:url];<br>        <span class="hljs-comment">//拿到图片数据</span><br>        <span class="hljs-keyword">self</span>.image2 = [<span class="hljs-built_in">UIImage</span> imageWithData:data];<br>    &#125;];<br><br>    <span class="hljs-comment">//4.合成图片</span><br>    <span class="hljs-built_in">NSBlockOperation</span> *combine = [<span class="hljs-built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;<br><br>        <span class="hljs-comment">//4.1 开启图形上下文</span><br>        <span class="hljs-built_in">UIGraphicsBeginImageContext</span>(<span class="hljs-built_in">CGSizeMake</span>(<span class="hljs-number">200</span>, <span class="hljs-number">200</span>));<br><br>        <span class="hljs-comment">//4.2 画第一幅图</span><br>        [<span class="hljs-keyword">self</span>.image1 drawInRect:<span class="hljs-built_in">CGRectMake</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">200</span>, <span class="hljs-number">100</span>)];<br><br>        <span class="hljs-comment">//4.3 画第二幅图</span><br>        [<span class="hljs-keyword">self</span>.image2 drawInRect:<span class="hljs-built_in">CGRectMake</span>(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">200</span>, <span class="hljs-number">100</span>)];<br><br>        <span class="hljs-comment">//4.4 根据图形上下文拿到图片数据</span><br>        <span class="hljs-built_in">UIImage</span> *image = <span class="hljs-built_in">UIGraphicsGetImageFromCurrentImageContext</span>();<br>        <span class="hljs-comment">//NSLog(@&quot;%@&quot;,image);</span><br><br>        <span class="hljs-comment">//4.5 关闭图形上下文</span><br>        <span class="hljs-built_in">UIGraphicsEndImageContext</span>();<br><br>        <span class="hljs-comment">//7.回到主线程刷新UI</span><br>        [[<span class="hljs-built_in">NSOperationQueue</span> mainQueue]addOperationWithBlock:^&#123;<br>            <span class="hljs-keyword">self</span>.imageView.image = image;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;刷新UI---%@&quot;</span>,[<span class="hljs-built_in">NSThread</span> currentThread]);<br>        &#125;];<br><br>    &#125;];<br><br>    <span class="hljs-comment">//5.设置操作依赖</span><br>    [combine addDependency:op1];<br>    [combine addDependency:op2];<br><br>    <span class="hljs-comment">//6.添加操作到队列中执行</span><br>    [queue addOperation:op1];<br>    [queue addOperation:op2];<br>    [queue addOperation:combine];<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="单例设计模式"><a href="#单例设计模式" class="headerlink" title="单例设计模式"></a>单例设计模式</h2><blockquote>
+<p>iOS开发多种设计模式之一—-单例模式</p>
+</blockquote>
+<h3 id="什么是单例"><a href="#什么是单例" class="headerlink" title="什么是单例"></a>什么是单例</h3><p>在程序运行过程，一个类有且只有一个实例对象</p>
+<h3 id="使用场合"><a href="#使用场合" class="headerlink" title="使用场合"></a>使用场合</h3><p>在整个应用程序中，共享一份资源（这份资源只需要创建初始化1次）</p>
+<h3 id="在不同的内存管理机制下实现单例"><a href="#在不同的内存管理机制下实现单例" class="headerlink" title="在不同的内存管理机制下实现单例:"></a>在不同的内存管理机制下实现单例:</h3><h4 id="ARC实现单例"><a href="#ARC实现单例" class="headerlink" title="ARC实现单例"></a>ARC实现单例</h4><p>步骤:</p>
+<ol>
+<li>在类的内部提供一个static修饰的全局变量</li>
+<li>提供一个类方法，方便外界访问</li>
+<li>重写+allocWithZone方法，保证永远都只为单例对象分配一次内存空间</li>
+<li>严谨起见，重写-copyWithZone方法和-MutableCopyWithZone方法</li>
+</ol>
+<p>代码实现:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//提供一个static修饰的全局变量，强引用着已经实例化的单例对象实例</span><br><span class="hljs-keyword">static</span> TYSingleTools *_instance;<br><span class="hljs-comment">//类方法，返回一个单例对象</span><br>+(<span class="hljs-keyword">instancetype</span>)shareTools<br>&#123;<br>     <span class="hljs-comment">//注意：这里建议使用self,而不是直接使用类名Tools（考虑继承）</span><br>    <span class="hljs-keyword">return</span> [[<span class="hljs-keyword">self</span> alloc]init];<br>&#125;<br><span class="hljs-comment">//保证永远只分配一次存储空间</span><br>+(<span class="hljs-keyword">instancetype</span>)allocWithZone:(<span class="hljs-keyword">struct</span> _NSZone *)zone<br>&#123;<br>    <span class="hljs-comment">//第一种：使用GCD中的一次性代码</span><br><span class="hljs-comment">//    static dispatch_once_t onceToken;</span><br><span class="hljs-comment">//    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="hljs-comment">//        _instance = [super allocWithZone:zone];</span><br><span class="hljs-comment">//    &#125;);</span><br>    <span class="hljs-comment">//第二种：使用加锁的方式，保证只分配一次存储空间</span><br>    <span class="hljs-keyword">@synchronized</span>(<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">if</span> (_instance == <span class="hljs-literal">nil</span>) &#123;<br>            _instance = [<span class="hljs-variable language_">super</span> allocWithZone:zone];<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> _instance;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">1.mutableCopy 创建一个新的可变对象，并初始化为原对象的值，新对象的引用计数为 1；</span><br><span class="hljs-comment">2.copy 返回一个不可变对象。分两种情况：（1）若原对象是不可变对象，那么返回原对象，并将其引用计数加 1 ；（2）若原对象是可变对象，那么创建一个新的不可变对象，并初始化为原对象的值，新对象的引用计数为 1。</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">//让代码更加的严谨</span><br>-(<span class="hljs-keyword">nonnull</span> <span class="hljs-type">id</span>)copyWithZone:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSZone</span> *)zone<br>&#123;<br><span class="hljs-comment">//    return [[self class] allocWithZone:zone];</span><br>    <span class="hljs-keyword">return</span> _instance;<br>&#125;<br>-(<span class="hljs-keyword">nonnull</span> <span class="hljs-type">id</span>)mutableCopyWithZone:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSZone</span> *)zone<br>&#123;<br>    <span class="hljs-keyword">return</span> _instance;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="MRC实现单例"><a href="#MRC实现单例" class="headerlink" title="MRC实现单例"></a>MRC实现单例</h4><p>步骤:</p>
+<ol>
+<li>在类的内部提供一个static修饰的全局变量</li>
+<li>提供一个类方法，方便外界访问</li>
+<li>重写+allocWithZone方法，保证永远都只为单例对象分配一次内存空间</li>
+<li>严谨起见，重写-copyWithZone方法和-MutableCopyWithZone方法</li>
+<li>重写release和retain方法</li>
+<li>建议在retainCount方法中返回一个最大值（有经验的程序员通过打印retainCount这个值可以猜到这是一个单例）</li>
+</ol>
+<p>配置MRC环境知识:</p>
+<ol>
+<li>注意ARC不是垃圾回收机制，是编译器特性</li>
+<li>配置MRC环境：build setting -&gt;搜索automatic ref-&gt;修改为NO</li>
+</ol>
+<p>代码实现:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//提供一个static修饰的全局变量，强引用着已经实例化的单例对象实例</span><br><span class="hljs-keyword">static</span> TYSingleTools *_instance;<br><span class="hljs-comment">//类方法，返回一个单例对象</span><br>+(<span class="hljs-keyword">instancetype</span>)shareTools<br>&#123;<br>     <span class="hljs-comment">//注意：这里建议使用self,而不是直接使用类名Tools（考虑继承）</span><br>    <span class="hljs-keyword">return</span> [[<span class="hljs-keyword">self</span> alloc]init];<br>&#125;<br><span class="hljs-comment">//保证永远只分配一次存储空间</span><br>+(<span class="hljs-keyword">instancetype</span>)allocWithZone:(<span class="hljs-keyword">struct</span> _NSZone *)zone<br>&#123;<br>    <span class="hljs-comment">//使用GCD中的一次性代码</span><br><span class="hljs-comment">//    static dispatch_once_t onceToken;</span><br><span class="hljs-comment">//    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="hljs-comment">//        _instance = [super allocWithZone:zone];</span><br><span class="hljs-comment">//    &#125;);</span><br>    <span class="hljs-comment">//使用加锁的方式，保证只分配一次存储空间</span><br>    <span class="hljs-keyword">@synchronized</span>(<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">if</span> (_instance == <span class="hljs-literal">nil</span>) &#123;<br>            _instance = [<span class="hljs-variable language_">super</span> allocWithZone:zone];<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> _instance;<br>&#125;<br><span class="hljs-comment">//让代码更加的严谨</span><br>-(<span class="hljs-keyword">nonnull</span> <span class="hljs-type">id</span>)copyWithZone:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSZone</span> *)zone<br>&#123;<br><span class="hljs-comment">//    return [[self class] allocWithZone:zone];</span><br>    <span class="hljs-keyword">return</span> _instance;<br>&#125;<br>-(<span class="hljs-keyword">nonnull</span> <span class="hljs-type">id</span>)mutableCopyWithZone:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSZone</span> *)zone<br>&#123;<br>    <span class="hljs-keyword">return</span> _instance;<br>&#125;<br><span class="hljs-comment">//在MRC环境下，如果用户retain了一次，那么直接返回instance变量，不对引用计数器+1</span><br><span class="hljs-comment">//如果用户release了一次，那么什么都不做，因为单例模式在整个程序运行过程中都拥有且只有一份，程序退出之后被释放，所以不需要对引用计数器操作</span><br>-(<span class="hljs-keyword">oneway</span> <span class="hljs-type">void</span>)release<br>&#123;<br>&#125;<br>-(<span class="hljs-keyword">instancetype</span>)<span class="hljs-keyword">retain</span><br>&#123;<br>    <span class="hljs-keyword">return</span> _instance;<br>&#125;<br><span class="hljs-comment">//惯用法，有经验的程序员通过打印retainCount这个值可以猜到这是一个单例</span><br>-(<span class="hljs-built_in">NSUInteger</span>)retainCount<br>&#123;<br>    <span class="hljs-keyword">return</span> MAXFLOAT;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>忽略ARC和MRC的单例通用版本<br>可以使用条件编译来判断当前项目环境是ARC还是MRC，从而实现一份代码在不同的内存管理机制下都可以实现单例。<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp">条件编译:<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> __has_feature(objc_arc)</span><br><span class="hljs-comment">//如果是ARC，那么就执行这里的代码1</span><br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br><span class="hljs-comment">//如果不是ARC，那么就执行代理的代码2</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>注意</strong>：<em>单例是不可以用继承的。</em></p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>GCDAPI:<br><a href="https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/c/func/dispatch_queue_create">https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/c/func/dispatch_queue_create</a></li>
+<li>Libdispatch版本源码：<br><a href="http://www.opensource.apple.com/source/libdispatch/libdispatch-187.5/">http://www.opensource.apple.com/source/libdispatch/libdispatch-187.5/</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/iOS/" class="category-chain-item">iOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>iOS之多线程</div>
+      <div>http://yoursite.com/2016/04/09/iOS之多线程/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Sheldon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2016年4月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2016/04/10/iOS%E4%B9%8Bruntime/" title="iOS之Runtime">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iOS之Runtime</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/09/01/Mac%E6%90%AD%E5%BB%BAhexo%20+%20githu%E5%8D%9A%E5%AE%A2/" title="Mac搭建hexo + github博客">
+                        <span class="hidden-mobile">Mac搭建hexo + github博客</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

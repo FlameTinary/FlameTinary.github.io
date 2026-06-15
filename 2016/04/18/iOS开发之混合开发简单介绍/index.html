@@ -1,0 +1,933 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="2014年,历时8年的HTML标准制定完成.利用HTML5编写的UI界面能运行在所有拥有浏览器的平台之上,且开发迅速而简单.这样,混合开发使得iOS开发变得更简单,更快捷">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发之混合开发简单介绍">
+<meta property="og:url" content="http://yoursite.com/2016/04/18/iOS%E5%BC%80%E5%8F%91%E4%B9%8B%E6%B7%B7%E5%90%88%E5%BC%80%E5%8F%91%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="2014年,历时8年的HTML标准制定完成.利用HTML5编写的UI界面能运行在所有拥有浏览器的平台之上,且开发迅速而简单.这样,混合开发使得iOS开发变得更简单,更快捷">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1879463-b56a7746859fd186.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2016-04-18T10:39:40.000Z">
+<meta property="article:modified_time" content="2026-06-15T12:34:33.438Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1879463-b56a7746859fd186.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+  
+  
+  <title>iOS开发之混合开发简单介绍 - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="iOS开发之混合开发简单介绍"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-04-18 18:39" pubdate>
+          2016年4月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">iOS开发之混合开发简单介绍</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><em>2014年,历时8年的HTML标准制定完成.利用HTML5编写的UI界面能运行在所有拥有浏览器的平台之上,且开发迅速而简单.这样,混合开发使得iOS开发变得更简单,更快捷</em></p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="1-Web开发新时代"><a href="#1-Web开发新时代" class="headerlink" title="1. Web开发新时代"></a>1. Web开发新时代</h3><ul>
+<li>Web1.0<br>    主流技术:HTML+CSS
+  </li>
+<li>Web2.0<br>    主流技术:Ajax(JavaScript&#x2F;DOM&#x2F;异步数据请求)
+  </li>
+<li>Web3.0<br>    主流技术:HTML5+CSS3<br>    HTML5亮点: Canvas\HTML5音视频\Web存储 Geolocation \Workers多线程处理<br>    CSS3亮点: 设计动画\2D变形\N多新特性</li>
+</ul>
+<p>    </p>
+<blockquote>
+<p>网页的组成</p>
+</blockquote>
+<ul>
+<li>一个有具体功能的完整的网页，一般由3部分组成<br>    - HTML<br>    网页的具体内容和结构</li>
+</ul>
+<p>    <br>  - CSS<br>    网页的样式（美化网页最重要的一块）<br>    <br>  - JavaScript(掌握)<br>    网页的交互效果，比如对用户鼠标事件做出响应
+    </p>
+<ul>
+<li>HTML\CSS\JavaScript学习资料：<a href="http://www.w3school.com.cn/">http://www.w3school.com.cn/</a></li>
+</ul>
+<h3 id="2-HTML"><a href="#2-HTML" class="headerlink" title="2. HTML"></a>2. HTML</h3><blockquote>
+<p>什么是HTML</p>
+</blockquote>
+<ul>
+<li>HTML的全称是HyperText Markup Language，超文本标记语言<br> - 其实它就是文本，由浏览器负责将它解析成具体的网页内容</li>
+</ul>
+<blockquote>
+<p>HTML的组成</p>
+</blockquote>
+<p>   - 跟XML类似，HTML由N个标签（节点、元素、标记）组成   </p>
+<blockquote>
+<p>HTML语法非常松散，目前的最新版是5.0，也就是HTML 5</p>
+</blockquote>
+<ul>
+<li><p>常见的HTML标签<br>    - 标题：h1、h2、h3、h4、h5….<br>    - 段落：p<br>    - 换行：br<br>    - 容器：div、span（用来容纳其他标签）<br>    - 表格：table、tr、td<br>    - 列表：ul、ol、li<br>    - 图片：img<br>    - 表单：input<br>    - 链接：a</p>
+</li>
+<li><p>HTML标签类型<br>HTML有N多标签，根据显示的类型，主要可以分为3大类</p>
+<ol>
+<li><p>块级标签<br>独占一行的标签<br>能随时设置宽度和高度（比如div、p、h1、h2、ul、li）</p>
+</li>
+<li><p>行内标签（内联标签）</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>多个行内标签能同时显示在一行<br>宽度和高度取决于内容的尺寸（比如span、a、label）</p>
+<ol start="3">
+<li>行内-块级标签（内联-块级标签）<br>多个行内-块级标签可以显示在同一行<br>能随时设置宽度和高度（比如input、button）</li>
+</ol>
+<ul>
+<li>CSS中有个display属性，能修改标签的显示类型<ul>
+<li><code>none</code>：隐藏标签</li>
+<li><code>block</code>：让标签变为块级标签</li>
+<li><code>inline</code>：让标签变为行内标签</li>
+<li><code>inline-block</code>：让标签变为行内-块级标签（内联-块级标签）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>HTML5新增标签</p>
+</blockquote>
+<ul>
+<li>HTML5新增了27个标签元素,废弃了16个标签元素,主要包括结构性标签、级块性标签、行内语义性标签、交互性标签<ol>
+<li>结构性标签<br>    负责Web上下文结构的定义，确保HTML文档，包括：<br>         - article  文章主体内容(一篇博客、一篇论坛帖子、一段用户评论、插件)</li>
+</ol>
+<p>         - header   标记头部区域内容<br>         - footer   标记脚部区域内容<br>         - section  区域章节表述<br>         - nav      菜单导航,链接导航<br>  <br>2. 块级性标签</p>
+</li>
+</ul>
+<p>    完成Web页面区域的划分，确保内容的有效分隔，包括：<br>         - aside   注记,贴士,侧栏,摘要,插入的引用作为补充主体的内容<br>         - figure  对多个元素组合并展示的元素,常与figcaption联合使用<br>         - code    表示一段代码块<br>         - dialog  人与人之间对话,包含dt和dd两个组合元素（dt用于表示说话者、dd用于表示说话者的内容）<br>    <br>  3. 行内语义性标签<br>    完成Web页面具体内容的引用和表述，丰富展示内容，包括：<br>         - meter     特定范围内的数值，如工资、数量、百分比<br>         - time      时间值<br>         - progress  进度条，可用max、min、step进行控制，完成对进度的表示和监听<br>         - video     视频元素，用于视频播放，支持缓冲预载和多种视频媒体格式<br>         - audio     音频元素，用于音频播放，支持缓冲预载和多种音频媒体格式<br>    <br>  4. 交互性标签<br>    功能性内容的表达，有一定的内容和数据的关联，是各种事件的基础，包括：<br>         - details   表示一段具体的内容，默认不显示，通过某种方式（单击）与legend交互才会显示<br>         - datagrid  控制客户端数据与显示，可用于动态脚本及时更新<br>         - menu      用于交互菜单<br>         - command   用来处理命令按钮</p>
+<h3 id="3-CSS"><a href="#3-CSS" class="headerlink" title="3. CSS"></a>3. CSS</h3><blockquote>
+<p>什么是CSS</p>
+</blockquote>
+<ul>
+<li><p>CSS的全称是Cascading Style Sheets，层叠样式表</p>
+</li>
+<li><p>它用来控制HTML标签的样式，在美化网页中起到非常重要的作用</p>
+</li>
+<li><p>CSS的编写格式是键值对形式的，比如:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-attribute">color</span>: red;<br><span class="hljs-attribute">background-color</span>: blue;<br><span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span>;<br>```    <br>  - 冒号:左边的是属性名，冒号:右边的属性值<br><br>&gt;CSS的<span class="hljs-number">3</span>种书写形式<br><br>- 行内样式：（内联样式）直接在标签的style属性中书写<br></code></pre></td></tr></table></figure>
+<p>    <body style="color: red;"></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-bullet">- </span>页内样式：在本网页的style标签中书写<br></code></pre></td></tr></table></figure>
+<p>    <style><br>    body {<br>    color: red;<br>    }<br>    </style><br>    <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-bullet">- </span>外部样式：在单独的CSS文件中书写，然后在网页中用link标签引用<br></code></pre></td></tr></table></figure><br>    <link rel="stylesheet" href="index.css"></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br>&gt;CSS的两大重点<br><br><span class="hljs-bullet">1.</span> 属性<br>    通过属性的复杂叠加才能做出漂亮的网页<br><span class="hljs-bullet">  -</span> CSS有N多属性，根据继承性，主要可以分为2大类<br><span class="hljs-bullet">    -</span> 可继承属性<br>父标签的属性值会传递给子标签<br>一般是文字控制属性<br></code></pre></td></tr></table></figure>
+<p>所有标签可继承<br>visibility、cursor<br>内联标签可继承<br>letter-spacing、word-spacing、white-space、line-height、color、font、font-family、font-size、font-style、font-variant、font-weight、text-decoration、text-transform、direction<br> 块级标签可继承<br>text-indent、text-align<br>列表标签可继承<br>list-style、list-style-type、list-style-position、list-style-image</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">    -</span> 不可继承属性<br>父标签的属性值不能传递给子标签<br>一般是区块控制属性<br></code></pre></td></tr></table></figure>
+<p>display、margin、border、padding、background<br>height、min-height、max-height、width、min-width、max-width<br>overflow、position、left、right、top、bottom、z-index<br>float、clear<br>table-layout、vertical-align<br>page-break-after、page-bread-before<br>unicode-bidi</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs markdown">    <br><span class="hljs-bullet">2.</span> 选择器<br>    通过选择器找到对应的标签设置样式<span class="hljs-emphasis">*(具体选择器内容和教程请参考:http://www.w3school.com.cn/css/index.asp)*</span><br><br><span class="hljs-quote">&gt; CSS布局</span><br><br><span class="hljs-bullet">-</span>  默认情况下，所有的网页标签都在标准流布局中,从上到下，从左到右<br><span class="hljs-bullet">-</span> 脱离标准流的方法有<br><span class="hljs-bullet">  -</span> float属性<br><span class="hljs-bullet">    -</span> float属性的常用取值有:<br><span class="hljs-code">        `left`：脱离标准流，浮动在父标签的最左边</span><br><span class="hljs-code">`right`：脱离标准流，浮动在父标签的最右边</span><br><span class="hljs-code">  - position属性</span><br><span class="hljs-code"></span><br><span class="hljs-code">    ![position属性](http://upload-images.jianshu.io/upload_images/1879463-98d3215b81c3df23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="hljs-code"></span><br>&gt;CSS3新增特性<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**RGBA透明度**</span><br>   RGB(红色R+绿色G+蓝色B),RGBA则在其基础上增加了Alpha通道，可用于设置透明值<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**块阴影与圆角阴影**</span><br>   box-shadow  text-shadow<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**圆角**</span><br>    border-radius<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**边框图片**</span><br>     border-image<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**形变**</span><br>   transform: none | <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">transform-function</span>&gt;</span></span>[<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">transform-fuction</span>&gt;</span></span>]<br><br><span class="hljs-section">### 4. 盒子模型</span><br><br>![<span class="hljs-string">盒子模型</span>](<span class="hljs-link">http://upload-images.jianshu.io/upload_images/1879463-dcd26e170da66975.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</span>)<br><span class="hljs-bullet">-</span> 网页上的每一个标签都是一个盒子<br><span class="hljs-bullet">-</span> 每个盒子都有四个属性<br><span class="hljs-bullet">  1.</span> 内容（content）<br><br>![<span class="hljs-string">内容属性</span>](<span class="hljs-link">http://upload-images.jianshu.io/upload_images/1879463-fd9b30c8df171c7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</span>)<br><span class="hljs-bullet">  2.</span> 填充（padding，内边距）<br><br>![<span class="hljs-string">填充属性</span>](<span class="hljs-link">http://upload-images.jianshu.io/upload_images/1879463-5689bf59b9e0f5fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</span>)<br><span class="hljs-bullet">  3.</span> 边框（border）：盒子本身<br><span class="hljs-bullet">  4.</span> 边界（margin，外边距）<br><br>![<span class="hljs-string">边界属性</span>](<span class="hljs-link">http://upload-images.jianshu.io/upload_images/1879463-2803e390750974e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</span>)<br><br>![<span class="hljs-string">标准盒子模型</span>](<span class="hljs-link">http://upload-images.jianshu.io/upload_images/1879463-7d4bf71b5a129753.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</span>)<br><br>![<span class="hljs-string">IE盒子模型</span>](<span class="hljs-link">http://upload-images.jianshu.io/upload_images/1879463-0ad03d90f842a6aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</span>)<br><br><span class="hljs-section">### 4. JavaScript</span><br>&gt;什么是JavaScript<br><br><span class="hljs-bullet">-</span> JavaScript是一门广泛用于浏览器客户端的脚本语言，由Netspace公司设计，当时跟Sun公司合作，所以名字起得像Java。业内一般简称JS<br><br>&gt;JS的常见用途<br><br><span class="hljs-bullet">-</span> HTML DOM操作（节点操作，比如添加、修改、删除节点）<br><span class="hljs-bullet">-</span> 给HTML网页增加动态功能，比如动画<br><span class="hljs-bullet">-</span> 事件处理：比如监听鼠标点击、鼠标滑动、键盘输入<br><br>&gt;JavaScript的书写方式<br><br><span class="hljs-bullet">-</span> JS常见的书写方式有2种<br><span class="hljs-bullet">  -</span> 页内JS：在当前网页的script标签中编写<br></code></pre></td></tr></table></figure>
+<script type="text/javascript">
+</script>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-bullet">- </span>外部JS<br></code></pre></td></tr></table></figure>
+<script src="index.js"></script>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs css"><br>&gt;<span class="hljs-selector-tag">Canvas</span><br><br>-  <span class="hljs-selector-tag">HTML</span><br></code></pre></td></tr></table></figure>
+<p>    <canvas id="canvas"></canvas></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-bullet">- </span>JS<br></code></pre></td></tr></table></figure>
+<p>   var canvas &#x3D; document.getElementById(‘canvas’);<br>   var context &#x3D; canvas.getContext(‘2d’);</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">    - `context`是一个绘图的上下文环境<br>    - `2d`是二维图形<br><br>- Canvas绘制直线<br>  - 起点<br></code></pre></td></tr></table></figure>
+<p>   context.moveTo(100,100);</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">  - 终点<br>```  <br>context.lineTo(<span class="hljs-number">400</span>, <span class="hljs-number">400</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>绘制<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">    context.stroke()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+<li>设置线条颜色和宽度<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini">    <span class="hljs-attr">context.strokeStyle</span> = <span class="hljs-string">&#x27;red&#x27;</span><span class="hljs-comment">;</span><br>   <span class="hljs-attr">context.lineWidth</span> = <span class="hljs-number">5</span><span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+<li>设置填充色<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">    <span class="hljs-attr">context.fillStyle</span> = <span class="hljs-string">&#x27;blue&#x27;</span><span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>Canvas绘制弧线<br> <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"> context.arc(<br><span class="hljs-built_in">          centerX,</span> centerY, radius,<br><span class="hljs-built_in">          startingAngle,</span> endingAngle, <br>          anticlockwise=<span class="hljs-literal">false</span>     <br>       )<br></code></pre></td></tr></table></figure></p>
+<ul>
+<li><code>centerX, centerY</code>: 圆心的坐标</li>
+<li><code>radius</code>: 半径</li>
+<li><code>startingAngle</code>, <code>endingAngle</code>: 开始角度,结束角度</li>
+<li><code>anticlockwise</code>: false顺时针 true逆时针</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1879463-b56a7746859fd186.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="/img/loading.gif" lazyload alt="Canvas绘制弧线"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/iOS/" class="category-chain-item">iOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>iOS开发之混合开发简单介绍</div>
+      <div>http://yoursite.com/2016/04/18/iOS开发之混合开发简单介绍/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Sheldon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2016年4月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2016/04/27/iOS%E5%BC%80%E5%8F%91%E4%B9%8B%E6%A0%B8%E5%BF%83%E5%8A%A8%E7%94%BB/" title="iOS开发之核心动画">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iOS开发之核心动画</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2016/04/12/iOS%E5%BC%80%E5%8F%91%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" title="iOS开发之数据存储">
+                        <span class="hidden-mobile">iOS开发之数据存储</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

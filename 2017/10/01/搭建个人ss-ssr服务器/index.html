@@ -1,0 +1,960 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="获取SSR客户端 Windows客户端地址 download  备用地址  Mac客户端地址 download 备用地址 Linux客户端一键安装配置 使用脚本 (使用方法见注释) 或者采用图形界面的linux ssr客户端 安卓 SSR客户端 下载地址 备用下载地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建个人ss-ssr服务器">
+<meta property="og:url" content="http://yoursite.com/2017/10/01/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BAss-ssr%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="获取SSR客户端 Windows客户端地址 download  备用地址  Mac客户端地址 download 备用地址 Linux客户端一键安装配置 使用脚本 (使用方法见注释) 或者采用图形界面的linux ssr客户端 安卓 SSR客户端 下载地址 备用下载地址">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/pac2/master/pp100.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/pac2/master/pp101.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B01.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B02.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B04.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B05.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B06.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell11.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell12.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell13.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell14.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell15.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/10.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/11.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/12.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/13.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/14.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/15.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/16.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/17.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/22.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/23.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/18.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/19.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/20.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/21.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/25.png">
+<meta property="article:published_time" content="2017-10-01T14:30:54.000Z">
+<meta property="article:modified_time" content="2026-06-15T12:34:33.439Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="ssr">
+<meta property="article:tag" content="服务器">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Alvin9999/pac2/master/pp100.png">
+  
+  
+  
+  <title>搭建个人ss-ssr服务器 - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="搭建个人ss-ssr服务器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-10-01 22:30" pubdate>
+          2017年10月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">搭建个人ss-ssr服务器</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="获取SSR客户端"><a href="#获取SSR客户端" class="headerlink" title="获取SSR客户端"></a>获取SSR客户端</h1><ul>
+<li>Windows客户端地址 <a href="https://github.com/shadowsocksr-backup/shadowsocksr-csharp/releases">download</a>  <a href="https://nofile.io/f/6Jm7WJCyOVv/ShadowsocksR-4.7.0-win.7z">备用地址</a> </li>
+<li>Mac客户端地址 <a href="https://github.com/shadowsocksr-backup/ShadowsocksX-NG/releases">download</a> <a href="https://nofile.io/f/jgMWFwCBonU#ab0d3c3b6ac54482">备用地址</a></li>
+<li>Linux客户端一键安装配置 <a href="https://github.com/the0demiurge/CharlesScripts/blob/master/charles/bin/ssr">使用脚本</a> (使用方法见注释) 或者采用图形界面的<a href="https://github.com/erguotou520/electron-ssr/releases">linux ssr客户端</a></li>
+<li>安卓 SSR客户端 <a href="https://github.com/shadowsocksr-backup/shadowsocksr-android/releases">下载地址</a> <a href="https://nofile.io/f/GRWw7PbADrc#1c6c32f969e7f5d9">备用下载地址</a></li>
+</ul>
+<span id="more"></span>
+
+<h1 id="开始搭建"><a href="#开始搭建" class="headerlink" title="开始搭建"></a>开始搭建</h1><blockquote>
+<p>搭建步骤分为三步：<br>1.购买VPS服务器<br>2.一键部署VPS服务器<br>3.一键加速VPS服务器 （谷歌BBR加速，推荐）</p>
+</blockquote>
+<h2 id="第一步：购买VPS服务器"><a href="#第一步：购买VPS服务器" class="headerlink" title="第一步：购买VPS服务器"></a>第一步：购买VPS服务器</h2><p>VPS服务器需要选择国外的，首选国际知名的vultr，速度不错、稳定且性价比高。</p>
+<p>vultr注册地址： <a href="http://www.vultr.com/?ref=7048874">http://www.vultr.com/?ref=7048874</a> （全球15个服务器位置可选，KVM框架）</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs awk">价格:<br><span class="hljs-number">2.5</span>美元<span class="hljs-regexp">/月的服务器配置信息：单核 512M内存 20G SSD硬盘 100M带宽 500G流量/</span>月<br><br><span class="hljs-number">5</span>美元<span class="hljs-regexp">/月的服务器配置信息：单核 1G内存 25G SSD硬盘 100M带宽 1000G流量/</span>月<br><br><span class="hljs-number">10</span>美元<span class="hljs-regexp">/月的服务器配置信息：单核 2G内存 40G SSD硬盘 100M带宽 2000G流量/</span>月<br><br><span class="hljs-number">20</span>美元<span class="hljs-regexp">/月的服务器配置信息：2cpu 4G内存 60G SSD硬盘 100M带宽 3000G流量/</span>月<br><br><span class="hljs-number">40</span>美元<span class="hljs-regexp">/月的服务器配置信息：4cpu 8G内存 100G SSD硬盘 100M带宽 4000G流量/</span>月<br><br></code></pre></td></tr></table></figure>
+
+<p>vultr实际上是折算成小时来计费的，比如服务器是5美元1个月，那么每小时收费为5&#x2F;30&#x2F;24&#x3D;0.0069美元 会自动从账号中扣费，只要保证账号有钱即可。如果你部署的服务器实测后不理想，你可以把它删掉（destroy），重新换个地区的服务器来部署，很方便。</p>
+<p>计费从你开通服务器开始算的，不管你有没有使用，即使服务器处于关机状态仍然会计费，如果你没有开通服务器就不算。比如你今天早上开通了服务器，但你有事情，晚上才部署，那么这段时间是会计费的。同理，如果你早上删掉服务器，第二天才开通新的服务器，那么这段时间是不会计费的。</p>
+<p>温馨提醒：同样的服务器位置，不同的宽带类型和地区所搭建的账号的翻墙速度会不同，所以最好亲测一下。</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/pac2/master/pp100.png" srcset="/img/loading.gif" lazyload alt="img"><br><img src="https://raw.githubusercontent.com/Alvin9999/pac2/master/pp101.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>购买vps服务器时，服务器地址优先选择：美国硅谷（Silicon Valley）、美国达拉斯(Dallas)等，近期不推荐用洛杉矶和日本的服务器，因为这两个地区近期能够开到的好ip的可能性很低。推荐选择CentOS 6.X64位的系统（系统版本不要选的太高，不要选centos7！centos7默认的防火墙可能会干扰ssr的正常连接！）。完成购买后，找到系统的密码记下来，部署服务器时需要用到。如图：</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B01.png" srcset="/img/loading.gif" lazyload alt="img"><br><img src="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B02.png" srcset="/img/loading.gif" lazyload alt="img"><br><img src="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B04.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>默认是centos7系统，点击图中的CentOS几个字，会弹出centos6，然后选中它！vps操作系统不要选cento7，因为选它很可能会影响ssr的正常连接。</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B05.png" srcset="/img/loading.gif" lazyload alt="img"><br><img src="https://raw.githubusercontent.com/Alvin9999/crp_up/master/pac%E6%95%99%E7%A8%8B06.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="第二步：远程连接VPS服务器"><a href="#第二步：远程连接VPS服务器" class="headerlink" title="第二步：远程连接VPS服务器"></a>第二步：远程连接VPS服务器</h2><h3 id="Mac连接远程服务器"><a href="#Mac连接远程服务器" class="headerlink" title="Mac连接远程服务器:"></a>Mac连接远程服务器:</h3><ol>
+<li>打开terminal,输入<code>ssh root@ip地址</code>;<code>root</code>为远程服务器的username,<code>ip地址</code>为远程服务器的ip.</li>
+<li>联通后,提示输入密码,然后输入服务器的密码.</li>
+<li>开始部署ssr代码</li>
+</ol>
+<h3 id="Windows连接远程服务器"><a href="#Windows连接远程服务器" class="headerlink" title="Windows连接远程服务器:"></a>Windows连接远程服务器:</h3><p>购买服务器后，需要部署一下。因为你买的是虚拟东西，而且又远在国外，我们需要一个叫Xshell的软件来远程部署。Xshell windows版下载地址：</p>
+<p><a href="http://www.babel.cc/share.do?s=5793540665720793">巴别鸟云盘下载</a> 提取密码：38693</p>
+<p><a href="https://nofile.io/f/FQaBa7fT3dy#32cbadc45982d2f3">国外云盘下载</a></p>
+<p><a href="http://rj.baidu.com/soft/detail/15201.html?ald">百度软件中心</a></p>
+<p>下载xshell软件并安装后，打开软件<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell11.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>选择文件，新建<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell12.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>随便取个名字，然后把你的服务器ip填上<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell13.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>连接国外<code>ip</code>即服务器时，软件会先后提醒你输入用户名和密码，用户名linux系统默认都是<code>root</code>，密码是购买服务器后的cent系统的密码。</p>
+<p><strong>如果开好了服务器，发现xshell死活连不上，多半是开的服务器ip被墙了，遇到这种情况，把服务器删掉，重新开个新的服务器即可，可以是同地区的也可以选择其它地区。</strong><br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell14.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/xshell15.png" srcset="/img/loading.gif" lazyload></p>
+<p>连接成功后，会出现如上图所示，之后就可以复制粘贴代码部署了。</p>
+<p>分享两个好用的代码，选择其中一个即可。建议两个脚本先大致都看一下功能,然后再选择。</p>
+<h2 id="第三步-部署ssr代码"><a href="#第三步-部署ssr代码" class="headerlink" title="第三步: 部署ssr代码"></a>第三步: 部署ssr代码</h2><h3 id="第1种方式"><a href="#第1种方式" class="headerlink" title="第1种方式:"></a>第1种方式:</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs vim">yum -<span class="hljs-keyword">y</span> install wget<br><br>wget --<span class="hljs-keyword">no</span>-check-certificate https://raw.githubusercontent.<span class="hljs-keyword">com</span>/teddysun/shadowsocks_install/master/shadowsocksR.<span class="hljs-keyword">sh</span><br><br>chmod +<span class="hljs-keyword">x</span> shadowsocksR.<span class="hljs-keyword">sh</span><br><br>./shadowsocksR.<span class="hljs-keyword">sh</span> <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> | tee shadowsocksR.<span class="hljs-built_in">log</span><br><br></code></pre></td></tr></table></figure>
+
+
+<p>上面的代码总共有4行（显示5行），复制时要一起复制下来，以下脚本类似。如果要卸载直接输入命令：<code>./shadowsocks-go.sh uninstall</code></p>
+<p>演示开始：复制代码粘贴到vps服务器里，按回车键，进入部署。</p>
+<p>按照如下提示，输入想设置的密码，按回车键进入下一步 (密码建议用字母，图中的密码只是作为演示用)<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/1.png" srcset="/img/loading.gif" lazyload><br>按照如下提示，输入想设置的端口（3～4位即可），按回车键进入下一步<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/2.png" srcset="/img/loading.gif" lazyload><br>按照如下提示，选择想设置的加密方式，括号里面是默认的加密方式，想设置默认的话直接按回车键。这里选择数字2（和默认一样）的aes-256-cfb的加密方式<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/3.png" srcset="/img/loading.gif" lazyload><br>按照如下提示，选择项设置的协议插件，默然的是origin（支持SS客户端，不推荐），我们选择SSR客户端的协议插件：3<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/4.png" srcset="/img/loading.gif" lazyload><br>按照如下提示，选择项设置的混淆插件，默然的是plain（支持SS客户端，不推荐），我们选择SSR客户端的混淆插件：6<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/5.png" srcset="/img/loading.gif" lazyload><br>按照如下提示，按任意键进行自动部署<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/6.png" srcset="/img/loading.gif" lazyload><br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/7.png" srcset="/img/loading.gif" lazyload></p>
+<p>上图表示部署成功。从上往下依次为SSR帐号的IP、端口、密码、协议插件、混淆插件和加密方式。</p>
+<p>最后可以重启服务器确保部署生效。重启需要在命令栏里输入<code>reboot</code> ，输入命令后稍微等待一会服务器就会自动重启，一般重启过程需要2～5分钟，重启过程中Xshell会自动断开连接，等VPS重启好后才可以用Xshell软件进行连接。如果部署过程中卡在某个位置超过10分钟，可以用xshell软件断开，然后重新连接你的ip，再复制代码进行部署。</p>
+<p>这个脚本的图文演示就结束了，图中的IP仅作演示用，教程发布后会失效。有人想了，我以后有想修改密码或者端口的需求怎么办？这个脚本修改密码和端口不是很方便，需要把最初的部署代码重新输入一遍，即从头到尾部署一遍即可。</p>
+<p>下面再分享第二个脚本，这个脚本装一遍即可，方便以后想修改密码、端口什么的，而且功能更多。</p>
+<h3 id="第2种方式"><a href="#第2种方式" class="headerlink" title="第2种方式:"></a>第2种方式:</h3><p>CentOS&#x2F;Debian&#x2F;Ubuntu ShadowsocksR单&#x2F;多端口一键管理脚本：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs vim">yum -<span class="hljs-keyword">y</span> install wget<br><br>wget -<span class="hljs-keyword">N</span> --<span class="hljs-keyword">no</span>-check-certificate https://softs.fun/Bash/ssr.<span class="hljs-keyword">sh</span> &amp;&amp; chmod +<span class="hljs-keyword">x</span> ssr.<span class="hljs-keyword">sh</span> &amp;&amp; bash ssr.<span class="hljs-keyword">sh</span><br><br></code></pre></td></tr></table></figure>
+
+<p>备用下载地址：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs vim">yum -<span class="hljs-keyword">y</span> install wget<br><br>wget -<span class="hljs-keyword">N</span> --<span class="hljs-keyword">no</span>-check-certificate https://raw.githubusercontent.<span class="hljs-keyword">com</span>/ToyoDAdoubi/doubi/master/ssr.<span class="hljs-keyword">sh</span> &amp;&amp; chmod +<span class="hljs-keyword">x</span> ssr.<span class="hljs-keyword">sh</span> &amp;&amp; bash ssr.<span class="hljs-keyword">sh</span><br><br></code></pre></td></tr></table></figure>
+
+
+<p>复制上面的代码到VPS服务器里，安装脚本后，以后只需要运行这个快捷命令就可以出现下图的界面进行设置，快捷管理命令为：<code>bash ssr.sh</code></p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/8.png" srcset="/img/loading.gif" lazyload></p>
+<p>如上图出现管理界面后，输入数字<code>1</code>来安装SSR服务端。如果输入<code>1</code>后不能进入下一步，那么请退出xshell，重新连接vps服务器，然后输入快捷管理命令<code>bash ssr.sh</code> 再尝试。</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/9.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据上图提示，依次输入自己想设置的端口和密码 (密码建议用字母，图中的密码只是作为演示用)，回车键用于确认</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/10.png" srcset="/img/loading.gif" lazyload></p>
+<p>如上图，选择想设置的加密方式，比如10，按回车键确认</p>
+<p>接下来是选择协议插件，如下图：<br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/11.png" srcset="/img/loading.gif" lazyload><br><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/12.png" srcset="/img/loading.gif" lazyload></p>
+<p>选择并确认后，会出现上图的界面，提示你是否选择兼容原版，这里的原版指的是SS客户端，可以根据需求进行选择，原则上不推荐使用SS客户端，演示选择n</p>
+<p>之后进行混淆插件的设置，如下面</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/13.png" srcset="/img/loading.gif" lazyload></p>
+<p>进行混淆插件的设置后，会依次提示你对设备数、单线程限速和端口总限速进行设置，默认值是不进行限制，个人使用的话，选择默认即可，即直接敲回车键。</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/14.png" srcset="/img/loading.gif" lazyload></p>
+<p>之后代码就正式自动部署了，到下图所示的位置，提示你下载文件，输入：y</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/15.png" srcset="/img/loading.gif" lazyload></p>
+<p>耐心等待一会，出现下面的界面即部署完成：</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/16.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/17.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据上图就可以看到自己设置的SSR账号信息，包括IP、端口、密码、加密方式、协议插件、混淆插件。如果之后想修改账号信息，直接输入快捷管理命令：bash ssr.sh 进入管理界面，选择相应的数字来进行一键修改。例如：</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/22.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/23.png" srcset="/img/loading.gif" lazyload></p>
+<p>第2个脚本的演示结束。</p>
+<h2 id="第四步：一键加速VPS服务器"><a href="#第四步：一键加速VPS服务器" class="headerlink" title="第四步：一键加速VPS服务器"></a>第四步：一键加速VPS服务器</h2><p>此加速教程为谷歌BBR加速 ，vultr的服务器可以装谷歌bbr。</p>
+<p>按照第二步的步骤，重新连接服务器ip，登录成功后，在命令栏里粘贴以下代码：</p>
+<p>【谷歌BBR加速教程】</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs vim">yum -<span class="hljs-keyword">y</span> install wget<br><br>wget --<span class="hljs-keyword">no</span>-check-certificate https://github.<span class="hljs-keyword">com</span>/teddysun/across/raw/master/bbr.<span class="hljs-keyword">sh</span><br><br>chmod +<span class="hljs-keyword">x</span> bbr.<span class="hljs-keyword">sh</span><br><br>./bbr.<span class="hljs-keyword">sh</span><br></code></pre></td></tr></table></figure>
+
+<p>把上面整个代码复制后粘贴进去，不动的时候按回车，然后耐心等待，最后重启vps服务器即可。</p>
+<p>演示开始，如图：</p>
+<p>复制并粘贴代码后，按回车键确认</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/18.png" srcset="/img/loading.gif" lazyload></p>
+<p>如下图提示，按任意键继续部署</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/19.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/20.png" srcset="/img/loading.gif" lazyload></p>
+<p>部署到上图这个位置的时候，等待3～6分钟</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/21.png" srcset="/img/loading.gif" lazyload></p>
+<p>最后输入y重启服务器或者手动输入代码reboot来确保加速生效。</p>
+<p>购买vps服务器后，ip有了，通过部署，端口、密码、加密方式、协议和混淆也有了，最后将这些信息填入SSR客户端就可以翻墙啦。</p>
+<p>有了账号后，打开SSR客户端，填上信息，这里以windows版的SSR客户端为例子：</p>
+<p><img src="https://raw.githubusercontent.com/Alvin9999/PAC/master/ss/25.png" srcset="/img/loading.gif" lazyload></p>
+<p>在对应的位置，填上服务器ip、服务器端口、密码、加密方式、协议和混淆，最后将浏览器的代理设置为（http）127.0.0.1 1080即可。账号的端口号就是你自己设置的，而要上网的浏览器的端口号是1080，固定的，谷歌浏览器可以通过 SwitchyOmega 插件来设置。</p>
+<p>有问题可以在这个帖子留言，或者自己网上搜索不明白的地方。多实践会更好。第一次部署时会慢一点，熟练了之后，就很快了。</p>
+<hr>
+<h1 id="常见问题参考解决方法："><a href="#常见问题参考解决方法：" class="headerlink" title="常见问题参考解决方法："></a>常见问题参考解决方法：</h1><p>1、用了一段时间发现ssr账号用不了了？</p>
+<p>多半是被墙了，即ip失效。首先ping一下自己的ip，看看能不能ping的通，ping不通那么就是ip被墙了，遇到这种情况重新部署一个新的服务器，新的服务器就是新的ip。关于怎么ping ip的方法，可以自行网上搜索，很简单。vultr服务商开通和删除服务器非常方便（新服务器即新ip。大多数vps服务商都没有这样的服务，一般的vps服务商可能会提供更换1次ip的服务，如果你买的是别家的vps，一定要了解是否能够更换ip，假如不能，那么万一你的ip不幸被墙，钱就打水漂了）。</p>
+<p>2、刚搭建好的ssr账号，ip能ping通，但是还是用不了？</p>
+<p>首选，排除杀毒软件的干扰，尤其是国产杀毒软件，包括但不限于360安全卫生、360杀毒软件、腾讯管家、金山卫生等。这些东西很容易干扰翻墙上网，如果你的电脑安装了这样的东西，建议至少翻墙时别用。其次，检查下SSR信息是否填写正确。浏览器的代理方式是否是ssr代理，即127.0.0.1 1080端口。如果以上条件都排除，还是用不了，那么可以更换端口、加密方式、协议、混淆，或者更换服务器位置。</p>
+<p>3、vps的服务器操作系统不要用的太高，太高可能会因为系统的防火墙问题导致搭建的SSR账号连不上，如果你用的centos系统，建议用centos6，不要用centos7。如果你前面不小心装了centos7系统，那么只能重装系统或者重新部署新的vps服务器。</p>
+<p>4、小知识：vultr服务商提供的vps服务器是单向流量计算，有的vps服务商是双向流量计算，单向流量计算对于用户来说更实惠。因为我们是在vps服务器上部署SSR服务端后，再用SSR客户端翻墙，所以SSR服务端就相当于中转，比如我们看一个视频，必然会产生流量，假如消耗流量80M，那么VPS服务器会产生上传80M和下载80M流量，vultr服务商只计算单向的80M流量。如果是双向计算流量，那么会计算为160M流量。</p>
+<p>5、如果你想把搭建的账号给多人使用，不用额外设置端口，因为一个账号就可以多人使用。一般10美元的服务器可以同时支持100人在线使用。如果你想额外的设置端口，采用第二个部署脚本，在管理界面输入数字9，就可以设置多端口了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">服务器</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="print-no-link">#服务器</a>
+      
+        <a href="/tags/ssr/" class="print-no-link">#ssr</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>搭建个人ss-ssr服务器</div>
+      <div>http://yoursite.com/2017/10/01/搭建个人ss-ssr服务器/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Sheldon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2017年10月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/01/21/hexo-next%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/" title="hexo+next详细配置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">hexo+next详细配置</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2016/04/27/iOS%E5%BC%80%E5%8F%91%E4%B9%8B%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6/" title="iOS开发之触摸事件">
+                        <span class="hidden-mobile">iOS开发之触摸事件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

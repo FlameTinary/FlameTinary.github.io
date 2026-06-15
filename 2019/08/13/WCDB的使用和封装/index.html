@@ -1,0 +1,963 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="公司的项目所使用的数据库是FMDB，并对其进行了二次封装；由于年久失修，遂决定改为WCDB，因此，抽时间对WCDB进行了一番研究。WCDB是腾讯开源的一款供客户端使用的数据库，基于SQLCipher，支持iOS，macOS和Android。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WCDB的使用和封装">
+<meta property="og:url" content="http://yoursite.com/2019/08/13/WCDB%E7%9A%84%E4%BD%BF%E7%94%A8%E5%92%8C%E5%B0%81%E8%A3%85/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="公司的项目所使用的数据库是FMDB，并对其进行了二次封装；由于年久失修，遂决定改为WCDB，因此，抽时间对WCDB进行了一番研究。WCDB是腾讯开源的一款供客户端使用的数据库，基于SQLCipher，支持iOS，macOS和Android。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565702556033&di=42e97cc84fdd5bac032679edd8726455&imgtype=0&src=http%3A%2F%2Fimg25.aspzz.cn%2Fuploads%2Fallimg%2Fc190624%2F156133JD62330-134U.jpg">
+<meta property="article:published_time" content="2019-08-13T10:33:05.000Z">
+<meta property="article:modified_time" content="2026-06-15T12:34:33.436Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565702556033&di=42e97cc84fdd5bac032679edd8726455&imgtype=0&src=http%3A%2F%2Fimg25.aspzz.cn%2Fuploads%2Fallimg%2Fc190624%2F156133JD62330-134U.jpg">
+  
+  
+  
+  <title>WCDB的使用和封装 - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="WCDB的使用和封装"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-08-13 18:33" pubdate>
+          2019年8月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          67 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">WCDB的使用和封装</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>公司的项目所使用的数据库是FMDB，并对其进行了二次封装；由于年久失修，遂决定改为WCDB，因此，抽时间对WCDB进行了一番研究。<br><a href="https://github.com/Tencent/wcdb">WCDB</a>是腾讯开源的一款供客户端使用的数据库，基于<a href="https://github.com/sqlcipher/sqlcipher">SQLCipher</a>，支持iOS，macOS和Android。</p>
+<span id="more"></span>
+
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><h3 id="易用"><a href="#易用" class="headerlink" title="易用"></a>易用</h3><p>WCDB通过深度封装数据库语言，使开发者可以通过OC或者Swift的代码方式使用数据库，无需为了拼接SQL而写一大坨代码；</p>
+<h3 id="高效"><a href="#高效" class="headerlink" title="高效"></a>高效</h3><p>WCDB通过框架层和<a href="https://github.com/sqlcipher/sqlcipher">SQLCipher</a>源码优化，使其有更高效的表现；</p>
+<h3 id="完整"><a href="#完整" class="headerlink" title="完整"></a>完整</h3><p>WCDB覆盖了数据库使用过程中大多数的使用场景和需求；</p>
+<ul>
+<li><strong>加密：</strong>WCDB提供基于<a href="https://github.com/sqlcipher/sqlcipher">SQLCipher</a>的数据库加密。</li>
+<li><strong>损坏修复：</strong>WCDB内建了Repair Kit用于修复损坏的数据库。</li>
+<li><strong>反注入：</strong>WCDB内建了对SQL注入的保护。</li>
+</ul>
+<h2 id="安装WCDB"><a href="#安装WCDB" class="headerlink" title="安装WCDB"></a>安装WCDB</h2><p>使用Cocoapods安装WCDB：</p>
+<ol>
+<li>更新pod repo：<code>pod repo update</code></li>
+<li>在Podfile对应的target中，添加<code>pod &#39;WCDB&#39;</code></li>
+<li>执行<code>pod install --verbose</code></li>
+<li>打开workspace</li>
+<li>引入头文件’#import &lt;WCDB&#x2F;WCDB.h&gt;’</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>使用WCD分为2部分：<strong>ORM</strong>和<strong>CRUD</strong>。</p>
+<h3 id="ORM"><a href="#ORM" class="headerlink" title="ORM"></a>ORM</h3><p>ORM的作用就是映射数据库字段和我们的数据模型；WCDB使用内置的宏来连接类、属性与表、字段。共有三类宏，分别对应数据库的字段、索引和约束。</p>
+<h4 id="字段宏"><a href="#字段宏" class="headerlink" title="字段宏"></a>字段宏</h4><p>字段宏以WCDB_SYNTHESIZE开头，定义了类属性与字段之间的联系。</p>
+<ul>
+<li><code>WCDB_SYNTHESIZE(className, propertyName)</code>是最简单的的用法，直接使用propertyName作为数据库中字段的名称。</li>
+<li><code>WCDB_SYNTHESIZE_COLUMN(className, propertyName, columnName)</code>支持自定义字段名。</li>
+<li><code>WCDB_SYNTHESIZE_DEFAULT(className, propertyName, defaultValue)</code>自定义字段默认值（可以是任意C类型或NSString, NSData, NSNumber, NSNull）。</li>
+<li><code>WCDB_SYNTHESIZE_COLUMN_DEFAULT(className, propertyName, cloumnName, defaultValue)</code>。</li>
+</ul>
+<p><a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORM.mm">字段宏参考</a></p>
+<h4 id="索引宏"><a href="#索引宏" class="headerlink" title="索引宏"></a>索引宏</h4><p>索引宏以WCDB_INDEX开头，定义了数据库的索引属性。支持定义索引的排序方式。</p>
+<ul>
+<li><code>WCDB_INDEX(className, indexSubfixName, propertyName)</code>是基础用法，直接指定某个字段为索引。同时，WCDB会将tableName + indexSubfixName作为该索引的名字。</li>
+<li><code>WCDB_INDEX_ASC(className, indexSubfixName, propertyName)</code>升序。</li>
+<li><code>WCDB_INDEX_DESC(className, indexSubfixName, propertyName)</code>降序。</li>
+<li><code>WCDB_UNIQUE_INDEX(className, indexSubfixName, propertyName)</code>唯一索引。</li>
+<li><code>WCDB_UNIQUE_INDEX_ASC(className, indexSubfixName, propertyName)</code>唯一索引升序排列。</li>
+<li><code>WCDB_UNIQUE_INDEX_DESC(className, indexSubfixName, propertyName)</code>唯一索引降序排列。</li>
+</ul>
+<p>WCDB通过<code>indexSubfixName</code>匹配多索引。相同的<code>indexSubfixName</code>会被组合为多字段索引。</p>
+<p>例如：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">WCDB_INDEX</span><span class="hljs-params">(WCTSampleORMIndex, <span class="hljs-string">&quot;_multiIndexSubfix&quot;</span>, multiIndexPart1)</span></span><br><span class="hljs-function"><span class="hljs-title">WCDB_INDEX</span><span class="hljs-params">(WCTSampleORMIndex, <span class="hljs-string">&quot;_multiIndexSubfix&quot;</span>, multiIndexPart2)</span></span><br></code></pre></td></tr></table></figure>
+<p><a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORMIndex.mm">索引宏例子</a></p>
+<h4 id="约束宏"><a href="#约束宏" class="headerlink" title="约束宏"></a>约束宏</h4><p>约束宏包含了<strong>字段约束</strong>和<strong>表约束</strong>。</p>
+<h5 id="字段约束"><a href="#字段约束" class="headerlink" title="字段约束"></a>字段约束</h5><p>主键约束以WCDB_PRIMARY开头，定义了数据库的主键；支持自定义主键的排序方式、是否自增。</p>
+<ul>
+<li><code>WCDB_PRIMARY(className, propertyName)</code>是基础用法，直接使用propertyName作为数据库的主键。</li>
+<li><code>WCDB_PRIMARY_ASC(className, propertyName)</code>主键升序。</li>
+<li><code>WCDB_PRIMARY_DESC(className, propertyName)</code>主键降序。</li>
+<li><code>WCDB_PRIMARY_AUTO_INCREMENT(className, propertyName)</code>主键自增。</li>
+<li><code>WCDB_PRIMARY_ASC_AUTO_INCREMENT(className, propertyName)</code>主键自增及升序的组合。</li>
+<li><code>WCDB_PRIMARY_DESC_AUTO_INCREMENT(className, propertyName)</code>主键自增及降序组合。</li>
+</ul>
+<p>非空约束：<code>WCDB_NOT_NULL(className, propertyName)</code>，当该字段插入数据为空时，数据库会返回错误。<br>唯一约束：<code>WCDB_UNIQUE(className, propertyName)</code>，当该字段插入数据与其他列冲突时，数据库会返回错误。</p>
+<p><strong>注意：</strong>使用了主键自增后，创建的模型必须设置<code>isAutoIncrement</code>为YES。</p>
+<h5 id="表约束"><a href="#表约束" class="headerlink" title="表约束"></a>表约束</h5><p>多主键约束以<code>WCDB_MULTI_PRIMARY</code>开头，定义了数据库的多主键，支持自定义每个主键的排序方式。</p>
+<ul>
+<li><code>WCDB_MULTI_PRIMARY(className, constraintName, propertyName)</code>为基础用法，多个主键通过constrainName匹配。</li>
+<li><code>WCDB_MULTI_PRIMARY_ASC(className, constraintName, propertyName)</code>多主键升序。</li>
+<li><code>WCDB_MULTI_PRIMARY_DESC(className, constraintName, propertyName)</code>多主键降序。</li>
+</ul>
+<p>多字段唯一约束以<code>WCDB_MULTI_UNIQUE</code>开头，定义了数据库的多字段组合唯一，支持自定义每个字段的排序方式。</p>
+<ul>
+<li><code>WCDB_MULTI_UNIQUE(className, constraintName, propertyName)</code>基础用法。</li>
+<li><code>WCDB_MULTI_UNIQUE_ASC(className, constraintName, propertyName)</code>升序。</li>
+<li><code>WCDB_MULTI_UNIQUE_DESC(className, constraintName, propertyName)</code>降序。</li>
+</ul>
+<p><a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORMTableConstraint.mm">表约束示例</a></p>
+<h4 id="修改字段"><a href="#修改字段" class="headerlink" title="修改字段"></a>修改字段</h4><p>由于SQLite只支持增加字段，并不支持删除和重命名字段。因此，WCDB在删除字段的时候只是将其定义删除；删除定义后，WCDB只是将该字段忽略，其旧数据依然在数据库中，但新增的数据基本<strong>不会因为该字段产生额外的性能和空间损耗</strong>。<br>由于SQLite不支持修改字段名称，所以WCDB采用重新映射的方式。</p>
+<h3 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h3><p>WCDB提供了三个基础类进行数据库操作：<code>WCTDatabase</code>、<code>WCTTable</code>、<code>WCTTransaction</code>。它们的接口都是<strong>线程安全的</strong>。</p>
+<h4 id="WCTDatabase"><a href="#WCTDatabase" class="headerlink" title="WCTDatabase"></a>WCTDatabase</h4><p>表示一个数据库，可以进行所有的数据库操作。</p>
+<h5 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h5><p><code>WCTDatabase</code>通过<code>initWithPath:</code>接口进行创建。该接口会同时创建path中不存在的目录。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs OBJC"><span class="hljs-built_in">NSString</span>* path = <span class="hljs-string">@&quot;&lt;这里是数据库路径&gt;&quot;</span>;<br>WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];<br></code></pre></td></tr></table></figure>
+
+<h5 id="打开数据库"><a href="#打开数据库" class="headerlink" title="打开数据库"></a>打开数据库</h5><p>WCDB采用懒加载的方式管理对象，因此SQLite连接会在第一次被访问的时候打开。开发者<strong>不需要手动打开数据库</strong>。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs OBJC"><span class="hljs-comment">// 判断数据库是否能够打开</span><br><span class="hljs-keyword">if</span> ([database canOpen]) &#123;<br>  <span class="hljs-comment">//...</span><br>&#125;<br><span class="hljs-comment">// 判断数据库是否已经打开</span><br><span class="hljs-keyword">if</span> ([database isOpened]) &#123;<br>  <span class="hljs-comment">//...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="关闭数据库"><a href="#关闭数据库" class="headerlink" title="关闭数据库"></a>关闭数据库</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs OBJC">[database close];<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>由于WCDB支持多线程访问数据库，因此，该接口会阻塞等待所有线程均已操作结束。</p>
+<p>对于一个特定路径的数据库，WCDB会在所有对象对其的引用结束时，自动关闭数据库，并且回收内存和SQLite连接。因此，大多数的时候，开发者并<strong>不需要手动关闭数据库</strong>。</p>
+<h4 id="WCTTable"><a href="#WCTTable" class="headerlink" title="WCTTable"></a>WCTTable</h4><p>表示一个表。等价于预设了<code>class</code>和<code>tableName</code>的<code>WCTDatabase</code>，仅可以进行数据库的CRUD。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs OBJC">WCTTable* table = [database getTableOfName:tableName<br>                                 withClass:WCTSampleTable.class];<br></code></pre></td></tr></table></figure>
+
+<h4 id="WCTTransaction"><a href="#WCTTransaction" class="headerlink" title="WCTTransaction"></a>WCTTransaction</h4><p>表示一个事务。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs OBJC">WCTTransaction *transaction = [database getTransaction];<br></code></pre></td></tr></table></figure>
+
+<p>与WCTDatabase的事务不同，WCTTransaction可以在函数和对象之间传递，实现跨线程的事务。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs OBJC"><span class="hljs-comment">//You can do a transaction in different threads using WCTTransaction.</span><br><span class="hljs-comment">//But it&#x27;s better to run serially, or an inner thread mutex will guarantee this.</span><br><span class="hljs-type">BOOL</span> ret = [transaction begin];<br><span class="hljs-built_in">dispatch_async</span>(dispatch_queue_create(<span class="hljs-string">&quot;other thread&quot;</span>, DISPATCH_QUEUE_SERIAL), ^&#123;<br>  WCTSampleTransaction *object = [[WCTSampleTransaction alloc] init];<br>  <span class="hljs-type">BOOL</span> ret = [transaction insertObject:object<br>                                  into:tableName];<br>  <span class="hljs-keyword">if</span> (ret) &#123;<br>      [transaction commit];<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>      [transaction rollback];<br>  &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<h4 id="CRUD操作"><a href="#CRUD操作" class="headerlink" title="CRUD操作"></a>CRUD操作</h4><h5 id="创建数据库-1"><a href="#创建数据库-1" class="headerlink" title="创建数据库"></a>创建数据库</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs OBJC"><span class="hljs-type">BOOL</span> ret = [database createTableAndIndexesOfName:tableName<br>                                       withClass:WCTSampleTable.class];<br><br><span class="hljs-comment">// 或者</span><br><br><span class="hljs-type">BOOL</span> ret = [database createTableOfName:tableName<br>                     withColumnDefList:&#123;<br>                     WCTSampleTable.intValue.def(WCTColumnTypeInteger32),<br>                     WCTSampleTable.stringValue.def(WCTColumnTypeString)<br>           &#125;];<br></code></pre></td></tr></table></figure>
+
+<h5 id="将数据插入表"><a href="#将数据插入表" class="headerlink" title="将数据插入表"></a>将数据插入表</h5><ul>
+<li><code>insertObject:into:和insertObjects:into:</code>，插入单个或多个对象</li>
+<li><code>insertOrReplaceObject:into</code>和<code>insertOrReplaceObjects:into</code>，插入单个或多个对象。当对象的主键在数据库内已经存在时，更新数据；否则插入对象。</li>
+<li><code>insertObject:onProperties:into:</code>和<code>insertObjects:onProperties:into:</code>，插入单个或多个对象的部分属性</li>
+<li><code>insertOrReplaceObject:onProperties:into</code>和<code>insertOrReplaceObjects:onProperties:into</code>，插入单个或多个对象的部分属性。当对象的主键在数据库内已经存在时，更新数据；否则插入对象。</li>
+</ul>
+<h5 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h5><ul>
+<li><code>deleteAllObjectsFromTable:</code>删除表内的所有数据</li>
+<li><code>deleteObjectsFromTable:</code>后可组合接 where、orderBy、limit、offset以删除部分数据</li>
+</ul>
+<h5 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h5><ul>
+<li><code>updateAllRowsInTable:onProperties:withObject:</code>，通过object更新数据库中所有指定列的数据</li>
+<li><code>updateRowsInTable:onProperties:withObject:</code>后可组合接 where、orderBy、limit、offset以通过object更新指定列的部分数据</li>
+<li><code>updateAllRowsInTable:onProperty:withObject:</code>，通过object更新数据库某一列的数据</li>
+<li><code>updateRowsInTable:onProperty:withObject:</code>后可组合接 where、orderBy、limit、offset以通过object更新某一列的部分数据</li>
+<li><code>updateAllRowsInTable:onProperties:withRow:</code>，通过数组更新数据库中的所有指定列的数据</li>
+<li><code>updateRowsInTable:onProperties:withRow:</code>后可组合接 where、orderBy、limit、offset以通过数组更新指定列的部分数据</li>
+<li><code>updateAllRowsInTable:onProperty:withRow:</code>，通过数组更新数据库某一列的数据</li>
+<li><code>updateRowsInTable:onProperty:withRow:</code>后可组合接 where、orderBy、limit、offset以通过数组更新某一列的部分数</li>
+</ul>
+<h5 id="查找数据"><a href="#查找数据" class="headerlink" title="查找数据"></a>查找数据</h5><ul>
+<li><code>getOneObjectOfClass:fromTable:</code>后可接 where、orderBy、limit、offset以从数据库中取出一行数据并组合成object</li>
+<li><code>getOneObjectOnResults:fromTable:</code>后可接 where、orderBy、limit、offset以从数据库中取出一行数据的部分列并组合成object</li>
+<li><code>getOneRowOnResults:fromTable:</code>后可接 where、orderBy、limit、offset以从数据库中取出一行数据的部分列并组合成数组</li>
+<li><code>getOneColumnOnResult:fromTable:</code>后可接 where、orderBy、limit、offset以从数据库中取出一列数据并组合成数组</li>
+<li><code>getOneDistinctColumnOnResult:fromTable:</code>后可接 where、orderBy、limit、offset以从数据库中取出一列数据，并取distinct后组合成数组。</li>
+<li><code>getOneValueOnResult:fromTable:</code>后可接 where、orderBy、limit、offset以从数据库中取出一行数据的某一列</li>
+<li><code>getAllObjectsOfClass:fromTable:</code>，取出所有数据，并组合成object</li>
+<li><code>getObjectsOfClass:fromTable:</code>后可接 where、orderBy、limit、offset以从数据库中取出一部分数据，并组合成object</li>
+<li><code>getAllObjectsOnResults:fromTable:</code>，取出所有数据的指定列，并组合成object</li>
+<li><code>getObjectsOnResults:fromTable:</code>后可接where、orderBy、limit、offset以从数据库中取出一部分数据的指定列，并组合成object</li>
+<li><code>getAllRowsOnResults:fromTable:</code>，取出所有数据的指定列，并组合成数组</li>
+<li><code>getRowsOnResults:fromTable:</code>后可接where、orderBy、limit、offset以从数据库中取出一部分数据的指定列，并组合成数组</li>
+</ul>
+<p><a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/convenient/sample_convenient_main.mm">CRUD示例</a></p>
+<h5 id="链式接口"><a href="#链式接口" class="headerlink" title="链式接口"></a>链式接口</h5><p>WCDB对于增删改查操作，都提供了对应的类以实现链式调用</p>
+<ul>
+<li>WCTInsert</li>
+<li>WCTDelete</li>
+<li>WCTUpdate</li>
+<li>WCTSelect</li>
+<li>WCTRowSelect</li>
+<li>WCTMultiSelect</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs OBJC">WCTSelect *select = [database prepareSelectObjectsOnResults:Message.localID.max()<br>                                                  fromTable:<span class="hljs-string">@&quot;message&quot;</span>];<br><span class="hljs-built_in">NSArray</span>&lt;Message *&gt; *objects = [[[[select where:Message.localID &gt; <span class="hljs-number">0</span>] <br>                               			groupBy:&#123;Message.content&#125;]<br>                                	    orderBy:Message.createTime.order()] <br>                               		      limit:<span class="hljs-number">10</span>].allObjects;<br></code></pre></td></tr></table></figure>
+
+
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><h4 id="调试SQL"><a href="#调试SQL" class="headerlink" title="调试SQL"></a>调试SQL</h4><p>[WCTStatistics SetGlobalSQLTrace:]会监控所有执行的SQL，该接口可用于调试，确定SQL是否执行正确。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs OBJC"><span class="hljs-comment">//SQL Execution Monitor</span><br>[WCTStatistics SetGlobalSQLTrace:^(<span class="hljs-built_in">NSString</span> *sql) &#123;<br>	<span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;SQL: %@&quot;</span>, sql);<br>&#125;];<br></code></pre></td></tr></table></figure>
+
+<h4 id="WINQ"><a href="#WINQ" class="headerlink" title="WINQ"></a>WINQ</h4><h4 id="自定义类型"><a href="#自定义类型" class="headerlink" title="自定义类型"></a>自定义类型</h4><h4 id="隔离C-代码"><a href="#隔离C-代码" class="headerlink" title="隔离C++代码"></a>隔离C++代码</h4><h4 id="关于数据库加密"><a href="#关于数据库加密" class="headerlink" title="关于数据库加密"></a>关于数据库加密</h4><h4 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h4><h5 id="主键自增-Auto-Increment"><a href="#主键自增-Auto-Increment" class="headerlink" title="主键自增(Auto Increment)"></a>主键自增(Auto Increment)</h5><h5 id="as重定向"><a href="#as重定向" class="headerlink" title="as重定向"></a>as重定向</h5><h5 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h5><h4 id="基础类共享"><a href="#基础类共享" class="headerlink" title="基础类共享"></a>基础类共享</h4><p>对于同一个路径的数据库，不同的<code>WCTDatabase</code>、<code>WCTTable</code>、<code>WCTTransaction</code>对象共享同一个WCDB核心。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs OBJC">WCTDatabase* database1 = [[WCTDatabase alloc] initWithPath:path];<br>WCTDatabase* database2 = [[WCTDatabase alloc] initWithPath:path];<br>database1.tag = <span class="hljs-number">1</span>;<br><span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;%d&quot;</span>, database2.tag);<span class="hljs-comment">//print 1</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h4><p>WCDB提供了删除数据库、移动数据库、获取数据库占用空间和使用路径的文件操作接口。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs OBJC">- (<span class="hljs-type">BOOL</span>)removeFilesWithError:(WCTError **)error;<br>- (<span class="hljs-type">BOOL</span>)moveFilesToDirectory:(<span class="hljs-built_in">NSString</span> *)directory withExtraFiles:(<span class="hljs-built_in">NSArray</span>&lt;<span class="hljs-built_in">NSString</span> *&gt; *)extraFiles andError:(WCTError **)error;<br>- (<span class="hljs-built_in">NSArray</span>&lt;<span class="hljs-built_in">NSString</span> *&gt; *)getPaths;<br>- (<span class="hljs-built_in">NSUInteger</span>)getFilesSizeWithError:(WCTError **)error;<br></code></pre></td></tr></table></figure>
+<p>若是一个线程正在操作数据库，而另一个线程进行移动数据库的操作，可能会导致数据库的损坏；因此，文件操作通常放在关闭数据库后。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs OBJC">[database close:^&#123;<br>  WCTError *error = <span class="hljs-literal">nil</span>;<br>  <span class="hljs-type">BOOL</span> ret = [database moveFilesToDirectory:otherDirectory withError:&amp;error];<br>  <span class="hljs-keyword">if</span> (!ret) &#123;<br>      <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Move files Error %@&quot;</span>, error);<br>  &#125;<br>&#125;];<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/iOS/" class="category-chain-item">iOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>WCDB的使用和封装</div>
+      <div>http://yoursite.com/2019/08/13/WCDB的使用和封装/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Sheldon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年8月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/08/19/iOS%E5%B8%B8%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E6%95%B4%E7%90%86/" title="iOS常用第三方库整理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iOS常用第三方库整理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/08/13/jenkins%E6%89%A7%E8%A1%8CGitHub%E4%B8%AD%E7%9A%84Python%E4%BB%A3%E7%A0%81/" title="jenkins执行GitHub中的Python代码">
+                        <span class="hidden-mobile">jenkins执行GitHub中的Python代码</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

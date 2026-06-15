@@ -1,0 +1,1152 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Core Animation,中文翻译为核心动画,它是一组非常强大的动画处理API,使用它能做出非常绚丽的动画效果,而且往往事半功倍.也就是说,使用少量的代码就可以实现非常强大的功能.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发之核心动画">
+<meta property="og:url" content="http://yoursite.com/2016/04/27/iOS%E5%BC%80%E5%8F%91%E4%B9%8B%E6%A0%B8%E5%BF%83%E5%8A%A8%E7%94%BB/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="Core Animation,中文翻译为核心动画,它是一组非常强大的动画处理API,使用它能做出非常绚丽的动画效果,而且往往事半功倍.也就是说,使用少量的代码就可以实现非常强大的功能.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-2193280/2dlyp18yyw.png?imageView2/2/w/1620">
+<meta property="article:published_time" content="2016-04-27T04:31:08.000Z">
+<meta property="article:modified_time" content="2026-06-15T12:34:33.438Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/yehe-2193280/2dlyp18yyw.png?imageView2/2/w/1620">
+  
+  
+  
+  <title>iOS开发之核心动画 - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="iOS开发之核心动画"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-04-27 12:31" pubdate>
+          2016年4月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          59 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">iOS开发之核心动画</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>Core Animation,中文翻译为核心动画,它是一组非常强大的动画处理API,使用它能做出非常绚丽的动画效果,而且往往事半功倍.也就是说,使用少量的代码就可以实现非常强大的功能.</p>
+</blockquote>
+<span id="more"></span>
+
+<ul>
+<li>Core Animation的动画执行过程都是在后台操作的,不会阻塞主线程</li>
+<li>Core Animation是直接作用在CALayer上的,并非UIView</li>
+</ul>
+<p><em>所以在了解Core Animation之前,先要了解什么是CALayer</em></p>
+<h2 id="CALayer"><a href="#CALayer" class="headerlink" title="CALayer"></a>CALayer</h2><blockquote>
+<p>在iOS中,你能看得见摸得着的东西基本上都是UIView,比如:按钮,文本标签等等;其实UIView之所以能显示在屏幕上,完全是因为它内部的一个图层</p>
+</blockquote>
+<ul>
+<li>在创建UIView对象时,UIView内部会自动创建一个图层(即CALayer对象),通过UIView的layer属性可以访问这个层</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-keyword">@property</span>(<span class="hljs-keyword">nonatomic</span>,<span class="hljs-keyword">readonly</span>,<span class="hljs-keyword">retain</span>) <span class="hljs-built_in">CALayer</span> *layer; <br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>当UIView需要显示到屏幕上时，会调用drawRect:方法进行绘图，并且会将所有内容绘制在自己的图层上，绘图完毕后，系统会将图层拷贝到屏幕上，于是就完成了UIView的显示;UIView本身不具备显示的功能，是它内部的层才有显示功能</li>
+<li>CALayer的一些属性</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-comment">//宽度和高度</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGRect</span> bounds;<br><span class="hljs-comment">//位置(默认指中点，具体由anchorPoint决定)</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGPoint</span> position;<br><span class="hljs-comment">//锚点(x,y的范围都是0-1)，决定了position的含义</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGPoint</span> anchorPoint;<br><span class="hljs-comment">//背景颜色(CGColorRef类型)</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGColorRef</span> backgroundColor;<br><span class="hljs-comment">//形变属性</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CATransform3D</span> transform;<br><span class="hljs-comment">//边框颜色(CGColorRef类型)</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGColorRef</span> borderColor;<br><span class="hljs-comment">//边框宽度</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGFloat</span> borderWidth;<br><span class="hljs-comment">//圆角半径</span><br><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGColorRef</span> borderColor;<br><span class="hljs-comment">//内容(比如设置为图片CGImageRef)</span><br><span class="hljs-keyword">@property</span>(<span class="hljs-keyword">retain</span>) <span class="hljs-type">id</span> contents;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>UIView和CALayer的选择</p>
+</blockquote>
+<p>通过CALayer，就能做出跟UIImageView一样的界面效果<br>既然CALayer和UIView都能实现相同的显示效果，那究竟该选择谁好呢？<br>其实，对比CALayer，UIView多了一个事件处理的功能。也就是说，CALayer不能处理用户的触摸事件，而UIView可以.<br>所以，如果显示出来的东西需要跟用户进行交互的话，用UIView；如果不需要跟用户进行交互，用UIView或者CALayer都可以.<br>当然，CALayer的性能会高一些，因为它少了事件处理的功能，更加轻量级.</p>
+<blockquote>
+<p>position和anchorPoint</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGPoint</span> position;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>用来设置CALayer在父层中的位置</li>
+</ol>
+<ul>
+<li>以父层的左上角为原点(0, 0)</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-keyword">@property</span> <span class="hljs-built_in">CGPoint</span> anchorPoint;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>称为“定位点”、“锚点”</li>
+</ol>
+<ul>
+<li>决定着CALayer身上的哪个点会在position属性所指的位置</li>
+<li>以自己的左上角为原点(0, 0)</li>
+<li>它的x、y取值范围都是0~1，默认值为（0.5, 0.5）</li>
+</ul>
+<blockquote>
+<p>隐式动画</p>
+</blockquote>
+<ul>
+<li>每一个UIView内部都默认关联着一个CALayer，我们可用称这个Layer为Root Layer（根层）</li>
+<li>所有的非Root Layer，也就是手动创建的CALayer对象，都存在着隐式动画</li>
+<li>什么是隐式动画？<ul>
+<li>当对非Root Layer的部分属性进行修改时，默认会自动产生一些动画效果</li>
+<li>而这些属性称为Animatable Properties(可动画属性)</li>
+<li>列举几个常见的Animatable Properties：<ol>
+<li>bounds：用于设置CALayer的宽度和高度。修改这个属性会产生缩放动画</li>
+</ol>
+<ul>
+<li>backgroundColor：用于设置CALayer的背景色。修改这个属性会产生背景色的渐变动画</li>
+<li>position：用于设置CALayer的位置。修改这个属性会产生平移动画</li>
+</ul>
+</li>
+<li>可以通过动画事务(CATransaction)关闭默认的隐式动画效果</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs objc">[<span class="hljs-built_in">CATransaction</span> begin];<br>[<span class="hljs-built_in">CATransaction</span> setDisableActions:<span class="hljs-literal">YES</span>];<br><span class="hljs-keyword">self</span>.myview.layer.position = <span class="hljs-built_in">CGPointMake</span>(<span class="hljs-number">10</span>, <span class="hljs-number">10</span>);<br>[<span class="hljs-built_in">CATransaction</span> commit];<br></code></pre></td></tr></table></figure>
+
+<h2 id="Core-Animation"><a href="#Core-Animation" class="headerlink" title="Core Animation"></a>Core Animation</h2><p><img src="http://7xtfqf.com2.z0.glb.clouddn.com/Snip20160427_1.png" srcset="/img/loading.gif" lazyload alt="Core Animation结构图"></p>
+<ul>
+<li>核心动画中所有类都遵守CAMediaTiming</li>
+<li>CAAnaimation是个抽象类，不具备动画效果，必须用它的子类才有动画效果</li>
+<li>CAAnimationGroup和CATransition才有动画效果<ul>
+<li>CAAnimationGroup是个动画组，可以同时进行缩放，旋转。</li>
+<li>CATransition是转场动画，界面之间跳转都可以用转场动画。</li>
+</ul>
+</li>
+<li>CAPropertyAnimation也是个抽象类，本身不具备动画效果，只有子类才有<ul>
+<li>CABasicAnimation和CAKeyframeAnimation<ol>
+<li>CABasicAnimation基本动画，做一些简单效果</li>
+</ol>
+<ul>
+<li>CAKeyframeAnimation帧动画，做一些连续的流畅的动画</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>开发步骤</p>
+</blockquote>
+<p><em>如果不是xcode5之后的版本，使用它需要先添QuartzCore.framework和引入对应的框架&lt;QuartzCore&#x2F;QuartzCore.h&gt;</em></p>
+<ol>
+<li>首先得有CALayer</li>
+</ol>
+<ul>
+<li>初始化一个CAAnimation对象，并设置一些动画相关属性</li>
+<li>通过调用CALayer的addAnimation:forKey:方法，增加CAAnimation对象到CALayer中，这样就能开始执行动画了</li>
+<li>通过调用CALayer的removeAnimationForKey:方法可以停止CALayer中的动画</li>
+</ul>
+<h3 id="CAAnimation"><a href="#CAAnimation" class="headerlink" title="CAAnimation"></a>CAAnimation</h3><blockquote>
+<p>简介</p>
+</blockquote>
+<ul>
+<li>是所有动画对象的父类，负责控制动画的持续时间和速度，是个抽象类，不能直接使用，应该使用它具体的子类</li>
+<li>属性说明：(红色代表来自CAMediaTiming协议的属性)<ul>
+<li>duration：动画的持续时间</li>
+<li>repeatCount：重复次数，无限循环可以设置HUGE_VALF或者MAXFLOAT</li>
+<li>repeatDuration：重复时间</li>
+<li>removedOnCompletion：默认为YES，代表动画执行完毕后就从图层上移除，图形会恢复到动画执行前的状态。如果想让图层保持显示动画执行后的状态，那就设置为NO，不过还要设置fillMode为kCAFillModeForwards</li>
+<li>fillMode：决定当前对象在非active时间段的行为。比如动画开始之前或者动画结束之后</li>
+<li>beginTime：可以用来设置动画延迟执行时间，若想延迟2s，就设置为CACurrentMediaTime()+2，CACurrentMediaTime()为图层的当前时间</li>
+<li>timingFunction：速度控制函数，控制动画运行的节奏</li>
+<li>delegate：动画代理</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> mark 暂停CALayer的动画</span><br>-(<span class="hljs-type">void</span>)pauseLayer:(<span class="hljs-built_in">CALayer</span>*)layer<br>&#123;<br>    <span class="hljs-built_in">CFTimeInterval</span> pausedTime = [layer convertTime:<span class="hljs-built_in">CACurrentMediaTime</span>() fromLayer:<span class="hljs-literal">nil</span>];<br><br>    <span class="hljs-comment">// 让CALayer的时间停止走动</span><br>      layer.speed = <span class="hljs-number">0.0</span>;<br>    <span class="hljs-comment">// 让CALayer的时间停留在pausedTime这个时刻</span><br>    layer.timeOffset = pausedTime;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs objc"><br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> mark 恢复CALayer的动画</span><br>-(<span class="hljs-type">void</span>)resumeLayer:(<span class="hljs-built_in">CALayer</span>*)layer<br>&#123;<br>    <span class="hljs-built_in">CFTimeInterval</span> pausedTime = layer.timeOffset;<br>    <span class="hljs-comment">// 1. 让CALayer的时间继续行走</span><br>      layer.speed = <span class="hljs-number">1.0</span>;<br>    <span class="hljs-comment">// 2. 取消上次记录的停留时刻</span><br>      layer.timeOffset = <span class="hljs-number">0.0</span>;<br>    <span class="hljs-comment">// 3. 取消上次设置的时间</span><br>      layer.beginTime = <span class="hljs-number">0.0</span>;    <br>    <span class="hljs-comment">// 4. 计算暂停的时间(这里也可以用CACurrentMediaTime()-pausedTime)</span><br>    <span class="hljs-built_in">CFTimeInterval</span> timeSincePause = [layer convertTime:<span class="hljs-built_in">CACurrentMediaTime</span>() fromLayer:<span class="hljs-literal">nil</span>] - pausedTime;<br>    <span class="hljs-comment">// 5. 设置相对于父坐标系的开始时间(往后退timeSincePause)</span><br>      layer.beginTime = timeSincePause;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>动画填充模式</p>
+</blockquote>
+<ul>
+<li>fillMode属性值（要想fillMode有效，最好设置removedOnCompletion &#x3D; NO）</li>
+<li>kCAFillModeRemoved 这个是默认值，也就是说当动画开始前和动画结束后，动画对layer都没有影响，动画结束后，layer会恢复到之前的状态</li>
+<li>kCAFillModeForwards 当动画结束后，layer会一直保持着动画最后的状态 </li>
+<li>kCAFillModeBackwards 在动画开始前，只需要将动画加入了一个layer，layer便立即进入动画的初始状态并等待动画开始。</li>
+<li>kCAFillModeBoth 这个其实就是上面两个的合成.动画加入后开始之前，layer便处于动画初始状态，动画结束后layer保持动画最后的状态</li>
+</ul>
+<blockquote>
+<p>速度控制函数</p>
+</blockquote>
+<ul>
+<li>速度控制函数(CAMediaTimingFunction) <ol>
+<li>kCAMediaTimingFunctionLinear（线性）：匀速，给你一个相对静态的感觉</li>
+</ol>
+<ul>
+<li>kCAMediaTimingFunctionEaseIn（渐进）：动画缓慢进入，然后加速离开</li>
+<li>kCAMediaTimingFunctionEaseOut（渐出）：动画全速进入，然后减速的到达目的地</li>
+<li>kCAMediaTimingFunctionEaseInEaseOut（渐进渐出）：动画缓慢的进入，中间加速，然后减速的到达目的地。这个是默认的动画行为。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>动画代理方法</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">NSObject</span> (<span class="hljs-title">CAAnimationDelegate</span>)</span><br><br><span class="hljs-comment">/* Called when the animation begins its active duration. */</span><br><br>- (<span class="hljs-type">void</span>)animationDidStart:(<span class="hljs-built_in">CAAnimation</span> *)anim;<br><br><span class="hljs-comment">/* Called when the animation either completes its active duration or</span><br><span class="hljs-comment"> * is removed from the object it is attached to (i.e. the layer). &#x27;flag&#x27;</span><br><span class="hljs-comment"> * is true if the animation reached the end of its active duration</span><br><span class="hljs-comment"> * without being removed. */</span><br><br>- (<span class="hljs-type">void</span>)animationDidStop:(<span class="hljs-built_in">CAAnimation</span> *)anim finished:(<span class="hljs-type">BOOL</span>)flag;<br><br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="1-CAPropertyAnimation"><a href="#1-CAPropertyAnimation" class="headerlink" title="1. CAPropertyAnimation"></a>1. CAPropertyAnimation</h4><ul>
+<li><p>是CAAnimation的子类，也是个抽象类，要想创建动画对象，应该使用它的两个子类：</p>
+<ol>
+<li>CABasicAnimation</li>
+</ol>
+<ul>
+<li>CAKeyframeAnimation</li>
+</ul>
+</li>
+<li><p>属性说明：</p>
+<ul>
+<li>keyPath：通过指定CALayer的一个属性名称为keyPath（NSString类型），并且对CALayer的这个属性的值进行修改，达到相应的动画效果。比如，指定@“position”为keyPath，就修改CALayer的position属性的值，以达到平移的动画效果</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>CABasicAnimation</p>
+</blockquote>
+<ul>
+<li><p>基本动画,是CAPropertyAnimation的子类</p>
+</li>
+<li><p>属性说明:</p>
+<ul>
+<li>fromValue：keyPath相应属性的初始值</li>
+<li>toValue：keyPath相应属性的结束值</li>
+</ul>
+</li>
+<li><p>动画过程说明：</p>
+<ul>
+<li>随着动画的进行，在长度为duration的持续时间内，keyPath相应属性的值从fromValue渐渐地变为toValue</li>
+<li>keyPath内容是CALayer的可动画Animatable属性</li>
+<li>如果fillMode&#x3D;kCAFillModeForwards同时removedOnComletion&#x3D;NO，那么在动画执行完毕后，图层会保持显示动画执行后的状态。但在实质上，图层的属性值还是动画执行前的初始值，并没有真正被改变。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>关键帧动画</p>
+</blockquote>
+<ul>
+<li><p>关键帧动画，也是CAPropertyAnimation的子类，与CABasicAnimation的区别是：</p>
+<ul>
+<li>CABasicAnimation只能从一个数值（fromValue）变到另一个数值（toValue），而CAKeyframeAnimation会使用一个NSArray保存这些数值</li>
+</ul>
+</li>
+<li><p>属性说明：</p>
+<ul>
+<li>values：上述的NSArray对象。里面的元素称为“关键帧”(keyframe)。动画对象会在指定的时间（duration）内，依次显示values数组中的每一个关键帧</li>
+<li>path：可以设置一个CGPathRef、CGMutablePathRef，让图层按照路径轨迹移动。path只对CALayer的anchorPoint和position起作用。如果设置了path，那么values将被忽略</li>
+<li>keyTimes：可以为对应的关键帧指定对应的时间点，其取值范围为0到1.0，keyTimes中的每一个时间值都对应values中的每一帧。如果没有设置keyTimes，各个关键帧的时间是平分的</li>
+</ul>
+</li>
+</ul>
+<p><em>CABasicAnimation可看做是只有2个关键帧的CAKeyframeAnimation</em></p>
+<h4 id="2-CAAnimationGroup"><a href="#2-CAAnimationGroup" class="headerlink" title="2. CAAnimationGroup"></a>2. CAAnimationGroup</h4><ul>
+<li><p>动画组，是CAAnimation的子类，可以保存一组动画对象，将CAAnimationGroup对象加入层后，组中所有动画对象可以同时并发运行</p>
+</li>
+<li><p>属性说明：</p>
+<ul>
+<li>animations：用来保存一组动画对象的NSArray</li>
+<li>默认情况下，一组动画对象是同时运行的，也可以通过设置动画对象的beginTime属性来更改动画的开始时间</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-CATransition"><a href="#3-CATransition" class="headerlink" title="3. CATransition"></a>3. CATransition</h4><ul>
+<li>CATransition是CAAnimation的子类，用于做转场动画，能够为层提供移出屏幕和移入屏幕的动画效果。iOS比Mac OS X的转场动画效果少一点</li>
+<li>UINavigationController就是通过CATransition实现了将控制器的视图推入屏幕的动画效果</li>
+<li>动画属性:<ul>
+<li>type：动画过渡类型</li>
+<li>subtype：动画过渡方向</li>
+<li>startProgress：动画起点(在整体动画的百分比)</li>
+<li>endProgress：动画终点(在整体动画的百分比)</li>
+<li>转场动画过渡效果</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">类型字符串</th>
+<th align="center">效果说明</th>
+<th align="center">关键字</th>
+<th align="center">方向</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">fade</td>
+<td align="center">交叉淡化过渡</td>
+<td align="center">YES</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">push</td>
+<td align="center">新视图把旧视图推出去</td>
+<td align="center">YES</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">moveIn</td>
+<td align="center">新视图移到旧视图上面</td>
+<td align="center">YES</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">reveal</td>
+<td align="center">将旧视图移开,显示下面的新视图</td>
+<td align="center">YES</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">cube</td>
+<td align="center">立方体翻滚效果</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">oglFlip</td>
+<td align="center">上下左右翻转效果</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">suckEffect</td>
+<td align="center">收缩效果，如一块布被抽走</td>
+<td align="center"></td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">rippleEffect</td>
+<td align="center">水滴效果</td>
+<td align="center"></td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">pageCurl</td>
+<td align="center">向上翻页效果</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">pageUnCurl</td>
+<td align="center">向下翻页效果</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">facameraIrisHollowOpende</td>
+<td align="center">相机镜头打开效果</td>
+<td align="center"></td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">cameraIrisHollowClose</td>
+<td align="center">相机镜头关闭效果</td>
+<td align="center"></td>
+<td align="center">NO</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>使用UIView动画函数实现转场动画——单视图</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc">+ (<span class="hljs-type">void</span>)transitionWithView:(<span class="hljs-built_in">UIView</span> *)view duration:(<span class="hljs-built_in">NSTimeInterval</span>)duration options:(<span class="hljs-built_in">UIViewAnimationOptions</span>)options animations:(<span class="hljs-type">void</span> (^)(<span class="hljs-type">void</span>))animations completion:(<span class="hljs-type">void</span> (^)(<span class="hljs-type">BOOL</span> finished))completion;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>参数说明：<ul>
+<li>duration：动画的持续时间</li>
+<li>view：需要进行转场动画的视图</li>
+<li>options：转场动画的类型</li>
+<li>animations：将改变视图属性的代码放在这个block中</li>
+<li>completion：动画结束后，会自动调用这个block</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>使用UIView动画函数实现转场动画——双视图</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs objc">+ (<span class="hljs-type">void</span>)transitionFromView:(<span class="hljs-built_in">UIView</span> *)fromView toView:(<span class="hljs-built_in">UIView</span> *)toView duration:(<span class="hljs-built_in">NSTimeInterval</span>)duration options:(<span class="hljs-built_in">UIViewAnimationOptions</span>)options completion:(<span class="hljs-type">void</span> (^)(<span class="hljs-type">BOOL</span> finished))completion;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>参数说明：<ul>
+<li>duration：动画的持续时间</li>
+<li>options：转场动画的类型</li>
+<li>animations：将改变视图属性的代码放在这个block中</li>
+<li>completion：动画结束后，会自动调用这个block</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/iOS/" class="category-chain-item">iOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>iOS开发之核心动画</div>
+      <div>http://yoursite.com/2016/04/27/iOS开发之核心动画/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Sheldon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2016年4月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2016/04/27/iOS%E5%BC%80%E5%8F%91%E4%B9%8B%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6/" title="iOS开发之触摸事件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iOS开发之触摸事件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2016/04/18/iOS%E5%BC%80%E5%8F%91%E4%B9%8B%E6%B7%B7%E5%90%88%E5%BC%80%E5%8F%91%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" title="iOS开发之混合开发简单介绍">
+                        <span class="hidden-mobile">iOS开发之混合开发简单介绍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
