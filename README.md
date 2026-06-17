@@ -15,6 +15,7 @@ npm install
 npm run clean
 npm run build
 npm run server
+npm run deploy
 ```
 
 Open the local site at `http://localhost:4000`.
@@ -33,3 +34,8 @@ Open the local site at `http://localhost:4000`.
 - Run `npm run clean` before `npm run build` when removing pages or changing generated routes, so stale files do not remain in `public/`.
 - The primary deployment path is [.github/workflows/deploy.yml](/Users/sheldon/CodeRepo/FlameTinary.github.io/.github/workflows/deploy.yml:1). Pushing to the `hexo` branch triggers a build and syncs the generated `public/` output to the `master` branch.
 - The local `npm run deploy` command and Hexo deploy config are kept as a fallback, but the automated workflow should be the default publishing path.
+
+## Publishing
+
+- Recommended: commit and push changes to the `hexo` branch. GitHub Actions will build the site and publish the generated output to `master`.
+- Fallback: run `npm run deploy` locally if you need to publish manually.
