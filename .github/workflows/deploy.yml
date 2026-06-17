@@ -48,7 +48,7 @@ jobs:
           rm -rf ../deploy-branch
           git worktree add -B master ../deploy-branch origin/master
 
-          rsync -av --delete public/ ../deploy-branch/
+          rsync -av --delete --exclude '.git' public/ ../deploy-branch/
 
           cd ../deploy-branch
           git add -A
