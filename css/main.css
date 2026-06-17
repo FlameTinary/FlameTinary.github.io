@@ -1435,13 +1435,6 @@ body.mobile-menu-open {
   height: auto;
   max-height: calc(1.4rem * 3);
 }
-.post-divider {
-  border: none;
-  height: 1px;
-  background-color: var(--line-color);
-  margin: 2rem auto;
-  width: 100%;
-}
 @media (max-width: 767px) {
   .index-info {
     padding-top: 1.25rem;
