@@ -36,7 +36,7 @@ filename_case: 0
 render_drafts: false
 post_asset_folder: false
 relative_link: false
-future: true
+future: false
 highlight:
   enable: true
   line_number: true
@@ -88,19 +88,8 @@ deploy:
   repo: git@github.com:FlameTinary/FlameTinary.github.io.git
   branch: master
 
-sitemap:
-    path: sitemap.xml
-baidusitemap:
-    path: baidusitemap.xml
-
 include:
   - .nojekyll
-
-search:
-  path: search.xml
-  field: post
-  format: html
-  limit: 10000
 
 symbols_count_time:
   symbols: true
@@ -113,4 +102,3 @@ symbols_count_time:
 
 browser_reloader_websocket:
   enable: true
-

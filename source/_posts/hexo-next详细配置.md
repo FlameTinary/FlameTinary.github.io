@@ -30,7 +30,7 @@ $ git clone https://github.com/iissnan/hexo-theme-next themes/next
 ```
 INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.
 ```
-此时即可使用浏览器访问 http://localhost:4000，检查站点是否正确运行。
+此时即可使用浏览器访问 `http://localhost:4000`，检查站点是否正确运行。
 
 ## 设置主题
 目前 NexT 支持四种 Scheme，他们是：
