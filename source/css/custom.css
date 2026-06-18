@@ -1,0 +1,22 @@
+.navbar .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .navbar-brand::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: block;
+  background: url("/img/favicon.svg") center / contain no-repeat;
+}
+
+@media (max-width: 767px) {
+  .navbar .navbar-brand::before {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+}
