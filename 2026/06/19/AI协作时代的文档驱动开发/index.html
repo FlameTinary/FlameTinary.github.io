@@ -19,24 +19,26 @@
   <meta name="author" content="Sheldon">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录一次把 Hexo 博客从本地手动发布，改造成 GitHub Actions 自动发布的完整过程。">
+    <meta name="description" content="最近做了一个 macOS 截图工具，抛弃古法编程，从头到尾没查看 xcode 中的代码，AI 贯穿全程：立项时帮我梳理思路，开发时补代码、查问题，写文档时参与整理。做完之后我最明显的感受不是“AI 真会写代码”，而是：有 AI 以后，文档反而更重要了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo博客自动化发布实践">
-<meta property="og:url" content="https://flametinary.github.io/2026/06/17/Hexo%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8F%91%E5%B8%83%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:title" content="AI协作时代的文档驱动开发">
+<meta property="og:url" content="https://flametinary.github.io/2026/06/19/AI%E5%8D%8F%E4%BD%9C%E6%97%B6%E4%BB%A3%E7%9A%84%E6%96%87%E6%A1%A3%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/index.html">
 <meta property="og:site_name" content="Sheldon&#39;s blog">
-<meta property="og:description" content="记录一次把 Hexo 博客从本地手动发布，改造成 GitHub Actions 自动发布的完整过程。">
+<meta property="og:description" content="最近做了一个 macOS 截图工具，抛弃古法编程，从头到尾没查看 xcode 中的代码，AI 贯穿全程：立项时帮我梳理思路，开发时补代码、查问题，写文档时参与整理。做完之后我最明显的感受不是“AI 真会写代码”，而是：有 AI 以后，文档反而更重要了。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-06-17T14:20:00.000Z">
-<meta property="article:modified_time" content="2026-06-19T06:25:51.138Z">
+<meta property="article:published_time" content="2026-06-19T02:55:43.000Z">
+<meta property="article:modified_time" content="2026-06-19T06:25:51.137Z">
 <meta property="article:author" content="Sheldon">
-<meta property="article:tag" content="GitHub">
-<meta property="article:tag" content="GitHub Actions">
-<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="App开发">
+<meta property="article:tag" content="Codex">
+<meta property="article:tag" content="macOS">
+<meta property="article:tag" content="工程化">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Hexo博客自动化发布实践 - Sheldon&#39;s blog</title>
+  <title>AI协作时代的文档驱动开发 - Sheldon&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -310,7 +312,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hexo博客自动化发布实践"></span>
+            <span id="subtitle" data-typed-text="AI协作时代的文档驱动开发"></span>
           
         </div>
 
@@ -321,8 +323,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-06-17 22:20" pubdate>
-          2026年6月17日 晚上
+        <time datetime="2026-06-19 10:55" pubdate>
+          2026年6月19日 上午
         </time>
       </span>
     
@@ -333,7 +335,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.1k 字
+          4.3k 字
         
       </span>
     
@@ -344,7 +346,7 @@
         
         
         
-          18 分钟
+          36 分钟
         
       </span>
     
@@ -383,122 +385,102 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Hexo博客自动化发布实践</h1>
+            <h1 id="seo-header">AI协作时代的文档驱动开发</h1>
             
             
               <div class="markdown-body">
                 
                 <blockquote>
-<p>记录一次把 Hexo 博客从本地手动发布，改造成 GitHub Actions 自动发布的完整过程。</p>
+<p>最近做了一个 macOS 截图工具，抛弃古法编程，从头到尾没查看 xcode 中的代码，AI 贯穿全程：立项时帮我梳理思路，开发时补代码、查问题，写文档时参与整理。做完之后我最明显的感受不是“AI 真会写代码”，而是：有 AI 以后，文档反而更重要了。</p>
 </blockquote>
 <span id="more"></span>
 
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>这个博客原本采用的是 Hexo 比较经典的发布方式：</p>
-<ul>
-<li><code>hexo</code> 分支保存博客源码</li>
-<li><code>master</code> 分支保存生成后的静态文件</li>
-<li>本地执行 <code>hexo generate</code></li>
-<li>本地执行 <code>hexo deploy</code></li>
-</ul>
-<p>这套方式本身没有问题，但长期维护下来会有几个明显痛点：</p>
-<ul>
-<li>发布依赖本机环境</li>
-<li>需要本地 SSH、git deploy、<code>.deploy_git</code> 都正常</li>
-<li>换一台电脑或者换一个维护者，接手成本比较高</li>
-<li>一旦发布失败，排查信息主要留在本地</li>
-</ul>
-<p>所以这次的目标很明确：保留当前仓库结构不变，把发布动作迁移到 GitHub Actions。</p>
-<h2 id="改造目标"><a href="#改造目标" class="headerlink" title="改造目标"></a>改造目标</h2><p>最终希望达到下面这个效果：</p>
-<ol>
-<li>日常只需要维护 <code>hexo</code> 分支的源码</li>
-<li>push 到 <code>hexo</code> 分支后自动触发构建</li>
-<li>自动把 <code>public</code> 目录内容同步到 <code>master</code></li>
-<li>GitHub Pages 继续从 <code>master</code> 分支发布站点</li>
-<li>本地 <code>hexo deploy</code> 继续保留，作为备用方案</li>
-</ol>
-<h2 id="改造前的清理"><a href="#改造前的清理" class="headerlink" title="改造前的清理"></a>改造前的清理</h2><p>在上自动化之前，我先做了一轮低风险整理，避免把历史包袱直接带进工作流：</p>
-<ul>
-<li>补充了 <code>package.json</code> 里的常用脚本</li>
-<li>统一了搜索配置，去掉重复的索引生成方式</li>
-<li>去掉未生效的 <code>sitemap</code> &#x2F; <code>baidusitemap</code> 配置</li>
-<li>关闭了默认开启但站点并不使用的 <code>links</code> 页面</li>
-<li>修正了一篇文章里触发构建 warning 的裸链接</li>
-<li>删除了仓库中未使用的 <code>themes/next</code> 和 <code>themes/landscape</code></li>
-<li>补充了根目录 <code>README.md</code></li>
-</ul>
-<p>这一步的好处是：后面如果自动化失败，我们更容易判断到底是工作流问题，还是历史配置问题。</p>
-<h2 id="工作流设计"><a href="#工作流设计" class="headerlink" title="工作流设计"></a>工作流设计</h2><p>这次采用的是“最少改动现有习惯”的方案：</p>
-<ul>
-<li><code>hexo</code> 仍然作为源码分支</li>
-<li><code>master</code> 仍然作为发布分支</li>
-<li>GitHub Actions 从 <code>hexo</code> 分支构建</li>
-<li>构建成功后，把生成结果推送到 <code>master</code></li>
-</ul>
-<p>对应的工作流文件放在：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">.github/workflows/deploy.yml<br></code></pre></td></tr></table></figure>
+<h2 id="代码变快之后，问题前移了"><a href="#代码变快之后，问题前移了" class="headerlink" title="代码变快之后，问题前移了"></a>代码变快之后，问题前移了</h2><p>这个截图工具从最基础的截图编辑开始，一路做到标注、复制保存、OCR、长截图、Pin、AI 分析和结果预览。Codex 参与以后，开发速度确实快了不少。有时候在 Codex 运行过程中还能做一组 HIIT，有点 work life balance 的感觉了。</p>
+<p>但项目不会因为代码生成得快，就自动变得更稳。</p>
+<p>AI 很像一个精力充沛的同事：理解快，动手快，也特别容易顺着一个想法继续往下扩。你让它改一个按钮，它可能顺手建议重构一层架构；你让它优化 AI 分析，它可能开始考虑对话、历史记录和设置页。它不是故意跑偏，只是太擅长“再多想一步”。</p>
+<p>所以我后来意识到，AI 介入以后，开发里的很多问题其实前移了。过去不少细节是在写代码时慢慢补齐的，现在最好提前写进文档：需求是什么，边界在哪里，哪些文件能改，哪些事情暂时不做，怎么验证，什么情况才算完成。</p>
+<p>文档写得清楚，AI 就像一个靠谱搭档；文档写得含糊，它也能产出很多东西，只是你不一定想要。</p>
+<h2 id="我说的文档驱动，不是写一堆文档"><a href="#我说的文档驱动，不是写一堆文档" class="headerlink" title="我说的文档驱动，不是写一堆文档"></a>我说的文档驱动，不是写一堆文档</h2><p>“文档驱动开发”听起来有点重，容易让人想到很长的 PRD、几轮评审会和打开后就想关掉的共享文档。</p>
+<p>我这里说的不是这个。</p>
+<p>对我来说，文档驱动的重点不是“多写”，而是让文档真正参与开发。它要能回答几个问题：项目现在是什么状态，下一步做什么，AI 可以做什么，不能做什么，做完以后怎么验证，以及这次踩过的坑以后怎么避免。</p>
+<p>后来我的流程基本变成这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">想法 / 需求<br>-&gt; AI 帮忙整理成文档<br>-&gt; 人审边界<br>-&gt; 写入 ROADMAP / Sprint / TASK<br>-&gt; AI 输出 Implementation Plan<br>-&gt; AI 做 Plan Review<br>-&gt; 按文档实施<br>-&gt; 构建和人工验证<br>-&gt; 结果写回文档<br></code></pre></td></tr></table></figure>
 
-<p>核心步骤如下：</p>
-<ol>
-<li>checkout <code>hexo</code> 分支源码</li>
-<li>安装 Node.js 和依赖</li>
-<li>执行 <code>npm run clean</code></li>
-<li>执行 <code>npm run build</code></li>
-<li>使用 <code>git worktree</code> 检出 <code>master</code></li>
-<li>将 <code>public</code> 同步到 <code>master</code></li>
-<li>自动提交并推送</li>
-</ol>
-<h2 id="GitHub-仓库设置检查"><a href="#GitHub-仓库设置检查" class="headerlink" title="GitHub 仓库设置检查"></a>GitHub 仓库设置检查</h2><p>为了让自动发布真正跑通，还需要确认仓库设置没有拦截：</p>
-<h3 id="1-Actions-权限"><a href="#1-Actions-权限" class="headerlink" title="1. Actions 权限"></a>1. Actions 权限</h3><p>仓库 <code>Settings -&gt; Actions -&gt; General</code> 中，需要满足：</p>
+<p>看上去绕了一圈，但实际更省时间。前面多花十分钟写清楚边界，后面经常少修两个小时奇怪问题。AI 的效率越高，越需要轨道。否则它确实跑得快，但不一定朝你想去的地方跑。</p>
+<h2 id="给文档分工，也是在给-AI-指路"><a href="#给文档分工，也是在给-AI-指路" class="headerlink" title="给文档分工，也是在给 AI 指路"></a>给文档分工，也是在给 AI 指路</h2><p>一开始我也容易把内容都塞进 README：项目介绍、开发计划、注意事项、TODO、历史记录，什么都来一点。人看起来已经不轻松，AI 看起来也不会更轻松。</p>
+<p>后来我把文档按职责拆开：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">README.md<br>AGENTS.md<br>TASK.md<br>docs/ROADMAP.md<br>docs/SPRINTS/Sprint-xx.md<br>docs/DEVLOG.md<br>docs/GIT_WORKFLOW.md<br></code></pre></td></tr></table></figure>
+
+<p><code>README.md</code> 只负责让人知道项目是什么、怎么运行。</p>
+<p><code>AGENTS.md</code> 是给 AI 的入职手册，告诉 Codex 进来后先读什么、遵守什么规则、哪些事情不能自作主张。</p>
+<p><code>TASK.md</code> 是当前唯一任务源，只回答一个问题：现在到底在做什么。</p>
+<p><code>ROADMAP.md</code> 管长期方向，让需求排队。独立开发不缺想法，缺的是让想法一个一个来。</p>
+<p><code>Sprint-xx.md</code> 管单次迭代，写清楚目标、范围、排除项、验收方式和风险。</p>
+<p><code>DEVLOG.md</code> 记录开发记忆。某个问题为什么出现，最后怎么修，哪些边界要注意，都可以写进去。</p>
+<p><code>GIT_WORKFLOW.md</code> 管提交规则，避免 AI 太热心，把不属于本轮的改动也一起提交。</p>
+<p>这些文件拆开以后，AI 的工作路径会稳定很多。当前任务看 <code>TASK.md</code>，长期规划看 <code>ROADMAP.md</code>，本轮边界看 Sprint 文档，提交规则看 Git 文档。文档结构越清楚，沟通成本越低，AI 出问题的概率也越小。</p>
+<h2 id="先让-AI-写文档，而不是直接写代码"><a href="#先让-AI-写文档，而不是直接写代码" class="headerlink" title="先让 AI 写文档，而不是直接写代码"></a>先让 AI 写文档，而不是直接写代码</h2><p>很多时候，我现在会先让 Codex 帮我写文档，而不是直接写代码。</p>
+<p>比如我曾经提过一个 OCR 预览需求：用户在截图编辑页点击 OCR 后，不要立即复制并退出，而是在当前页面打开一个预览窗口。用户可以先看 OCR 内容，再选择复制或取消。预览窗口显示在选择框左右空间更大的一侧。</p>
+<p>这段描述已经比“加个 OCR 预览”清楚不少，但里面仍然藏着很多细节：</p>
 <ul>
-<li>允许 GitHub Actions 运行</li>
-<li><code>Workflow permissions</code> 为 <code>Read and write permissions</code></li>
+<li>OCR 失败时是否关闭截图编辑？</li>
+<li>OCR 空结果时按钮是否可点？</li>
+<li>预览窗口是否能响应鼠标？</li>
+<li>点击取消是取消 OCR，还是取消整个截图？</li>
+<li>带标注后 OCR 识别的是原图还是标注后的图？</li>
 </ul>
-<p>因为工作流需要把构建产物推回 <code>master</code> 分支。</p>
-<h3 id="2-Branch-规则"><a href="#2-Branch-规则" class="headerlink" title="2. Branch 规则"></a>2. Branch 规则</h3><p>如果 <code>master</code> 分支开启了保护规则，就要允许 Actions 推送，否则 workflow 会构建成功但 push 失败。</p>
-<p>这次检查下来，仓库当前并没有开启 <code>master</code> 分支保护，所以不会拦截自动部署。</p>
-<h3 id="3-Pages-发布来源"><a href="#3-Pages-发布来源" class="headerlink" title="3. Pages 发布来源"></a>3. Pages 发布来源</h3><p>仓库 <code>Settings -&gt; Pages</code> 中，继续保持：</p>
+<p>这些问题不一定要自己对着空白文档硬想。我会让 AI 先整理一版 Sprint 文档：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text">请基于这个需求整理：<br>1. 需求目标<br>2. Included<br>3. Out of Scope<br>4. 交互流程<br>5. 失败态和空态<br>6. 验收标准<br>7. 风险点<br></code></pre></td></tr></table></figure>
+
+<p>AI 很适合做第一版结构化整理。人要做的不是照单全收，而是审它、删它、补它。这个过程其实就是需求澄清。很多模糊点，在写成文档时会自己浮出来。</p>
+<h2 id="Out-of-Scope-很重要"><a href="#Out-of-Scope-很重要" class="headerlink" title="Out of Scope 很重要"></a><code>Out of Scope</code> 很重要</h2><p>在所有字段里，我越来越重视 <code>Out of Scope</code>。</p>
+<p>项目失控很多时候不是因为做错了什么，而是因为“顺手多做了点什么”。尤其和 AI 协作时，这件事会被放大。</p>
+<p>比如 <code>Sprint 30 - AI 结果增强</code>，目标只是让 AI 分析结果更稳定、更好复制。于是文档里明确写了不做：图片直传 AI、AI 对话、设置页 AI 配置、模型选择 UI、历史记录、自动修复。</p>
+<p>这些“不做”并不是偷懒，而是给项目降温。</p>
+<p>AI 很容易沿着一个方向继续扩展。你让它做 AI 分析，它可能建议做对话；做了对话，又可能建议历史记录；再往下，截图工具快变办公平台了。听起来很宏大，但用户只是想截个图。</p>
+<p><code>Out of Scope</code> 的价值，就是在 AI 准备发散之前，先把边界钉住。AI 很会扩展，而项目经常更需要收敛。</p>
+<h2 id="Plan-先行，Review-再动手"><a href="#Plan-先行，Review-再动手" class="headerlink" title="Plan 先行，Review 再动手"></a>Plan 先行，Review 再动手</h2><p>我现在不会直接对 Codex 说“实现吧”。更稳的做法是先让它写 Implementation Plan。</p>
+<p>一份有用的 Plan 不只是 TODO。它至少应该说清楚：需求怎么理解、相关代码在哪里、有哪些方案、推荐哪一个、要改哪些文件、怎么验证、风险是什么。</p>
+<p>还是 OCR 预览这个例子，当时有两个方案：一个是直接把 OCR 预览 UI 放进 <code>CaptureOverlayView</code>，另一个是新增 <code>OCRPreviewWindowService</code>。最后我选了后者，不是因为多拆一个文件显得高级，而是因为它能让截图流程、OCR 识别和预览窗口各归各位。</p>
+<p>Plan 的意义在于把隐含决策变成显性文字。<strong>AI 真正写代码前，先暴露自己的理解。如果理解错了，在文档阶段改掉就行，别等代码写完再大动干戈</strong> 。</p>
+<p>Plan 写完后，我还会让 Codex 做 Plan Review。这一步不是让它夸自己“方案完整、结构清晰”，而是专门挑刺。</p>
+<p>OCR 预览的第一版 Plan 就被打回过：<code>ROADMAP</code> 状态没对齐、<code>NSPanel</code> 没明确可点击、closure 可能形成保留链、OCR 失败和空结果没说清楚。这些问题如果等代码写完再修，成本会高很多。</p>
+<h2 id="脚本也是文档"><a href="#脚本也是文档" class="headerlink" title="脚本也是文档"></a>脚本也是文档</h2><p>除了 Markdown，脚本也很重要。</p>
+<p>比如项目里有固定构建入口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./scripts/build.sh<br></code></pre></td></tr></table></figure>
+
+<p>没有脚本时，Codex 可能会猜：用哪个 scheme？Debug 还是 Release？DerivedData 放哪里？要不要 clean？</p>
+<p>一旦有了固定脚本，每次实现后就一句话：跑构建。AI 不需要把时间花在猜命令上，也不会因为猜错命令制造额外噪音。</p>
+<p>构建、启动 Debug App、清理旧进程、运行测试、打包 Release，这些固定动作都适合脚本化。普通文档告诉 AI “应该怎么做”，脚本直接告诉 AI “照这个跑”。</p>
+<h2 id="少一点“顺手”"><a href="#少一点“顺手”" class="headerlink" title="少一点“顺手”"></a>少一点“顺手”</h2><p>进入实现阶段后，我对 Codex 的要求反而变简单了：按计划改，少发挥。</p>
+<p>“少发挥”不是不信任 AI，而是项目开发里最容易出事的两个字就是“顺手”。</p>
 <ul>
-<li>Source: <code>Deploy from a branch</code></li>
-<li>Branch: <code>master</code></li>
-<li>Folder: <code>/ (root)</code></li>
+<li>顺手重构一下</li>
+<li>顺手抽个协议</li>
+<li>顺手加个未来扩展点</li>
+<li>顺手把 README 也更新一下</li>
 </ul>
-<p>这样 GitHub Actions 只需要负责更新 <code>master</code>，Pages 会继续按原来的方式发布。</p>
-<h2 id="第一次运行踩到的坑"><a href="#第一次运行踩到的坑" class="headerlink" title="第一次运行踩到的坑"></a>第一次运行踩到的坑</h2><p>第一版工作流推上去之后，第一次运行失败了。</p>
-<p>失败现象是：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">fatal: not a git repository (or any of the parent directories): .git<br></code></pre></td></tr></table></figure>
+<p>每一项单独看都合理，合在一起就是一场小型迁移。</p>
+<p>所以 Plan 里要写清楚文件变更范围。例如 AI 结果增强只动 <code>AIAnalysisService.swift</code>、<code>AIAnalysisPreviewWindowService.swift</code>、<code>CaptureSessionService.swift</code>。这样 AI 实施时就不容易把展示逻辑塞进 session 层，也不容易顺手抽一个当前根本用不上的通用框架。</p>
+<p>让 AI 稳定产出代码的关键，不是一句“写得优雅点”，而是足够具体的上下文、边界、文件范围和验收标准。</p>
+<h2 id="把结果写回去"><a href="#把结果写回去" class="headerlink" title="把结果写回去"></a>把结果写回去</h2><p>AI 很容易在构建通过后说“完成了”。但构建通过，只能说明代码能编译。</p>
+<p>截图工具这类 App，很多问题只有真实运行才会出现：浮窗位置不对、按钮点不到、热键被旧实例抢走、OCR 空结果没反馈、AI 面板内容顺序反了、Auto Layout 运行时报约束冲突。</p>
+<p>所以 Sprint 文档里要有<strong>验证清单</strong>。Codex 实现完后，也要按清单给出人工验证步骤。等人工验证通过，再进入 Sprint 收尾。</p>
+<p>收尾时还有一件事很重要：把结果写回 <code>DEVLOG.md</code> 或 Sprint 文档。这个文档不是流水账，而是项目记忆。某个问题为什么出现、最后怎么解决、哪些边界要注意，都应该沉淀下来。</p>
+<p><strong>AI 没有人类那种长期项目记忆，但它可以读文档。既然它会读，那我们就应该把重要经验写给它读</strong>。</p>
+<h2 id="把-Codex-当成不同角色"><a href="#把-Codex-当成不同角色" class="headerlink" title="把 Codex 当成不同角色"></a>把 Codex 当成不同角色</h2><p>我现在更倾向于把 Codex 当成工程搭档，而不是许愿池。</p>
+<p>许愿池式用法是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">帮我实现一个截图工具，最好带 OCR 和 AI。<br></code></pre></td></tr></table></figure>
 
-<p>问题出在同步静态文件这一步。</p>
-<p>最初我是这样写的：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rsync -av --delete public/ ../deploy-branch/<br></code></pre></td></tr></table></figure>
-
-<p>这里用了 <code>--delete</code>，本意是把 <code>master</code> 分支里的旧文件清掉，确保生成结果干净。但 <code>deploy-branch</code> 是通过 <code>git worktree</code> 检出的工作树，它的根目录里也有 <code>.git</code> 元数据入口。结果 <code>rsync --delete</code> 把这部分一起误删了，后面的 <code>git add</code> &#x2F; <code>git commit</code> 自然就报了 “not a git repository”。</p>
-<p>修复方法很简单：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rsync -av --delete --exclude <span class="hljs-string">&#x27;.git&#x27;</span> public/ ../deploy-branch/<br></code></pre></td></tr></table></figure>
-
-<p>加上排除规则后，第二次运行就顺利通过了。</p>
-<h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>修复后的发布链路已经验证通过：</p>
-<ul>
-<li>push 到 <code>hexo</code></li>
-<li><code>Deploy Hexo Site</code> 自动执行</li>
-<li>自动生成 <code>public</code></li>
-<li>自动提交到 <code>master</code></li>
-<li><code>pages-build-deployment</code> 接力发布</li>
-<li>站点更新完成</li>
-</ul>
-<p>同时，仍然保留了本地手动发布能力：</p>
-<ul>
-<li>推荐方式：push <code>hexo</code> 分支，走 GitHub Actions</li>
-<li>备用方式：本地执行 <code>npm run deploy</code></li>
-</ul>
-<h2 id="当前推荐用法"><a href="#当前推荐用法" class="headerlink" title="当前推荐用法"></a>当前推荐用法</h2><p>日常发布：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git add .<br>git commit -m <span class="hljs-string">&quot;更新博客内容&quot;</span><br>git push origin hexo<br></code></pre></td></tr></table></figure>
-
-<p>备用兜底：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm run deploy<br></code></pre></td></tr></table></figure>
-
-<p>如果只是写文章、改页面、调配置，优先走自动化路径就够了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这次改造最大的价值，不是“少敲几个命令”，而是把发布这件事从“依赖某台电脑的本地操作”，变成了“仓库内可追踪、可复现、可交接的自动流程”。</p>
-<p>对于个人博客这种长期维护项目，这类改造往往比继续堆主题效果或页面样式更值得优先做，因为它直接影响未来每一次发布的稳定性和接手成本。</p>
+<p>这当然也能生成东西，但项目会很难控。</p>
+<p>更好的方式是给它明确阶段：规划 Sprint、输出 Implementation Plan、执行 Plan Review、实施、验证、收尾、提交。</p>
+<p>规划时，它是产品助理；写 Plan 时，它是技术方案作者；Review 时，它是挑刺的人；实施时，它是工程师；验证时，它是测试助手；收尾时，它是文档维护者。</p>
+<p>不要让它同一时间扮演所有角色。一个人同时当产品、架构、开发、测试、发布经理都容易乱，AI 也一样。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>AI 开发真正有价值的地方，不是让我们跳过工程流程，而是让工程流程跑得更快。</p>
+<p>如果没有文档、没有边界、没有验证，AI 只会更快地制造混乱。它写得越快，你收拾得越忙。</p>
+<p>但如果项目有清晰的文档结构、有明确的 Sprint、有可执行脚本、有 Plan Review、有验证清单、有 DEVLOG、有 Git 规则，AI 就会变成一个非常高效的工程搭档。</p>
+<p><strong>AI 能把油门踩得很深，但方向盘还是要握在开发者手里。否则速度是上去了，项目去哪儿就不好说了</strong>。</p>
+<p>最后，附上项目的 <a href="https://github.com/FlameTinary/TYScreenShotTool">Github</a> 和 <a href="https://apps.apple.com/cn/app/tshot/id6780356949?mt=12">app store</a> 地址，项目还缺了测试文档以及功能测试相关内容，其他功能也还没有开发完整，后续会继续迭代。</p>
 
                 
               </div>
@@ -517,7 +499,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Hexo/" class="category-chain-item">Hexo</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
 
@@ -532,11 +514,15 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Hexo/" class="print-no-link">#Hexo</a>
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
       
-        <a href="/tags/GitHub/" class="print-no-link">#GitHub</a>
+        <a href="/tags/Codex/" class="print-no-link">#Codex</a>
       
-        <a href="/tags/GitHub-Actions/" class="print-no-link">#GitHub Actions</a>
+        <a href="/tags/macOS/" class="print-no-link">#macOS</a>
+      
+        <a href="/tags/App%E5%BC%80%E5%8F%91/" class="print-no-link">#App开发</a>
+      
+        <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" class="print-no-link">#工程化</a>
       
     </div>
   
@@ -550,18 +536,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/06/19/AI%E5%8D%8F%E4%BD%9C%E6%97%B6%E4%BB%A3%E7%9A%84%E6%96%87%E6%A1%A3%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" title="AI协作时代的文档驱动开发">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">AI协作时代的文档驱动开发</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/09/20/cocoapods%E7%BB%93%E6%9E%84%E8%A7%A3%E6%9E%90/" title="cocoapods结构解析">
-                        <span class="hidden-mobile">cocoapods结构解析</span>
+                      <a href="/2026/06/17/Hexo%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8F%91%E5%B8%83%E5%AE%9E%E8%B7%B5/" title="Hexo博客自动化发布实践">
+                        <span class="hidden-mobile">Hexo博客自动化发布实践</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
