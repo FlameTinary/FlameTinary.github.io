@@ -1,0 +1,1088 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.svg">
+  <link rel="icon" href="/img/favicon.svg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。 其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名">
+<meta property="og:url" content="https://flametinary.github.io/2026/09/08/iOS%E5%BC%80%E5%8F%91%E8%AF%81%E4%B9%A6%E4%B8%8EProvisioning%20Profile%E5%88%9B%E5%BB%BA%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8ECSR%E5%88%B0%E7%9C%9F%E6%9C%BA%E7%AD%BE%E5%90%8D/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。 其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-08T06:20:21.573Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="Apple-Developer">
+<meta property="article:tag" content="Fastlane">
+<meta property="article:tag" content="Provisioning-Profile">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="代码签名">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名 - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"flametinary.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-09-08 00:00" pubdate>
+          2026年9月8日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          93 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="iOS开发证书与Provisioning-Profile创建指南：从CSR到真机签名"><a href="#iOS开发证书与Provisioning-Profile创建指南：从CSR到真机签名" class="headerlink" title="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名"></a>iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名</h1><p>第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。</p>
+<p>其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，再创建可用于签名的证书，最后用 Provisioning Profile 把“App、证书、能力和设备”组合在一起。本文以<strong>手动签名</strong>为主，带你从创建 CSR（Certificate Signing Request，证书签名请求）开始，完成 Development Certificate 和 Development Provisioning Profile 的创建，并说明它和 Xcode 自动签名、Fastlane match 的关系。</p>
+<p>本文讨论的是 Apple Developer 的代码签名体系，不涉及 App Store Connect API Key。后者用于上传 TestFlight、管理商店元数据和提交审核，和“能不能把 App 签名安装到设备”是两套不同的权限系统。</p>
+<h2 id="一、先建立正确的概念"><a href="#一、先建立正确的概念" class="headerlink" title="一、先建立正确的概念"></a>一、先建立正确的概念</h2><p>在动手前，先把几个名词分清。很多签名问题并不是操作错了，而是把它们当成同一种文件。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解决的问题</th>
+<th>可以简单理解为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Identifier &#x2F; App ID</td>
+<td>这个 App 是谁</td>
+<td>App 的身份证，通常对应 Bundle ID</td>
+</tr>
+<tr>
+<td>Certificate</td>
+<td>谁可以代表团队签名</td>
+<td>团队认可的签名身份</td>
+</tr>
+<tr>
+<td>Private Key</td>
+<td>你是否真的拥有签名能力</td>
+<td>证书背后的“钥匙”，必须严格保护</td>
+</tr>
+<tr>
+<td>Device</td>
+<td>哪些真机可安装开发包</td>
+<td>开发测试的设备白名单</td>
+</tr>
+<tr>
+<td>Provisioning Profile</td>
+<td>这个 App 用哪张证书、允许哪些能力和设备</td>
+<td>把前面几项装订成一份通行证</td>
+</tr>
+<tr>
+<td>Entitlements</td>
+<td>App 实际请求的能力</td>
+<td>如推送、App Groups、iCloud、Sign in with Apple</td>
+</tr>
+</tbody></table>
+<p>可以把 Development 签名过程想成下面这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">明确 Bundle ID 和能力<br>        ↓<br>创建 CSR → Apple 签发开发证书 → 本机保留私钥<br>        ↓<br>登记测试设备（真机开发时）<br>        ↓<br>创建 Development Profile<br>        ↓<br>Profile 绑定 App ID + 开发证书 + 设备 + 能力<br>        ↓<br>Xcode 或 Fastlane 使用它签名并安装 App<br></code></pre></td></tr></table></figure>
+
+<p>其中最重要的一点是：<strong>证书文件本身不等于签名能力。</strong> 如果某台 Mac 只导入了 <code>.cer</code>，却没有创建 CSR 时生成的私钥，codesign 仍然无法用它签名。</p>
+<h2 id="二、开始前需要准备什么"><a href="#二、开始前需要准备什么" class="headerlink" title="二、开始前需要准备什么"></a>二、开始前需要准备什么</h2><p>开始之前，请确认你具备以下条件：</p>
+<ul>
+<li>已加入 Apple Developer Program，并在团队中拥有创建证书&#x2F;Profile 的权限；</li>
+<li>项目已经确定主 App 的 Bundle ID，例如 <code>com.example.myapp</code>；</li>
+<li>如果项目有 Widget、Share Extension、Notification Service Extension 等 Target，已经列出它们各自的 Bundle ID；</li>
+<li>使用一台自己的 Mac 创建 CSR，且能访问“钥匙串访问”；</li>
+<li>如果要真机开发，准备好测试 iPhone&#x2F;iPad 的 UDID；</li>
+<li>知道项目需要哪些 Capability，例如 Push Notifications、App Groups、iCloud 等。</li>
+</ul>
+<p>Apple 当前的手动 Development Profile 页面要求 Account Holder 或 Admin 权限。如果你只是普通团队成员，通常应让管理员创建 Profile，或者直接使用 Xcode 的 Automatically manage signing，由 Xcode 代为管理开发证书、设备和 Profile。</p>
+<p>如果项目暂时只跑 Simulator，严格来说不需要 Development Profile；Simulator App 不使用 Apple Developer 的真机签名链路。不过，只要要连接真机、导出 Development 包，或之后准备接入 Fastlane，就建议尽早把签名资产整理好。</p>
+<h3 id="主-App-和-Extension-要单独看待"><a href="#主-App-和-Extension-要单独看待" class="headerlink" title="主 App 和 Extension 要单独看待"></a>主 App 和 Extension 要单独看待</h3><p>一个常见误区是“我的 App 已经有 Bundle ID，所以 Widget 也应该自动可以签”。实际上，Widget 等 Extension 是独立的签名 Target，通常拥有不同 Bundle ID，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">主 App：com.example.myapp<br>Widget：com.example.myapp.Widget<br></code></pre></td></tr></table></figure>
+
+<p>主 App 和 Widget 可能共享某些能力，比如 App Groups；但在 Apple Developer 后台中，它们仍要分别有对应的 Identifier，并在 Profile 和自动化签名配置中被完整覆盖。</p>
+<h2 id="三、第一步：创建-App-ID-和配置能力"><a href="#三、第一步：创建-App-ID-和配置能力" class="headerlink" title="三、第一步：创建 App ID 和配置能力"></a>三、第一步：创建 App ID 和配置能力</h2><p>创建证书前，先确认 Apple Developer 后台已有正确的 Identifier。</p>
+<p>进入 <a href="https://developer.apple.com/account/">Apple Developer</a> 后，依次打开：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">Certificates, Identifiers &amp; Profiles<br>→ Identifiers<br>→ 点击 +<br>→ App IDs<br></code></pre></td></tr></table></figure>
+
+<p>选择 App 类型后，填写描述名称和 Bundle ID。</p>
+<h3 id="Explicit-App-ID-和-Wildcard-App-ID-怎么选"><a href="#Explicit-App-ID-和-Wildcard-App-ID-怎么选" class="headerlink" title="Explicit App ID 和 Wildcard App ID 怎么选"></a>Explicit App ID 和 Wildcard App ID 怎么选</h3><p>通常应选择 <strong>Explicit App ID（明确 App ID）</strong>，也就是完整写出 Bundle ID：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">com.example.myapp<br></code></pre></td></tr></table></figure>
+
+<p>Wildcard App ID 形如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">com.example.*<br></code></pre></td></tr></table></figure>
+
+<p>它在非常简单的老项目中可能有用，但对现代 iOS 项目通常不够。只要使用推送通知、App Groups、iCloud、Sign in with Apple、Apple Pay 等能力，就需要明确 App ID。实际开发中，为了降低后续迁移成本，即使暂时没开这些能力，也更推荐使用 Explicit App ID。</p>
+<h3 id="Capability-必须和工程保持一致"><a href="#Capability-必须和工程保持一致" class="headerlink" title="Capability 必须和工程保持一致"></a>Capability 必须和工程保持一致</h3><p>如果 Xcode 的 Signing &amp; Capabilities 中启用了 App Groups、iCloud 或 Push Notifications，Apple Developer 后台对应 Identifier 也必须开启这些能力。否则经常会出现：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">Provisioning profile doesn&#x27;t include the ... entitlement<br></code></pre></td></tr></table></figure>
+
+<p>或者：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">Profile doesn&#x27;t match the entitlements file&#x27;s values<br></code></pre></td></tr></table></figure>
+
+<p>遇到这类错误时，不要急着反复删除 Profile。应先对比三处是否一致：</p>
+<ol>
+<li>Xcode Target 的 Signing &amp; Capabilities；</li>
+<li><code>.entitlements</code> 文件中的值；</li>
+<li>Apple Developer 中对应 Identifier 已启用的 Capability。</li>
+</ol>
+<p>能力发生变化后，旧 Profile 未必包含新 entitlement，通常需要重新生成或更新 Profile。</p>
+<h2 id="四、第二步：创建-CSR"><a href="#四、第二步：创建-CSR" class="headerlink" title="四、第二步：创建 CSR"></a>四、第二步：创建 CSR</h2><p>CSR 是发给 Apple 的“证书申请”。它包含公钥和申请信息；与之配对的私钥会保留在创建 CSR 的 Mac 的 Keychain 中。CSR 本身不是私钥，通常不属于最高敏感级别，但也没有必要提交到业务 Git 仓库。</p>
+<h3 id="1-打开钥匙串访问"><a href="#1-打开钥匙串访问" class="headerlink" title="1. 打开钥匙串访问"></a>1. 打开钥匙串访问</h3><p>在 macOS 中打开：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">应用程序 → 实用工具 → 钥匙串访问<br></code></pre></td></tr></table></figure>
+
+<p>或者直接用 Spotlight 搜索“钥匙串访问”。</p>
+<h3 id="2-发起证书请求"><a href="#2-发起证书请求" class="headerlink" title="2. 发起证书请求"></a>2. 发起证书请求</h3><p>在顶部菜单选择：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">钥匙串访问 → 证书助手 → 向证书颁发机构请求证书<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>界面示意：在 Certificate Assistant 中填写开发者邮箱和一个便于识别的通用名称；本文不展示含邮箱或姓名的原始截图。</p>
+</blockquote>
+<p>在弹出的窗口中：</p>
+<ol>
+<li>在“用户电子邮件地址”填写你的开发者邮箱；</li>
+<li>在“通用名称”填写方便识别的名称，例如 <code>MyApp Development Key 2026</code>；</li>
+<li>“CA 电子邮件地址”保持为空；</li>
+<li>选择“保存到磁盘”；</li>
+<li>点击“继续”，选择一个安全的位置保存。</li>
+</ol>
+<p>生成的文件通常名为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">CertificateSigningRequest.certSigningRequest<br></code></pre></td></tr></table></figure>
+
+<p>![[CertificateSigningRequest.png|368]]</p>
+<p>这个 CSR 可以上传到 Apple Developer 后台，但它本身不能用于签名，也不需要提交进 Git。</p>
+<h3 id="3-为什么一定要在自己的-Mac-上生成-CSR"><a href="#3-为什么一定要在自己的-Mac-上生成-CSR" class="headerlink" title="3. 为什么一定要在自己的 Mac 上生成 CSR"></a>3. 为什么一定要在自己的 Mac 上生成 CSR</h3><p>创建 CSR 的同时，钥匙串访问会生成一对密钥：公钥被放进 CSR，私钥保留在当前 Mac。Apple 后台下载的证书会与这个私钥匹配。</p>
+<p>因此：</p>
+<ul>
+<li>证书应由负责签名的人或受控的签名机器创建；</li>
+<li>CSR 可以上传给 Apple 或证书颁发机构，但不要把真正的私钥、<code>.p12</code> 或 Keychain 导出文件一并发出去；</li>
+<li>更不要只备份 <code>.cer</code> 而忘了备份含私钥的签名身份；</li>
+<li>如果换电脑，需要从旧机器导出带私钥的 <code>.p12</code>，或用 Fastlane match 统一恢复签名资产。</li>
+</ul>
+<h2 id="五、第三步：在-Apple-Developer-创建-Development-Certificate"><a href="#五、第三步：在-Apple-Developer-创建-Development-Certificate" class="headerlink" title="五、第三步：在 Apple Developer 创建 Development Certificate"></a>五、第三步：在 Apple Developer 创建 Development Certificate</h2><p>回到 Apple Developer 后台，依次进入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">Certificates, Identifiers &amp; Profiles<br>→ Certificates<br>→ 点击 +<br></code></pre></td></tr></table></figure>
+
+<p>在证书类型中选择适合开发用途的开发证书。Apple 后台的命名会随时间调整，但原则不变：<strong>真机调试用 Development；TestFlight&#x2F;App Store 用 Distribution。</strong> 如果你使用 Xcode 自动签名，Xcode 可能会代为创建或管理开发证书，这时不必重复手动创建。</p>
+<p>接下来上传刚才创建的 <code>.certSigningRequest</code> 文件。</p>
+<p>![[choose_file.png|492]]</p>
+<p>点击继续后，Apple 会生成证书。下载生成的 <code>.cer</code> 文件：</p>
+<blockquote>
+<p>生成成功后，页面会显示证书类型、创建者和到期时间。为避免泄露个人邮箱和姓名，本文不展示原始结果页截图。</p>
+</blockquote>
+<p>下载后的文件类似：</p>
+<p>![[download_development_cer.png|511]]</p>
+<p>双击 <code>.cer</code> 文件，系统会将证书导入“钥匙串访问”。正常情况下，你应在“我的证书”分类中看到证书，并能展开看到下面的私钥。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">Apple Development: Your Name (TEAMID)<br>  └── private key<br></code></pre></td></tr></table></figure>
+
+<p>如果能看到证书，却不能展开出 private key，说明当前 Mac 没有对应私钥。最常见的原因是 CSR 在另一台 Mac 上生成，或曾经清理过 Keychain。此时不要新建一堆重复证书；应回到生成 CSR 的机器导出带私钥的身份，或按团队既定的 match 流程恢复。</p>
+<h3 id="Development-与-Distribution-证书的区别"><a href="#Development-与-Distribution-证书的区别" class="headerlink" title="Development 与 Distribution 证书的区别"></a>Development 与 Distribution 证书的区别</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>用途</th>
+<th>能否上传 TestFlight&#x2F;App Store</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Development Certificate</td>
+<td>Xcode 真机运行、Development 包</td>
+<td>不可以</td>
+</tr>
+<tr>
+<td>Distribution Certificate</td>
+<td>Ad Hoc、TestFlight、App Store Archive</td>
+<td>可以，具体分发方式由 Profile&#x2F;导出方式决定</td>
+</tr>
+</tbody></table>
+<p>开发证书和发布证书可以由同一个团队管理，但不是同一种证书。不要拿 Development Certificate 去导出 App Store IPA，也不要因为“Xcode 能跑”就认为发布签名已经准备好。</p>
+<h2 id="六、第四步：登记测试设备"><a href="#六、第四步：登记测试设备" class="headerlink" title="六、第四步：登记测试设备"></a>六、第四步：登记测试设备</h2><p>如果你要创建传统的 Development Profile 或 Ad Hoc Profile，需要把测试设备登记到 Apple Developer 后台。</p>
+<p>进入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">Certificates, Identifiers &amp; Profiles<br>→ Devices<br>→ 点击 +<br></code></pre></td></tr></table></figure>
+
+<p>填写设备名称和 UDID。获取 UDID 的常见方式：</p>
+<ul>
+<li>在 Finder 中连接 iPhone&#x2F;iPad，点击设备信息区的序列号字段，直到显示 UDID，然后复制；</li>
+<li>在 Xcode 的 Devices and Simulators 窗口查看；</li>
+<li>使用受信任的设备管理流程导出设备标识。</li>
+</ul>
+<p>UDID 是设备唯一标识，应像普通设备资产信息一样管理。设备更换、退出测试范围或团队成员变化时，及时从测试清单中移除或停止使用对应 Profile。</p>
+<p>设备登记完成后，已经下载过的旧 Profile 不会自动获得新设备。新增设备后，需要重新生成并重新下载 Development Profile，或者让 Xcode 自动签名重新同步。</p>
+<h2 id="七、第五步：创建-Development-Provisioning-Profile"><a href="#七、第五步：创建-Development-Provisioning-Profile" class="headerlink" title="七、第五步：创建 Development Provisioning Profile"></a>七、第五步：创建 Development Provisioning Profile</h2><p>现在可以创建 Profile。进入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">Certificates, Identifiers &amp; Profiles<br>→ Profiles<br>→ 点击 +<br></code></pre></td></tr></table></figure>
+
+<p>选择开发用途的 Profile 类型，然后按页面步骤完成：</p>
+<ol>
+<li>选择主 App 对应的 Explicit App ID；</li>
+<li>选择刚创建的 Development Certificate；</li>
+<li>选择允许安装的测试设备；</li>
+<li>为 Profile 起一个清晰名称，例如 <code>MyApp Development 2026</code>；</li>
+<li>生成并下载 <code>.mobileprovision</code> 文件；</li>
+<li>双击该文件导入 Xcode，或让 Xcode&#x2F;fastlane 自动安装。</li>
+</ol>
+<blockquote>
+<p>在“Select an App ID”步骤中，选择当前 Target 对应的 Explicit App ID。请勿在公开文章中展示真实 Team ID 或 Bundle ID。</p>
+</blockquote>
+<p>对于含 Widget 的项目，主 App 和 Widget 通常都需要对应的 Profile。创建时要反复确认当前 App ID 属于哪个 Target，不要把主 App 的 Profile 误配给 Extension。</p>
+<h3 id="Profile-里的内容到底是什么"><a href="#Profile-里的内容到底是什么" class="headerlink" title="Profile 里的内容到底是什么"></a>Profile 里的内容到底是什么</h3><p>一个 Development Profile 大致可以理解为以下集合：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">明确的 App ID<br>  + 可用的 Capability / Entitlements<br>  + 一张或多张开发证书<br>  + 一组已登记的测试设备<br>  + 有效期<br></code></pre></td></tr></table></figure>
+
+<p>任意一项不匹配都可能导致安装或签名失败。例如：新增测试机但 Profile 没重新生成、新增 App Group 但 Profile 还是旧版本、选错了证书、Widget 没有对应 Profile。</p>
+<h2 id="八、Offline-support-7-day-validity-是什么"><a href="#八、Offline-support-7-day-validity-是什么" class="headerlink" title="八、Offline support 7 day validity 是什么"></a>八、Offline support 7 day validity 是什么</h2><p>创建某些开发或 Ad Hoc Profile 时，Apple Developer 后台可能会显示 <strong>Offline support (7 day validity)</strong> 选项。</p>
+<blockquote>
+<p>该页面会显示 Offline support 选项；本文省略包含真实证书名称的原始截图。</p>
+</blockquote>
+<p>它的核心取舍可以这样理解：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>适用情况</th>
+<th>主要代价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>No（通常默认）</td>
+<td>日常开发、普通真机测试、Fastlane match</td>
+<td>设备需按 Apple 的常规验证机制使用网络环境</td>
+</tr>
+<tr>
+<td>Yes</td>
+<td>设备长期处于隔离网络、无法访问 Apple 验证服务的特殊测试</td>
+<td>Profile 有效期只有 7 天，必须频繁重新生成和安装</td>
+</tr>
+</tbody></table>
+<h3 id="日常开发为什么建议选-No"><a href="#日常开发为什么建议选-No" class="headerlink" title="日常开发为什么建议选 No"></a>日常开发为什么建议选 No</h3><p>对绝大多数项目，选择默认的 <strong>No</strong> 更合适：</p>
+<ul>
+<li>Profile 有效期按常规规则管理，通常不需要每周重建；</li>
+<li>更适合持续开发、多人协作和自动化打包；</li>
+<li>Fastlane match 和 Xcode 的常规签名流程也更容易维护；</li>
+<li>测试设备只要能在正常网络条件下完成 Apple 的验证即可。</li>
+</ul>
+<h3 id="什么时候才考虑-Yes"><a href="#什么时候才考虑-Yes" class="headerlink" title="什么时候才考虑 Yes"></a>什么时候才考虑 Yes</h3><p>只有当测试设备确实处于隔离网络，长期无法访问 Apple 的验证服务，并且你能接受维护成本时，才考虑启用。典型场景包括特殊内网、离线现场演示或受严格网络限制的测试环境。</p>
+<p>代价是明确的：Profile 只有 7 天有效，失效后 App 可能无法继续启动；你需要重新生成 Profile、重新签名、重新安装。这不是“更高级的模式”，而是为了离线场景做的有期限交换。</p>
+<blockquote>
+<p>Profile 生成页通常会显示 Profile 名称、App ID 和到期时间。公开记录时应使用占位示例，不展示真实项目标识。</p>
+</blockquote>
+<p>如果你正在使用 Fastlane match，优先保持默认的常规 Profile。把频繁过期的 7 天离线 Profile 纳入自动化资产，通常只会增加维护成本和故障概率。</p>
+<h2 id="九、把证书和-Profile-安装到-Xcode"><a href="#九、把证书和-Profile-安装到-Xcode" class="headerlink" title="九、把证书和 Profile 安装到 Xcode"></a>九、把证书和 Profile 安装到 Xcode</h2><p>手动流程中：</p>
+<ul>
+<li>双击 <code>.cer</code>，导入钥匙串；</li>
+<li>双击 <code>.mobileprovision</code>，让 Xcode 识别并安装；</li>
+<li>在 Xcode 选择主 App Target → Signing &amp; Capabilities；</li>
+<li>设置正确 Team；</li>
+<li>根据团队策略选择 Automatically manage signing 或手动指定 Profile；</li>
+<li>对每一个 Extension Target 重复检查 Team、Bundle ID 与 Capability。</li>
+</ul>
+<h3 id="自动签名和手动签名怎么选"><a href="#自动签名和手动签名怎么选" class="headerlink" title="自动签名和手动签名怎么选"></a>自动签名和手动签名怎么选</h3><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>适合什么情况</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Automatically manage signing</td>
+<td>个人开发、早期项目、简单真机调试</td>
+<td>Xcode 会尝试创建&#x2F;更新资产；多人和 CI 下可控性较弱</td>
+</tr>
+<tr>
+<td>Manual signing</td>
+<td>已接入 Fastlane match、多个 Target、CI、正式发布</td>
+<td>需要明确管理证书&#x2F;Profile，但行为可复现</td>
+</tr>
+</tbody></table>
+<p>两种方式没有绝对好坏。项目刚起步时自动签名能减少操作；一旦需要多人协作、Widget、多环境或 CI，建议逐步迁移到受控的签名管理方案。最怕的不是选哪一种，而是本机自动签名、CI 手动签名、团队成员各自一套证书混着用。</p>
+<h3 id="当前项目的实际对应关系"><a href="#当前项目的实际对应关系" class="headerlink" title="当前项目的实际对应关系"></a>当前项目的实际对应关系</h3><p>当前工程采用 Manual signing，并按 SDK 和构建配置区分签名身份：真机 Debug 使用 Apple Development，Release 使用 Apple Distribution；主 App 和 Widget 分别指定对应的 <code>match Development ...</code> 或 <code>match AppStore ...</code> Profile。这里的省略号代表脱敏后的完整 Bundle ID。</p>
+<p>这说明手动 Profile 不是“下载一次就结束”：工程的 Target、Bundle ID、签名身份、Profile specifier 和 entitlements 必须长期保持一致。只要新增 Widget、修改 App Groups 或切换分发方式，就要一起检查这些字段。</p>
+<h2 id="十、检查-Profile-是否真的包含预期内容"><a href="#十、检查-Profile-是否真的包含预期内容" class="headerlink" title="十、检查 Profile 是否真的包含预期内容"></a>十、检查 Profile 是否真的包含预期内容</h2><p><code>.mobileprovision</code> 是签名配置文件，可以在本机查看它的有效期、UUID、App ID、Team 标识、设备列表和 Entitlements。不要直接用文本编辑器打开，而是让 macOS 的 <code>security</code> 工具解码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sh">security cms -D -i MyApp_Development.mobileprovision &gt; /tmp/profile.plist<br><br><span class="hljs-comment"># 查看关键字段</span><br>/usr/libexec/PlistBuddy -c <span class="hljs-string">&#x27;Print :Name&#x27;</span> /tmp/profile.plist<br>/usr/libexec/PlistBuddy -c <span class="hljs-string">&#x27;Print :ExpirationDate&#x27;</span> /tmp/profile.plist<br>/usr/libexec/PlistBuddy -c <span class="hljs-string">&#x27;Print :Entitlements:application-identifier&#x27;</span> /tmp/profile.plist<br>/usr/libexec/PlistBuddy -c <span class="hljs-string">&#x27;Print :ProvisionedDevices&#x27;</span> /tmp/profile.plist<br></code></pre></td></tr></table></figure>
+
+<p>重点核对：</p>
+<ul>
+<li><code>application-identifier</code> 是否对应当前 Team 和 Bundle ID；</li>
+<li><code>com.apple.developer.team-identifier</code> 是否属于预期团队；</li>
+<li><code>Entitlements</code> 是否包含项目实际使用的能力；</li>
+<li><code>ProvisionedDevices</code> 是否包含本次测试设备；</li>
+<li><code>ExpirationDate</code> 是否已经过期。</li>
+</ul>
+<p>临时解码文件只用于排查，检查完成后可以删除。不要把包含团队标识、设备 UDID 或能力信息的完整 Profile 上传到公开 issue。</p>
+<h2 id="十一、如何安全备份和迁移签名身份"><a href="#十一、如何安全备份和迁移签名身份" class="headerlink" title="十一、如何安全备份和迁移签名身份"></a>十一、如何安全备份和迁移签名身份</h2><p>如果暂时不用 Fastlane match，至少要知道如何从旧 Mac 迁移签名能力。</p>
+<p>在“钥匙串访问 → 我的证书”中，找到能展开显示 private key 的开发或发布证书，导出为 <code>.p12</code>，并设置强密码。这个 <code>.p12</code> 同时携带证书和私钥，才可以在新 Mac 上继续签名。</p>
+<p>安全规则：</p>
+<ul>
+<li><code>.p12</code>、私钥、<code>.mobileprovision</code> 不要提交到业务 Git 仓库；</li>
+<li>不要用聊天工具、邮件或公开网盘随意传播私钥；</li>
+<li>为 <code>.p12</code> 设置独立强密码；</li>
+<li>只在受信任设备上导入；</li>
+<li>团队协作时优先使用 Fastlane match 等统一机制，避免每个人手里散落一份证书；</li>
+<li>证书疑似泄露时应立即在 Apple Developer 后台撤销并重新签发，而不是只删除本地文件。</li>
+</ul>
+<h2 id="十二、如何与-Fastlane-match-衔接"><a href="#十二、如何与-Fastlane-match-衔接" class="headerlink" title="十二、如何与 Fastlane match 衔接"></a>十二、如何与 Fastlane match 衔接</h2><p>当项目从“一个人一台电脑”发展到多人协作、需要换电脑、需要 CI 时，手动导入证书和 Profile 会越来越脆弱。这时可以使用 Fastlane match。</p>
+<p>match 的做法是：把证书、私钥和 Profile 存放在<strong>独立的私有、加密仓库</strong>中，项目仓库只保存规则。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text">业务仓库<br>  └── Fastfile：声明需要的 Bundle ID 和分发类型<br><br>私有 match 仓库<br>  └── 加密保存证书、私钥、Profile<br><br>开发机 / CI Runner<br>  └── match 下载、解密、导入 Keychain，再执行签名<br></code></pre></td></tr></table></figure>
+
+<p>脱敏示例：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">APP_IDENTIFIERS</span> = [<br>  <span class="hljs-string">&quot;com.example.myapp&quot;</span>,<br>  <span class="hljs-string">&quot;com.example.myapp.Widget&quot;</span><br>].freeze<br><br>lane <span class="hljs-symbol">:install_development_signing</span> <span class="hljs-keyword">do</span><br>  match(<br>    <span class="hljs-symbol">type:</span> <span class="hljs-string">&quot;development&quot;</span>,<br>    <span class="hljs-symbol">app_identifier:</span> <span class="hljs-variable constant_">APP_IDENTIFIERS</span>,<br>    <span class="hljs-symbol">git_url:</span> <span class="hljs-string">&quot;git@github.com:example/ios-certificates.git&quot;</span>,<br>    <span class="hljs-symbol">readonly:</span> <span class="hljs-literal">true</span><br>  )<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>日常开发和 CI 建议用：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-symbol">readonly:</span> <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+
+<p>这表示当前机器只消费已有签名材料，不会擅自创建、修改或吊销团队证书。证书资产的创建、迁移、更新应在受控的本机环境中完成，再同步到 match 仓库。</p>
+<p>如果想进一步了解 match、Archive、TestFlight、版本号与发布流程，可以阅读同目录文章：<a href="iOS%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5Fastlane.md">iOS项目如何接入Fastlane</a>。</p>
+<h2 id="十三、常见问题与排查顺序"><a href="#十三、常见问题与排查顺序" class="headerlink" title="十三、常见问题与排查顺序"></a>十三、常见问题与排查顺序</h2><h3 id="1-找不到可用的签名身份"><a href="#1-找不到可用的签名身份" class="headerlink" title="1. 找不到可用的签名身份"></a>1. 找不到可用的签名身份</h3><p><strong>现象</strong>：Xcode 或 <code>codesign</code> 报找不到 Development&#x2F;Distribution certificate。</p>
+<p><strong>优先检查</strong>：</p>
+<ol>
+<li>钥匙串访问“我的证书”中是否有证书；</li>
+<li>证书下面能否展开看到 private key；</li>
+<li>证书是否属于当前选择的 Team；</li>
+<li>证书是否过期或已被撤销；</li>
+<li>CI 是否创建、解锁并使用了正确 Keychain。</li>
+</ol>
+<p>只有 <code>.cer</code> 没有私钥，不能解决签名问题。</p>
+<h3 id="2-Profile-不包含所需-entitlement"><a href="#2-Profile-不包含所需-entitlement" class="headerlink" title="2. Profile 不包含所需 entitlement"></a>2. Profile 不包含所需 entitlement</h3><p><strong>现象</strong>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">Provisioning profile doesn&#x27;t include the ... entitlement<br></code></pre></td></tr></table></figure>
+
+<p><strong>处理顺序</strong>：检查 Identifier Capability → 检查 Xcode 的 Signing &amp; Capabilities → 检查 <code>.entitlements</code> → 更新 Profile。不要只在 Xcode 里反复切换 Team。</p>
+<h3 id="3-真机无法安装或提示设备不在-Profile-内"><a href="#3-真机无法安装或提示设备不在-Profile-内" class="headerlink" title="3. 真机无法安装或提示设备不在 Profile 内"></a>3. 真机无法安装或提示设备不在 Profile 内</h3><p><strong>原因</strong>：设备 UDID 没登记，或者当前 Development&#x2F;Ad Hoc Profile 创建时没有勾选这台设备。</p>
+<p><strong>解决</strong>：登记设备后重新生成 Profile，并在 Xcode 或 match 中更新安装的 Profile。</p>
+<h3 id="4-Widget-能编译，Archive-时却签名失败"><a href="#4-Widget-能编译，Archive-时却签名失败" class="headerlink" title="4. Widget 能编译，Archive 时却签名失败"></a>4. Widget 能编译，Archive 时却签名失败</h3><p><strong>原因</strong>：Widget 的 Identifier 或 Profile 漏配；也可能 App Group 等共享能力在主 App 和 Widget 中不一致。</p>
+<p><strong>解决</strong>：逐个检查 Target 的 Bundle ID、Team、Capability 和 Provisioning Profile。自动化中也要让 <code>app_identifier</code> 包含所有 Target。</p>
+<h3 id="5-App-一周后无法打开"><a href="#5-App-一周后无法打开" class="headerlink" title="5. App 一周后无法打开"></a>5. App 一周后无法打开</h3><p><strong>原因</strong>：可能使用了 7 天 Offline support Profile；也可能使用了个人免费开发者账户或其他有期限的签名方式。不能只凭“7 天失效”就断言原因，先检查 Profile 类型和签名身份。</p>
+<p><strong>解决</strong>：在 Apple Developer 后台查看该 Profile 的配置与有效期；日常开发改用常规 Development Profile，并重新签名安装。</p>
+<h3 id="6-新机器导入证书后还是不能签名"><a href="#6-新机器导入证书后还是不能签名" class="headerlink" title="6. 新机器导入证书后还是不能签名"></a>6. 新机器导入证书后还是不能签名</h3><p><strong>原因</strong>：只导入了 <code>.cer</code>，没有私钥；或者导入的私钥与证书不匹配。</p>
+<p><strong>解决</strong>：从旧机器导出带私钥的 <code>.p12</code>，或通过 match 恢复完整签名身份；不要在新机器上盲目多次创建证书。</p>
+<h3 id="7-Fastlane-或-CI-里-match-拉取失败"><a href="#7-Fastlane-或-CI-里-match-拉取失败" class="headerlink" title="7. Fastlane 或 CI 里 match 拉取失败"></a>7. Fastlane 或 CI 里 match 拉取失败</h3><p><strong>原因</strong>：证书仓库 SSH 权限、Deploy Key、<code>known_hosts</code>、<code>MATCH_PASSWORD</code> 或临时 Keychain 配置有问题。</p>
+<p><strong>解决</strong>：先检查仓库读取权限和密钥文件 <code>600</code> 权限；CI 中明确设置 <code>GIT_SSH_COMMAND</code>，并使用 <code>match readonly</code>。不要把证书仓库改公开来“解决”权限问题。</p>
+<h2 id="十四、最后的检查清单"><a href="#十四、最后的检查清单" class="headerlink" title="十四、最后的检查清单"></a>十四、最后的检查清单</h2><p>在点击 Build 或 Archive 前，可以快速过一遍：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs text">[ ] 主 App 与所有 Extension 都有正确的 Explicit App ID<br>[ ] Capability 与 Xcode entitlements 一致<br>[ ] 本机证书在“我的证书”中能展开看到 private key<br>[ ] 已登记本次测试的真机 UDID（Development/Ad Hoc 场景）<br>[ ] Profile 的类型符合目标：Development / Ad Hoc / App Store<br>[ ] Profile 覆盖了正确的 App ID、证书、设备与能力<br>[ ] 未误用 7 天 Offline support Profile<br>[ ] 私钥、.p12、.p8 和 Profile 没有提交进业务仓库<br>[ ] 有 Widget/Extension 时，所有 Target 的签名配置均已检查<br>[ ] 需要 CI 时，签名资产已通过 match 或等价的受控方案管理<br></code></pre></td></tr></table></figure>
+
+<h2 id="十五、与-Apple-官方流程的对应关系"><a href="#十五、与-Apple-官方流程的对应关系" class="headerlink" title="十五、与 Apple 官方流程的对应关系"></a>十五、与 Apple 官方流程的对应关系</h2><p>本文的手动步骤与 Apple 官方 Development Profile 流程一一对应：先准备 App ID、开发证书和已登记设备，再在 Profiles 中选择 Development 类型、App ID、证书和设备，填写 Profile 名称后 Generate、Download。使用自动签名时，Xcode 会管理开发 Profile，不必重复执行这些手动步骤。</p>
+<p>建议在 Apple 后台改版后，以官方页面的当前字段名称为准：</p>
+<ul>
+<li><a href="https://developer.apple.com/help/account/provisioning-profiles/create-a-development-provisioning-profile/">Create a development provisioning profile</a></li>
+<li><a href="https://developer.apple.com/help/account/identifiers/register-an-app-id/">Register an App ID</a></li>
+<li><a href="https://developer.apple.com/help/account/devices/register-a-single-device/">Register a device</a></li>
+</ul>
+<p>Apple 后台界面和证书名称会随 Xcode、平台政策调整，但“App ID + 证书 + 设备 + 能力 + Profile”这条关系不会变。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>iOS 签名看起来复杂，是因为它同时要回答四个问题：这个 App 是谁、谁可以签名、哪些能力被允许、包可以安装到哪里。把 App ID、证书与私钥、设备、Profile 这几层关系理清后，绝大多数问题都有固定的排查路径。</p>
+<p>对个人项目来说，手动创建一次 Development Certificate 和 Profile，是理解 Apple 签名体系最好的起点；对多人协作和持续集成项目来说，下一步则是把这些资产收敛到 Fastlane match 等可控流程中。无论采用哪种方式，最重要的原则都一样：签名资产必须可追溯、私钥必须安全、每个 Target 都必须被完整覆盖。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+        <a href="/tags/%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/" class="print-no-link">#代码签名</a>
+      
+        <a href="/tags/Provisioning-Profile/" class="print-no-link">#Provisioning-Profile</a>
+      
+        <a href="/tags/Apple-Developer/" class="print-no-link">#Apple-Developer</a>
+      
+        <a href="/tags/Fastlane/" class="print-no-link">#Fastlane</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/09/08/%E7%94%A8%20SwiftData%20+%20CloudKit%20%E7%BB%99%E4%B9%A0%E6%83%AF%20App%20%E5%8A%A0%E4%B8%8A%E3%80%8C%E6%97%A0%E6%84%9F%E3%80%8D%E5%A4%9A%E7%AB%AF%E5%90%8C%E6%AD%A5%20%E2%80%94%E2%80%94%20%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E8%90%BD%E5%9C%B0%E7%9A%84%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" title="用 SwiftData + CloudKit 给习惯 App 加上「无感」多端同步">
+                        <span class="hidden-mobile">用 SwiftData + CloudKit 给习惯 App 加上「无感」多端同步</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
