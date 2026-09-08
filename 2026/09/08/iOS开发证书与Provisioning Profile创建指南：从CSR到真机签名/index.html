@@ -19,15 +19,15 @@
   <meta name="author" content="Sheldon">
   <meta name="keywords" content="">
   
-    <meta name="description" content="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。 其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，">
+    <meta name="description" content="第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。 其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，再创建可用于签名的证书，最后用 Provisioning Profile 把“App">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名">
 <meta property="og:url" content="https://flametinary.github.io/2026/09/08/iOS%E5%BC%80%E5%8F%91%E8%AF%81%E4%B9%A6%E4%B8%8EProvisioning%20Profile%E5%88%9B%E5%BB%BA%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8ECSR%E5%88%B0%E7%9C%9F%E6%9C%BA%E7%AD%BE%E5%90%8D/index.html">
 <meta property="og:site_name" content="Sheldon&#39;s blog">
-<meta property="og:description" content="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。 其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，">
+<meta property="og:description" content="第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。 其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，再创建可用于签名的证书，最后用 Provisioning Profile 把“App">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-09-07T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-09-08T06:20:21.573Z">
+<meta property="article:modified_time" content="2026-09-08T06:37:31.247Z">
 <meta property="article:author" content="Sheldon">
 <meta property="article:tag" content="Apple-Developer">
 <meta property="article:tag" content="Fastlane">
@@ -390,7 +390,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="iOS开发证书与Provisioning-Profile创建指南：从CSR到真机签名"><a href="#iOS开发证书与Provisioning-Profile创建指南：从CSR到真机签名" class="headerlink" title="iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名"></a>iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名</h1><p>第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。</p>
+                <p>第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。</p>
 <p>其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，再创建可用于签名的证书，最后用 Provisioning Profile 把“App、证书、能力和设备”组合在一起。本文以<strong>手动签名</strong>为主，带你从创建 CSR（Certificate Signing Request，证书签名请求）开始，完成 Development Certificate 和 Development Provisioning Profile 的创建，并说明它和 Xcode 自动签名、Fastlane match 的关系。</p>
 <p>本文讨论的是 Apple Developer 的代码签名体系，不涉及 App Store Connect API Key。后者用于上传 TestFlight、管理商店元数据和提交审核，和“能不能把 App 签名安装到设备”是两套不同的权限系统。</p>
 <h2 id="一、先建立正确的概念"><a href="#一、先建立正确的概念" class="headerlink" title="一、先建立正确的概念"></a>一、先建立正确的概念</h2><p>在动手前，先把几个名词分清。很多签名问题并不是操作错了，而是把它们当成同一种文件。</p>
