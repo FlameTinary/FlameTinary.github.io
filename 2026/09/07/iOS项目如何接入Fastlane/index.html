@@ -1,0 +1,1381 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.svg">
+  <link rel="icon" href="/img/favicon.svg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="iOS项目如何接入Fastlane做 iOS 开发的人，大概都经历过这种时刻：本地调试明明很顺，临近提测才开始手动改版本号、找证书、切 Scheme、Archive、导 IPA、登录 App Store Connect、传 TestFlight。中间只要漏一步，或者用错一张 Profile，就得从头再来。 Fastlane 的价值不是“替你点几个按钮”，而是把这些重复、容易出错、又必须可追溯的动作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS项目如何接入Fastlane">
+<meta property="og:url" content="https://flametinary.github.io/2026/09/07/iOS%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5Fastlane/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="iOS项目如何接入Fastlane做 iOS 开发的人，大概都经历过这种时刻：本地调试明明很顺，临近提测才开始手动改版本号、找证书、切 Scheme、Archive、导 IPA、登录 App Store Connect、传 TestFlight。中间只要漏一步，或者用错一张 Profile，就得从头再来。 Fastlane 的价值不是“替你点几个按钮”，而是把这些重复、容易出错、又必须可追溯的动作">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-08T03:45:19.020Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="Fastlane">
+<meta property="article:tag" content="TestFlight">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="自动化">
+<meta property="article:tag" content="证书签名">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>iOS项目如何接入Fastlane - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"flametinary.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="iOS项目如何接入Fastlane"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-09-07 00:00" pubdate>
+          2026年9月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          22k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          184 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">iOS项目如何接入Fastlane</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="iOS项目如何接入Fastlane"><a href="#iOS项目如何接入Fastlane" class="headerlink" title="iOS项目如何接入Fastlane"></a>iOS项目如何接入Fastlane</h1><p>做 iOS 开发的人，大概都经历过这种时刻：本地调试明明很顺，临近提测才开始手动改版本号、找证书、切 Scheme、Archive、导 IPA、登录 App Store Connect、传 TestFlight。中间只要漏一步，或者用错一张 Profile，就得从头再来。</p>
+<p>Fastlane 的价值不是“替你点几个按钮”，而是把这些重复、容易出错、又必须可追溯的动作变成代码。你把规则写进 <code>Fastfile</code>，以后无论是自己在终端运行，还是让 GitHub Actions 的 macOS Runner 运行，走的都是同一套流程。</p>
+<p>本文以 HabitPulse 的真实接入过程为例，完整说明一个 SwiftUI iOS 项目如何接入 Fastlane：它能做什么、项目里常用哪些功能、证书怎么管理、前置字段如何准备，以及接入过程中实际遇到的问题和解决办法。项目包含主 App 和 Widget Extension，所有账号、仓库地址、Bundle ID、Team ID 与密钥内容均已脱敏。</p>
+<h2 id="一、先用一句话理解-Fastlane"><a href="#一、先用一句话理解-Fastlane" class="headerlink" title="一、先用一句话理解 Fastlane"></a>一、先用一句话理解 Fastlane</h2><p>Fastlane 是一套用 Ruby 配置的移动端自动化工具集。它不替代 Xcode，也不替代 Apple Developer 或 App Store Connect；它做的是把这些平台和命令行工具串成稳定的流水线。</p>
+<p>你可以把它理解为 iOS 项目的“自动化总控台”：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">开发者输入一条 Fastlane 命令<br>        ↓<br>Fastlane 选择正确的证书/Profile、调用 xcodebuild<br>        ↓<br>测试 / 归档 / 导出 IPA / 生成截图 / 上传 TestFlight / 提交审核<br>        ↓<br>输出 IPA、dSYM、xcresult、日志、发布说明等可追溯产物<br></code></pre></td></tr></table></figure>
+
+<p>在 HabitPulse 中，最常用的命令长这样：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 用固定模拟器运行测试，并生成报告</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios <span class="hljs-built_in">test</span><br><br><span class="hljs-comment"># 安装开发签名材料（主 App + Widget）</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_dev<br><br><span class="hljs-comment"># 生成开发 IPA、archive、dSYM、xcresult</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_build_dev<br><br><span class="hljs-comment"># 生成 App Store IPA、archive、dSYM、xcresult，但不上传</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_archive_appstore<br><br><span class="hljs-comment"># 上传 TestFlight</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios beta<br></code></pre></td></tr></table></figure>
+
+<p>这里有一个习惯值得从第一天就建立：<strong>始终使用 <code>bundle exec</code>。</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+
+<p>不要随手运行系统全局的：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">fastlane ios <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+
+<p>因为前者一定使用项目 <code>Gemfile.lock</code> 锁定的 Fastlane 版本，团队成员和 CI 才会保持一致；后者可能悄悄调用你电脑里另一个版本的 Fastlane，今天能跑、明天升级后就变了。</p>
+<h2 id="二、Fastlane-到底能做什么"><a href="#二、Fastlane-到底能做什么" class="headerlink" title="二、Fastlane 到底能做什么"></a>二、Fastlane 到底能做什么</h2><p>Fastlane 并不是一个单独的“打包工具”，它是许多 action 的集合。最常见的几类能力如下。</p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>常见 Fastlane action</th>
+<th>HabitPulse 中的用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>执行单元&#x2F;UI 测试</td>
+<td><code>run_tests</code> &#x2F; <code>scan</code></td>
+<td>固定模拟器运行测试，保存 JUnit、<code>.xcresult</code> 和日志</td>
+</tr>
+<tr>
+<td>管理证书与 Profile</td>
+<td><code>match</code></td>
+<td>主 App 与 Widget 使用同一份受加密保护的签名仓库</td>
+</tr>
+<tr>
+<td>Archive 与导出 IPA</td>
+<td><code>build_app</code> &#x2F; <code>gym</code></td>
+<td>导出开发版或 App Store 版 IPA、archive 与 dSYM</td>
+</tr>
+<tr>
+<td>读取和更新版本号</td>
+<td><code>get_version_number</code>、<code>get_build_number</code>、<code>increment_build_number</code></td>
+<td>生成唯一 TestFlight build number，准备发布 tag</td>
+</tr>
+<tr>
+<td>调用 App Store Connect API</td>
+<td><code>app_store_connect_api_key</code></td>
+<td>无需 Apple ID 会话即可读取构建号、上传或预检</td>
+</tr>
+<tr>
+<td>上传 TestFlight</td>
+<td><code>upload_to_testflight</code> &#x2F; <code>pilot</code></td>
+<td>上传构建并附上中文更新说明，默认不外部分发</td>
+</tr>
+<tr>
+<td>管理商店元数据</td>
+<td><code>deliver</code>、<code>check_app_store_metadata</code> &#x2F; <code>precheck</code></td>
+<td>校验多语言元数据、上传元数据、提交审核</td>
+</tr>
+<tr>
+<td>生成商店截图</td>
+<td><code>snapshot</code></td>
+<td>通过稳定的 UI Test 批量生成多语言、多设备截图</td>
+</tr>
+<tr>
+<td>读写 Git 信息</td>
+<td><code>ensure_git_status_clean</code>、<code>add_git_tag</code></td>
+<td>发布时检查工作树与 tag，避免“代码和包不是同一份”</td>
+</tr>
+</tbody></table>
+<p>你不必一口气把所有功能都接入。一个健康的演进顺序通常是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">先测试 → 再归档 → 再管理签名 → 再上传 TestFlight<br>→ 再管理元数据和截图 → 最后才是审核提交与 CI<br></code></pre></td></tr></table></figure>
+
+<p>每往前走一步，先确保本机可复现，再交给 CI。这样当问题出现时，你能知道是工程问题、签名问题，还是 CI 环境问题。</p>
+<h2 id="三、接入前先准备什么"><a href="#三、接入前先准备什么" class="headerlink" title="三、接入前先准备什么"></a>三、接入前先准备什么</h2><p>Fastlane 本身安装很简单，但 iOS 发布所依赖的外部信息不少。先把它们分成三类，会清楚很多。</p>
+<h3 id="1-工程内必须明确的信息"><a href="#1-工程内必须明确的信息" class="headerlink" title="1. 工程内必须明确的信息"></a>1. 工程内必须明确的信息</h3><p>至少要确认下面这些值，而不是在 Fastfile 里“猜”。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>例子</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Xcode 工程或 Workspace</td>
+<td><code>HabitPulse.xcodeproj</code></td>
+<td>测试、Archive 的入口</td>
+</tr>
+<tr>
+<td>Scheme</td>
+<td><code>HabitPulse</code></td>
+<td>告诉 xcodebuild 构建哪个方案</td>
+</tr>
+<tr>
+<td>主 App Bundle ID</td>
+<td><code>com.example.habitpulse</code></td>
+<td>签名和 App Store Connect 的应用标识</td>
+</tr>
+<tr>
+<td>所有 Extension Bundle ID</td>
+<td><code>com.example.habitpulse.Widget</code></td>
+<td>Widget、Share Extension 等也要签名</td>
+</tr>
+<tr>
+<td>Apple Team ID</td>
+<td><code>ABCDE12345</code></td>
+<td>导出选项、签名校验</td>
+</tr>
+<tr>
+<td>版本号与构建号策略</td>
+<td><code>1.0</code> &#x2F; <code>42</code></td>
+<td>App Store 与 TestFlight 要求 build number 唯一</td>
+</tr>
+<tr>
+<td>测试设备与 Runtime</td>
+<td><code>iPhone 17 Pro (26.3)</code></td>
+<td>使本机和 CI 的测试一致</td>
+</tr>
+</tbody></table>
+<p>最容易漏掉的是 Extension。只要工程里有 Widget、Share Extension、Notification Service Extension 等 Target，签名就不是“主 App 一个 Bundle ID”这么简单。HabitPulse 的 <code>APP_IDENTIFIERS</code> 显式包括主 App 和 Widget：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">APP_IDENTIFIERS</span> = [<br>  <span class="hljs-string">&quot;com.example.habitpulse&quot;</span>,<br>  <span class="hljs-string">&quot;com.example.habitpulse.Widget&quot;</span><br>].freeze<br></code></pre></td></tr></table></figure>
+
+<p>在 Apple Developer 后台、match、Fastfile、CI 签名校验中，都要以这份完整列表为准。</p>
+<h3 id="2-本地工具链"><a href="#2-本地工具链" class="headerlink" title="2. 本地工具链"></a>2. 本地工具链</h3><p>HabitPulse 把 Ruby、Fastlane 和 Bundler 版本锁进 <code>Gemfile</code>：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ruby">ruby <span class="hljs-string">&quot;~&gt; 3.3.0&quot;</span><br><br>source <span class="hljs-string">&quot;https://rubygems.org&quot;</span><br><br>gem <span class="hljs-string">&quot;fastlane&quot;</span>, <span class="hljs-string">&quot;2.238.0&quot;</span><br>gem <span class="hljs-string">&quot;bundler&quot;</span>, <span class="hljs-string">&quot;4.0.16&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>第一次接入时，在项目根目录运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle install<br>bundle <span class="hljs-built_in">exec</span> fastlane --version<br></code></pre></td></tr></table></figure>
+
+<p>此外你还需要：</p>
+<ul>
+<li>macOS 和可用的 Xcode；</li>
+<li>项目最低系统版本所需的 iOS Simulator Runtime；</li>
+<li>已登录并有相应权限的 Apple Developer 账号（首次准备签名材料时需要）；</li>
+<li>Git 可访问私有证书仓库；</li>
+<li>如果计划上传 TestFlight 或提交审核，还要有 App Store Connect API Key。</li>
+</ul>
+<h3 id="3-机密字段：哪些可以进仓库，哪些绝对不行"><a href="#3-机密字段：哪些可以进仓库，哪些绝对不行" class="headerlink" title="3. 机密字段：哪些可以进仓库，哪些绝对不行"></a>3. 机密字段：哪些可以进仓库，哪些绝对不行</h3><p>下面这张表很重要。</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>是否可提交到业务仓库</th>
+<th>合理位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Fastfile</code>、<code>Gemfile</code>、元数据模板</td>
+<td>可以</td>
+<td>业务仓库</td>
+</tr>
+<tr>
+<td>Bundle ID、Scheme、非敏感 Team ID</td>
+<td>通常可以</td>
+<td>Fastfile&#x2F;xcconfig</td>
+</tr>
+<tr>
+<td>match 证书仓库地址</td>
+<td>可视仓库权限而定，私有项目通常可以</td>
+<td><code>Matchfile</code> 或 Fastfile</td>
+</tr>
+<tr>
+<td>match 加密密码</td>
+<td>不可以</td>
+<td>本机安全环境变量、CI Secret</td>
+</tr>
+<tr>
+<td><code>.p12</code>、Provisioning Profile</td>
+<td>不可以直接放业务仓库</td>
+<td>match 加密仓库</td>
+</tr>
+<tr>
+<td>App Store Connect <code>.p8</code> 私钥</td>
+<td>绝对不可以</td>
+<td>密码管理器、本机安全路径、CI Secret</td>
+</tr>
+<tr>
+<td>Apple ID 密码</td>
+<td>不建议作为自动化凭据</td>
+<td>尽量改用 App Store Connect API Key</td>
+</tr>
+<tr>
+<td>App Review 联系人信息</td>
+<td>不应进公共仓库</td>
+<td>本机受限文件或 CI Secret</td>
+</tr>
+</tbody></table>
+<p>HabitPulse 提供了被 <code>.gitignore</code> 忽略的本地环境变量模板：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs dotenv"># fastlane/.env（仅本机使用，不提交）<br>ASC_KEY_ID=<br>ASC_ISSUER_ID=<br>ASC_KEY_FILEPATH=<br>ASC_REVIEW_INFO_FILEPATH=<br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>ASC_KEY_FILEPATH</code> 指向本机的 <code>.p8</code> 文件；文件权限也应该收紧：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">chmod</span> 600 /安全路径/AuthKey_XXXXXXXXXX.p8<br></code></pre></td></tr></table></figure>
+
+<h2 id="四、开始接入：初始化和目录结构"><a href="#四、开始接入：初始化和目录结构" class="headerlink" title="四、开始接入：初始化和目录结构"></a>四、开始接入：初始化和目录结构</h2><p>在一个已有 iOS 项目的根目录执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane init<br></code></pre></td></tr></table></figure>
+
+<p>Fastlane 会引导创建 <code>fastlane/</code> 目录。实际项目里，建议把目录逐步整理成这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs text">fastlane/<br>├── Fastfile                         # 各条自动化 lane 的核心定义<br>├── Appfile                          # App 标识等基础配置（按需）<br>├── Matchfile                        # match 的默认签名仓库配置（按需）<br>├── .env.example                     # 环境变量模板，不含真实密钥<br>├── review_information.example.yml   # 审核联系信息模板，不含真实个人资料<br>├── metadata/                        # App Store 多语言文案<br>│   ├── zh-Hans/<br>│   ├── en-US/<br>│   └── fr-FR/<br>├── screenshots/                     # snapshot 生成的截图<br>├── test_output/                     # JUnit、xcresult、测试日志<br>├── build_output/                    # IPA、archive、dSYM、构建 xcresult<br>└── release_notes/                   # 自动生成的发布说明<br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>Fastfile</code> 是核心。Fastlane 里的可执行单元叫 <strong>lane</strong>，你可以把它理解为一条命名的自动化任务。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ruby">default_platform(<span class="hljs-symbol">:ios</span>)<br><br>platform <span class="hljs-symbol">:ios</span> <span class="hljs-keyword">do</span><br>  desc <span class="hljs-string">&quot;运行 iOS 测试&quot;</span><br>  lane <span class="hljs-symbol">:test</span> <span class="hljs-keyword">do</span><br>    run_tests(<br>      <span class="hljs-symbol">project:</span> <span class="hljs-string">&quot;HabitPulse.xcodeproj&quot;</span>,<br>      <span class="hljs-symbol">scheme:</span> <span class="hljs-string">&quot;HabitPulse&quot;</span><br>    )<br>  <span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>上面定义之后，运行方式是：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+
+<p><code>ios</code> 对应 <code>platform :ios</code>，<code>test</code> 对应 <code>lane :test</code>。lane 不一定要复杂；把一个动作做清楚、可单独验证，比写一条无所不包的“全自动超级 lane”更容易维护。</p>
+<h2 id="五、先做好公共配置和前置校验"><a href="#五、先做好公共配置和前置校验" class="headerlink" title="五、先做好公共配置和前置校验"></a>五、先做好公共配置和前置校验</h2><p>真实项目中，最开始的 Fastfile 很容易充满散落的字符串：工程路径写一遍、Scheme 写一遍、Bundle ID 写一遍、输出路径又写一遍。HabitPulse 在接入的第一阶段把它们抽成常量：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">REPOSITORY_ROOT</span> = <span class="hljs-title class_">File</span>.expand_path(<span class="hljs-string">&quot;..&quot;</span>, __dir__)<br><span class="hljs-variable constant_">PROJECT</span> = <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">REPOSITORY_ROOT</span>, <span class="hljs-string">&quot;HabitPulse.xcodeproj&quot;</span>)<br><span class="hljs-variable constant_">SCHEME</span> = <span class="hljs-string">&quot;HabitPulse&quot;</span><br><span class="hljs-variable constant_">DEFAULT_TEAM_ID</span> = <span class="hljs-string">&quot;ABCDE12345&quot;</span><br><span class="hljs-variable constant_">APP_IDENTIFIERS</span> = [<br>  <span class="hljs-string">&quot;com.example.habitpulse&quot;</span>,<br>  <span class="hljs-string">&quot;com.example.habitpulse.Widget&quot;</span><br>].freeze<br><span class="hljs-variable constant_">APP_IDENTIFIER</span> = <span class="hljs-variable constant_">APP_IDENTIFIERS</span>.first<br><span class="hljs-variable constant_">OUTPUT_ROOT</span> = <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">REPOSITORY_ROOT</span>, <span class="hljs-string">&quot;fastlane/build_output/ios/habitpulse&quot;</span>)<br><span class="hljs-variable constant_">TEST_OUTPUT_ROOT</span> = <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">REPOSITORY_ROOT</span>, <span class="hljs-string">&quot;fastlane/test_output&quot;</span>)<br><span class="hljs-variable constant_">TEST_DEVICE</span> = <span class="hljs-string">&quot;iPhone 17 Pro (26.3)&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>然后给各 lane 一个统一的入口校验：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ruby">private_lane <span class="hljs-symbol">:verify_fastlane_environment</span> <span class="hljs-keyword">do</span> |<span class="hljs-params">options</span>|<br>  ensure_bundle_exec<br>  <span class="hljs-variable constant_">UI</span>.user_error!(<span class="hljs-string">&quot;找不到 Xcode 工程：<span class="hljs-subst">#&#123;<span class="hljs-variable constant_">PROJECT</span>&#125;</span>&quot;</span>) <span class="hljs-keyword">unless</span> <span class="hljs-title class_">File</span>.exist?(<span class="hljs-variable constant_">PROJECT</span>)<br><br>  <span class="hljs-keyword">if</span> options[<span class="hljs-symbol">:requires_match_password</span>] &amp;&amp; <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;MATCH_PASSWORD&quot;</span>].to_s.empty?<br>    <span class="hljs-variable constant_">UI</span>.user_error!(<span class="hljs-string">&quot;缺少 MATCH_PASSWORD，无法解密 match 证书仓库&quot;</span>)<br>  <span class="hljs-keyword">end</span><br><br>  team_id = <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;FASTLANE_TEAM_ID&quot;</span>] |<span class="hljs-params"></span>| <span class="hljs-variable constant_">DEFAULT_TEAM_ID</span><br>  <span class="hljs-variable constant_">UI</span>.user_error!(<span class="hljs-string">&quot;FASTLANE_TEAM_ID 必须是 10 位 Apple Team ID&quot;</span>) <span class="hljs-keyword">unless</span> team_id.match?(<span class="hljs-regexp">/\A[A-Z0-9]&#123;10&#125;\z/</span>)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这类“先失败”的设计看似啰嗦，其实能省很多时间。比如 <code>.p8</code> 路径填错、忘记设置 <code>MATCH_PASSWORD</code>、用错 Ruby 环境时，应该在一分钟内给出清晰错误，而不是等五分钟 Archive 后才报一个难懂的签名失败。</p>
+<h2 id="六、测试自动化：从能跑到可排查"><a href="#六、测试自动化：从能跑到可排查" class="headerlink" title="六、测试自动化：从能跑到可排查"></a>六、测试自动化：从能跑到可排查</h2><p>Fastlane 的测试 action 通常是 <code>run_tests</code>，也常被称为 <code>scan</code>。HabitPulse 的测试 lane 做了几件比“直接跑测试”更完整的事：清理上次报告、固定设备、输出日志、输出 JUnit、输出 <code>.xcresult</code>。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs ruby">lane <span class="hljs-symbol">:test</span> <span class="hljs-keyword">do</span><br>  verify_fastlane_environment<br><br>  <span class="hljs-title class_">FileUtils</span>.rm_rf(<span class="hljs-variable constant_">TEST_OUTPUT_ROOT</span>)<br>  <span class="hljs-title class_">FileUtils</span>.mkdir_p(<span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">TEST_OUTPUT_ROOT</span>, <span class="hljs-string">&quot;logs&quot;</span>))<br><br>  run_tests(<br>    <span class="hljs-symbol">project:</span> <span class="hljs-variable constant_">PROJECT</span>,<br>    <span class="hljs-symbol">scheme:</span> <span class="hljs-variable constant_">SCHEME</span>,<br>    <span class="hljs-symbol">devices:</span> [<span class="hljs-variable constant_">TEST_DEVICE</span>],<br>    <span class="hljs-symbol">ensure_devices_found:</span> <span class="hljs-literal">true</span>,<br>    <span class="hljs-symbol">clean:</span> <span class="hljs-literal">true</span>,<br>    <span class="hljs-symbol">output_directory:</span> <span class="hljs-variable constant_">TEST_OUTPUT_ROOT</span>,<br>    <span class="hljs-symbol">output_types:</span> <span class="hljs-string">&quot;junit&quot;</span>,<br>    <span class="hljs-symbol">output_files:</span> <span class="hljs-string">&quot;HabitPulseTests.junit&quot;</span>,<br>    <span class="hljs-symbol">buildlog_path:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">TEST_OUTPUT_ROOT</span>, <span class="hljs-string">&quot;logs&quot;</span>),<br>    <span class="hljs-symbol">result_bundle:</span> <span class="hljs-literal">true</span>,<br>    <span class="hljs-symbol">result_bundle_path:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">TEST_OUTPUT_ROOT</span>, <span class="hljs-string">&quot;HabitPulseTests.xcresult&quot;</span>),<br>    <span class="hljs-symbol">xcargs:</span> <span class="hljs-variable constant_">SWIFT_SANDBOX_XCARGS</span><br>  )<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>运行后重点看这些产物：</p>
+<table>
+<thead>
+<tr>
+<th>产物</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>HabitPulseTests.xcresult</code></td>
+<td>用 Xcode 打开后可查看失败用例、附件与测试层级</td>
+</tr>
+<tr>
+<td><code>HabitPulseTests.junit</code></td>
+<td>适合 CI 系统解析和统计</td>
+</tr>
+<tr>
+<td><code>logs/</code></td>
+<td>最接近原始 <code>xcodebuild</code> 输出，签名或编译失败时最有用</td>
+</tr>
+</tbody></table>
+<h3 id="为什么要固定模拟器"><a href="#为什么要固定模拟器" class="headerlink" title="为什么要固定模拟器"></a>为什么要固定模拟器</h3><p>“在我的电脑上能跑”不等于 CI 上能跑。设备型号、iOS Runtime、Xcode 版本不同，都可能让 UI 测试出现布局、权限弹窗或系统行为差异。HabitPulse 固定到 <code>iPhone 17 Pro (26.3)</code>，并在 CI 安装相同 Xcode 版本。</p>
+<p>不要盲目照搬这个型号和版本；你应该选择你本机与 CI 都可获得的一组组合。关键原则是：<strong>把它当作工程配置维护，而不是临时参数。</strong></p>
+<h2 id="七、iOS-签名到底在管理什么"><a href="#七、iOS-签名到底在管理什么" class="headerlink" title="七、iOS 签名到底在管理什么"></a>七、iOS 签名到底在管理什么</h2><p>这是 Fastlane 接入最容易卡住、也最值得理解的部分。</p>
+<h3 id="1-四个容易混淆的东西"><a href="#1-四个容易混淆的东西" class="headerlink" title="1. 四个容易混淆的东西"></a>1. 四个容易混淆的东西</h3><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>它证明什么</th>
+<th>通常在哪里</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>App ID &#x2F; Identifier</td>
+<td>这个 Bundle ID 属于你的开发团队</td>
+<td>Apple Developer 后台</td>
+</tr>
+<tr>
+<td>Certificate（证书）</td>
+<td>谁可以为团队签名</td>
+<td>Apple Developer 后台与本机 Keychain</td>
+</tr>
+<tr>
+<td>Private Key（私钥）</td>
+<td>证书真正可用于签名的关键</td>
+<td>创建证书的 Keychain；必须严格保护</td>
+</tr>
+<tr>
+<td>Provisioning Profile</td>
+<td>某个 App ID、证书、能力、设备或分发方式的组合许可</td>
+<td>Apple 后台和本机</td>
+</tr>
+</tbody></table>
+<p>可以这样粗略理解：Bundle ID 是“这是谁的 App”，证书和私钥是“谁有权签名”，Profile 是“这份签名允许以什么方式安装或分发”。</p>
+<p>因此，一个包含 Widget 的 App Store Archive 至少要确保：主 App 和 Widget 都有正确的 App ID、所需 Capability、相应的签名证书和正确类型的 Profile。</p>
+<h3 id="2-为什么不建议手工到处导入-p12-和-Profile"><a href="#2-为什么不建议手工到处导入-p12-和-Profile" class="headerlink" title="2. 为什么不建议手工到处导入 .p12 和 Profile"></a>2. 为什么不建议手工到处导入 <code>.p12</code> 和 Profile</h3><p>小项目刚开始时，手动导入也能用。但一旦需要换电脑、多人协作或者接入 CI，你会遇到：</p>
+<ul>
+<li>私钥只在某一台老电脑里，其他机器虽然有证书却无法签名；</li>
+<li>Profile 到期后，大家不知道该谁更新；</li>
+<li>新增 Widget 后，主 App 能编译、Extension 没有 Profile；</li>
+<li>CI 缺证书、缺 Keychain、缺 Profile，错误信息还不直观；</li>
+<li>有人误点了“重新生成”，导致其他人的签名材料失效。</li>
+</ul>
+<p>这正是 <code>match</code> 的用武之地。</p>
+<h2 id="八、使用-match-管理证书和-Profile"><a href="#八、使用-match-管理证书和-Profile" class="headerlink" title="八、使用 match 管理证书和 Profile"></a>八、使用 match 管理证书和 Profile</h2><p>Fastlane match 的核心思路是：把证书、私钥和 Profile 放进<strong>独立的私有 Git 仓库</strong>，并且加密保存。业务项目不保存敏感签名文件，只保存“去哪里拿、拿哪些 Bundle ID”的规则。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text">业务仓库<br>  └── Fastfile：声明需要哪些 Bundle ID、什么分发类型<br><br>私有 match 仓库（加密）<br>  └── Certificates / Profiles / 加密材料<br><br>本机或 CI<br>  └── match 下载并解密 → 导入临时 Keychain → xcodebuild 签名<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-初始化-match"><a href="#1-初始化-match" class="headerlink" title="1. 初始化 match"></a>1. 初始化 match</h3><p>初次使用可执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane match init<br></code></pre></td></tr></table></figure>
+
+<p>之后配置 <code>Matchfile</code> 或在 Fastfile 中传入仓库地址。脱敏示例：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">MATCH_GIT_URL</span> = <span class="hljs-string">&quot;git@github.com:example/ios-certificates.git&quot;</span><br><span class="hljs-variable constant_">MATCH_GIT_BRANCH</span> = <span class="hljs-string">&quot;main&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>首次创建或迁移证书，需要在受控的开发机上执行相应 match 命令，并登录有 Apple Developer 权限的账号。完成后，日常开发机和 CI 应优先使用只读模式。</p>
+<h3 id="2-为开发版和-App-Store-版分别定义-lane"><a href="#2-为开发版和-App-Store-版分别定义-lane" class="headerlink" title="2. 为开发版和 App Store 版分别定义 lane"></a>2. 为开发版和 App Store 版分别定义 lane</h3><p>HabitPulse 这样定义：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs ruby">lane <span class="hljs-symbol">:habitpulse_dev</span> <span class="hljs-keyword">do</span><br>  verify_fastlane_environment(<span class="hljs-symbol">requires_match_password:</span> <span class="hljs-literal">true</span>)<br>  match(<br>    <span class="hljs-symbol">type:</span> <span class="hljs-string">&quot;development&quot;</span>,<br>    <span class="hljs-symbol">app_identifier:</span> <span class="hljs-variable constant_">APP_IDENTIFIERS</span>,<br>    <span class="hljs-symbol">git_url:</span> <span class="hljs-variable constant_">MATCH_GIT_URL</span>,<br>    <span class="hljs-symbol">git_branch:</span> <span class="hljs-variable constant_">MATCH_GIT_BRANCH</span>,<br>    <span class="hljs-symbol">readonly:</span> <span class="hljs-literal">true</span><br>  )<br><span class="hljs-keyword">end</span><br><br>lane <span class="hljs-symbol">:habitpulse_appstore</span> <span class="hljs-keyword">do</span><br>  verify_fastlane_environment(<span class="hljs-symbol">requires_match_password:</span> <span class="hljs-literal">true</span>)<br>  match(<br>    <span class="hljs-symbol">type:</span> <span class="hljs-string">&quot;appstore&quot;</span>,<br>    <span class="hljs-symbol">app_identifier:</span> <span class="hljs-variable constant_">APP_IDENTIFIERS</span>,<br>    <span class="hljs-symbol">git_url:</span> <span class="hljs-variable constant_">MATCH_GIT_URL</span>,<br>    <span class="hljs-symbol">git_branch:</span> <span class="hljs-variable constant_">MATCH_GIT_BRANCH</span>,<br>    <span class="hljs-symbol">readonly:</span> <span class="hljs-literal">true</span><br>  )<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>分别运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_dev<br>bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_appstore<br></code></pre></td></tr></table></figure>
+
+<p><code>development</code> 用于开发安装，<code>appstore</code> 用于 TestFlight 和 App Store 分发。不要拿开发 Profile 去导出 App Store IPA，也不要为了“让 CI 过”随意切成 automatic signing；这样虽然一时可能绕过去，后续会更难追踪。</p>
+<h3 id="3-为什么-readonly-true-是-CI-的正确默认值"><a href="#3-为什么-readonly-true-是-CI-的正确默认值" class="headerlink" title="3. 为什么 readonly: true 是 CI 的正确默认值"></a>3. 为什么 <code>readonly: true</code> 是 CI 的正确默认值</h3><p>CI 应该是一个消费者，而不是证书的管理员。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-symbol">readonly:</span> <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+
+<p>意味着 CI 只会下载、解密、安装已有材料。如果材料缺失或过期，它会明确失败，而不会擅自新建、吊销或替换团队证书。需要修复签名资产时，应该由有权限的人在受控的本机环境中处理，再把更新后的加密材料提交进 match 仓库。</p>
+<p>特别不要在日常 CI 里用 <code>match --force</code>。它可能导致重新创建甚至影响既有材料；只有明确诊断到证书损坏、换新机等场景，才应由负责人谨慎执行。</p>
+<h3 id="4-match-需要哪些秘密"><a href="#4-match-需要哪些秘密" class="headerlink" title="4. match 需要哪些秘密"></a>4. match 需要哪些秘密</h3><p>通常至少有两个：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MATCH_PASSWORD</code></td>
+<td>解密 match 仓库中材料的密码</td>
+</tr>
+<tr>
+<td>证书仓库读取凭据</td>
+<td>例如只读 Deploy Key 对应的 SSH 私钥</td>
+</tr>
+</tbody></table>
+<p><code>MATCH_PASSWORD</code> 不是 Apple ID 密码。它是你为 match 加密仓库设置的密码，应该存放在密码管理器、本机安全环境变量或 CI Secret 中。</p>
+<h2 id="九、归档和导出-IPA：build-app-的正确用法"><a href="#九、归档和导出-IPA：build-app-的正确用法" class="headerlink" title="九、归档和导出 IPA：build_app 的正确用法"></a>九、归档和导出 IPA：build_app 的正确用法</h2><p>Fastlane 中的 <code>build_app</code>（别名 <code>gym</code>）负责把 <code>xcodebuild archive</code> 和导出 IPA 的步骤封装起来。HabitPulse 将开发版和 App Store 版拆开，输出目录也拆开，避免产物互相覆盖。</p>
+<h3 id="1-开发版打包"><a href="#1-开发版打包" class="headerlink" title="1. 开发版打包"></a>1. 开发版打包</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs ruby">lane <span class="hljs-symbol">:habitpulse_build_dev</span> <span class="hljs-keyword">do</span><br>  habitpulse_dev<br><br>  build_app(<br>    <span class="hljs-symbol">project:</span> <span class="hljs-variable constant_">PROJECT</span>,<br>    <span class="hljs-symbol">scheme:</span> <span class="hljs-variable constant_">SCHEME</span>,<br>    <span class="hljs-symbol">configuration:</span> <span class="hljs-string">&quot;Debug&quot;</span>,<br>    <span class="hljs-symbol">output_directory:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">OUTPUT_ROOT</span>, <span class="hljs-string">&quot;dev&quot;</span>),<br>    <span class="hljs-symbol">output_name:</span> <span class="hljs-string">&quot;HabitPulse_dev&quot;</span>,<br>    <span class="hljs-symbol">export_method:</span> <span class="hljs-string">&quot;development&quot;</span>,<br>    <span class="hljs-symbol">export_options:</span> &#123;<br>      <span class="hljs-symbol">teamID:</span> <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;FASTLANE_TEAM_ID&quot;</span>] |<span class="hljs-params"></span>| <span class="hljs-variable constant_">DEFAULT_TEAM_ID</span>,<br>      <span class="hljs-symbol">compileBitcode:</span> <span class="hljs-literal">false</span><br>    &#125;,<br>    <span class="hljs-symbol">clean:</span> <span class="hljs-literal">true</span>,<br>    <span class="hljs-symbol">archive_path:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">OUTPUT_ROOT</span>, <span class="hljs-string">&quot;dev&quot;</span>, <span class="hljs-string">&quot;HabitPulse.xcarchive&quot;</span>),<br>    <span class="hljs-symbol">result_bundle:</span> <span class="hljs-literal">true</span>,<br>    <span class="hljs-symbol">result_bundle_path:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">OUTPUT_ROOT</span>, <span class="hljs-string">&quot;dev&quot;</span>, <span class="hljs-string">&quot;HabitPulse.xcresult&quot;</span>),<br>    <span class="hljs-symbol">xcargs:</span> <span class="hljs-variable constant_">SWIFT_SANDBOX_XCARGS</span><br>  )<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_build_dev<br></code></pre></td></tr></table></figure>
+
+<p>它输出一个 development IPA，适合受 Profile 限制的开发安装场景。</p>
+<h3 id="2-App-Store-归档"><a href="#2-App-Store-归档" class="headerlink" title="2. App Store 归档"></a>2. App Store 归档</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs ruby">lane <span class="hljs-symbol">:habitpulse_archive_appstore</span> <span class="hljs-keyword">do</span><br>  habitpulse_appstore<br><br>  version = get_version_number(<span class="hljs-symbol">xcodeproj:</span> <span class="hljs-variable constant_">PROJECT</span>, <span class="hljs-symbol">target:</span> <span class="hljs-variable constant_">SCHEME</span>)<br>  build_number = <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;BUILD_NUMBER&quot;</span>] |<span class="hljs-params"></span>| get_build_number(<span class="hljs-symbol">xcodeproj:</span> <span class="hljs-variable constant_">PROJECT</span>)<br>  increment_build_number(<span class="hljs-symbol">build_number:</span> build_number, <span class="hljs-symbol">xcodeproj:</span> <span class="hljs-variable constant_">PROJECT</span>) <span class="hljs-keyword">if</span> <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;BUILD_NUMBER&quot;</span>]<br><br>  build_app(<br>    <span class="hljs-symbol">project:</span> <span class="hljs-variable constant_">PROJECT</span>,<br>    <span class="hljs-symbol">scheme:</span> <span class="hljs-variable constant_">SCHEME</span>,<br>    <span class="hljs-symbol">configuration:</span> <span class="hljs-string">&quot;Release&quot;</span>,<br>    <span class="hljs-symbol">output_directory:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">OUTPUT_ROOT</span>, <span class="hljs-string">&quot;appstore&quot;</span>),<br>    <span class="hljs-symbol">output_name:</span> <span class="hljs-string">&quot;HabitPulse&quot;</span>,<br>    <span class="hljs-symbol">export_method:</span> <span class="hljs-string">&quot;app-store&quot;</span>,<br>    <span class="hljs-symbol">export_options:</span> &#123;<br>      <span class="hljs-symbol">teamID:</span> <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;FASTLANE_TEAM_ID&quot;</span>] |<span class="hljs-params"></span>| <span class="hljs-variable constant_">DEFAULT_TEAM_ID</span>,<br>      <span class="hljs-symbol">uploadSymbols:</span> <span class="hljs-literal">true</span>,<br>      <span class="hljs-symbol">uploadBitcode:</span> <span class="hljs-literal">false</span><br>    &#125;,<br>    <span class="hljs-symbol">clean:</span> <span class="hljs-literal">true</span>,<br>    <span class="hljs-symbol">archive_path:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">OUTPUT_ROOT</span>, <span class="hljs-string">&quot;appstore&quot;</span>, <span class="hljs-string">&quot;HabitPulse.xcarchive&quot;</span>),<br>    <span class="hljs-symbol">result_bundle:</span> <span class="hljs-literal">true</span>,<br>    <span class="hljs-symbol">result_bundle_path:</span> <span class="hljs-title class_">File</span>.join(<span class="hljs-variable constant_">OUTPUT_ROOT</span>, <span class="hljs-string">&quot;appstore&quot;</span>, <span class="hljs-string">&quot;HabitPulse.xcresult&quot;</span>),<br>    <span class="hljs-symbol">xcargs:</span> <span class="hljs-variable constant_">SWIFT_SANDBOX_XCARGS</span><br>  )<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>执行时可以临时传入构建号：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">BUILD_NUMBER=42 bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_archive_appstore<br></code></pre></td></tr></table></figure>
+
+<p>这条 lane 的一个重要边界是：<strong>它只归档和导出 IPA，不上传。</strong>把“构建一个可发布包”和“把包发到外部平台”拆开后，日常验证更安全，CI 也能稳定保留一份主干可发布的制品。</p>
+<h3 id="3-为什么要同时保留-IPA、archive、dSYM-和-xcresult"><a href="#3-为什么要同时保留-IPA、archive、dSYM-和-xcresult" class="headerlink" title="3. 为什么要同时保留 IPA、archive、dSYM 和 xcresult"></a>3. 为什么要同时保留 IPA、archive、dSYM 和 xcresult</h3><table>
+<thead>
+<tr>
+<th>产物</th>
+<th>为什么要留</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.ipa</code></td>
+<td>上传 TestFlight 或给分发渠道使用</td>
+</tr>
+<tr>
+<td><code>.xcarchive</code></td>
+<td>复查归档内容、签名和 dSYM 的来源</td>
+</tr>
+<tr>
+<td><code>.dSYM</code></td>
+<td>日后崩溃日志符号化需要</td>
+</tr>
+<tr>
+<td><code>.xcresult</code></td>
+<td>构建或测试失败时排查 Xcode 级别细节</td>
+</tr>
+</tbody></table>
+<p>HabitPulse 统一输出到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">fastlane/build_output/ios/habitpulse/dev/<br>fastlane/build_output/ios/habitpulse/appstore/<br>fastlane/test_output/<br></code></pre></td></tr></table></figure>
+
+<p>在 CI 中，这些目录还会作为 Artifact 上传。不要只保留一份 IPA；真遇到问题时，archive 与完整日志往往更有价值。</p>
+<h2 id="十、版本号、构建号和发布说明"><a href="#十、版本号、构建号和发布说明" class="headerlink" title="十、版本号、构建号和发布说明"></a>十、版本号、构建号和发布说明</h2><h3 id="1-先分清两个版本字段"><a href="#1-先分清两个版本字段" class="headerlink" title="1. 先分清两个版本字段"></a>1. 先分清两个版本字段</h3><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>Xcode 中常见键</th>
+<th>例子</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>面向用户的版本</td>
+<td><code>MARKETING_VERSION</code> &#x2F; <code>CFBundleShortVersionString</code></td>
+<td><code>1.0</code></td>
+<td>只有产品版本变化时才增加</td>
+</tr>
+<tr>
+<td>构建号</td>
+<td><code>CURRENT_PROJECT_VERSION</code> &#x2F; <code>CFBundleVersion</code></td>
+<td><code>42</code></td>
+<td>每次上传到 TestFlight 必须唯一且递增</td>
+</tr>
+</tbody></table>
+<p>很多“上传被拒绝”的问题都来自 build number 重复。HabitPulse 的思路是先读取本地构建号和 App Store Connect 上已经存在的最大值，再取更大的下一个值：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ruby">private_lane <span class="hljs-symbol">:next_testflight_build_number</span> <span class="hljs-keyword">do</span><br>  local_build = get_build_number(<span class="hljs-symbol">xcodeproj:</span> <span class="hljs-variable constant_">PROJECT</span>).to_i<br>  uploaded_build = latest_testflight_build_number(<br>    <span class="hljs-symbol">api_key:</span> lane_context[<span class="hljs-title class_">SharedValues</span><span class="hljs-symbol">:</span><span class="hljs-symbol">:APP_STORE_CONNECT_API_KEY</span>],<br>    <span class="hljs-symbol">app_identifier:</span> <span class="hljs-variable constant_">APP_IDENTIFIER</span>,<br>    <span class="hljs-symbol">initial_build_number:</span> <span class="hljs-number">0</span><br>  ).to_i<br>  [local_build + <span class="hljs-number">1</span>, uploaded_build + <span class="hljs-number">1</span>].max<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios next_build_number<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-从-Conventional-Commits-生成发布说明"><a href="#2-从-Conventional-Commits-生成发布说明" class="headerlink" title="2. 从 Conventional Commits 生成发布说明"></a>2. 从 Conventional Commits 生成发布说明</h3><p>把提交信息规范化后，发布说明不必每次手写。HabitPulse 只提取 <code>feat</code>、<code>fix</code>、<code>perf</code>，过滤 <code>docs</code>、<code>chore</code> 等不面向用户的提交：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs ruby">subjects = sh(<span class="hljs-string">&quot;git log --no-merges --pretty=format:%s <span class="hljs-subst">#&#123;previous_tag&#125;</span>..HEAD&quot;</span>).lines.map(&amp;<span class="hljs-symbol">:strip</span>)<br>notes = subjects.filter_map <span class="hljs-keyword">do</span> |<span class="hljs-params">subject</span>|<br>  <span class="hljs-keyword">next</span> <span class="hljs-keyword">unless</span> subject.match?(<span class="hljs-regexp">/^(feat|fix|perf)(\([^)]*\))?:/</span>)<br>  <span class="hljs-string">&quot;- <span class="hljs-subst">#&#123;subject.sub(<span class="hljs-regexp">/^(feat|fix|perf)(\([^)]*\))?:\s*/</span>, <span class="hljs-string">&quot;&quot;</span>)&#125;</span>&quot;</span><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>例如提交：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">feat(reminder): 新增提醒管理页面<br>fix(widget): 修复快照刷新延迟<br>docs(readme): 补充安装说明<br></code></pre></td></tr></table></figure>
+
+<p>生成的面向用户说明是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">- 新增提醒管理页面<br>- 修复快照刷新延迟<br></code></pre></td></tr></table></figure>
+
+<p>这不是让开发者偷懒，而是让提交信息成为可复用的工程记录。前提是提交标题真的描述了用户能感知的变化。</p>
+<h3 id="3-用-tag-约束正式发布"><a href="#3-用-tag-约束正式发布" class="headerlink" title="3. 用 tag 约束正式发布"></a>3. 用 tag 约束正式发布</h3><p>HabitPulse 的发布 tag 采用：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">v&lt;版本号&gt;-build.&lt;构建号&gt;<br></code></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">v1.0-build.42<br></code></pre></td></tr></table></figure>
+
+<p>发布 lane 会确认当前 <code>HEAD</code> 精确对应这个 tag。这样你不会出现“本来准备发布 A 提交，实际打出来的是后来又混进几个提交的 B 包”。</p>
+<p><code>release_prepare</code> 默认是 dry-run：会计算下一构建号和生成发布说明，但不会修改工程，也不会创建 tag。只有明确设置确认变量才会写入：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 默认只预览</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios release_prepare<br><br><span class="hljs-comment"># 确认后才会修改 build number 并创建 tag</span><br>CONFIRM_RELEASE_PREPARE=<span class="hljs-literal">true</span> bundle <span class="hljs-built_in">exec</span> fastlane ios release_prepare<br></code></pre></td></tr></table></figure>
+
+<h2 id="十一、接入-App-Store-Connect-API-Key"><a href="#十一、接入-App-Store-Connect-API-Key" class="headerlink" title="十一、接入 App Store Connect API Key"></a>十一、接入 App Store Connect API Key</h2><p>过去 Fastlane 经常依赖 Apple ID 登录、双重验证和会话 Cookie。现在更推荐 App Store Connect API Key：它适合本机与 CI，也更容易收紧权限和撤销。</p>
+<h3 id="1-需要准备的三个字段"><a href="#1-需要准备的三个字段" class="headerlink" title="1. 需要准备的三个字段"></a>1. 需要准备的三个字段</h3><table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ASC_KEY_ID</code></td>
+<td>App Store Connect 创建 API Key 后的 Key ID，通常是 10 位字符</td>
+</tr>
+<tr>
+<td><code>ASC_ISSUER_ID</code></td>
+<td>App Store Connect 页面提供的 Issuer ID，UUID 格式</td>
+</tr>
+<tr>
+<td><code>ASC_KEY_FILEPATH</code></td>
+<td>本机 <code>.p8</code> 私钥文件的绝对路径</td>
+</tr>
+</tbody></table>
+<p><code>.p8</code> 文件创建后通常只有一次下载机会。下载后立即保存到密码管理器或受保护路径，绝对不要提交到 Git。</p>
+<p>Fastfile 可以做格式和权限检查：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs ruby">private_lane <span class="hljs-symbol">:app_store_connect_api_key_from_environment</span> <span class="hljs-keyword">do</span><br>  key_id = <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;ASC_KEY_ID&quot;</span>]<br>  issuer_id = <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;ASC_ISSUER_ID&quot;</span>]<br>  key_filepath = <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;ASC_KEY_FILEPATH&quot;</span>]<br><br>  <span class="hljs-variable constant_">UI</span>.user_error!(<span class="hljs-string">&quot;ASC_KEY_ID 格式错误&quot;</span>) <span class="hljs-keyword">unless</span> key_id&amp;.match?(<span class="hljs-regexp">/\A[A-Z0-9]&#123;10&#125;\z/</span>)<br>  <span class="hljs-variable constant_">UI</span>.user_error!(<span class="hljs-string">&quot;ASC_ISSUER_ID 格式错误&quot;</span>) <span class="hljs-keyword">unless</span> issuer_id&amp;.match?(<span class="hljs-regexp">/\A[0-9a-fA-F-]&#123;36&#125;\z/</span>)<br>  <span class="hljs-variable constant_">UI</span>.user_error!(<span class="hljs-string">&quot;缺少 .p8 私钥&quot;</span>) <span class="hljs-keyword">unless</span> key_filepath&amp;.end_with?(<span class="hljs-string">&quot;.p8&quot;</span>) &amp;&amp; <span class="hljs-title class_">File</span>.file?(key_filepath)<br>  <span class="hljs-variable constant_">UI</span>.user_error!(<span class="hljs-string">&quot;私钥权限过宽&quot;</span>) <span class="hljs-keyword">unless</span> (<span class="hljs-title class_">File</span>.stat(key_filepath).mode &amp; <span class="hljs-number">0o077</span>).zero?<br><br>  app_store_connect_api_key(<br>    <span class="hljs-symbol">key_id:</span> key_id,<br>    <span class="hljs-symbol">issuer_id:</span> issuer_id,<br>    <span class="hljs-symbol">key_filepath:</span> key_filepath,<br>    <span class="hljs-symbol">duration:</span> <span class="hljs-number">1_200</span>,<br>    <span class="hljs-symbol">in_house:</span> <span class="hljs-literal">false</span><br>  )<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>先做一个只读验证，比直接上传更稳：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios asc_verify<br></code></pre></td></tr></table></figure>
+
+<p>它能先确认 Key 是否有效、权限是否足够、网络和配置是否正确。</p>
+<h3 id="2-API-Key-与签名证书不是同一回事"><a href="#2-API-Key-与签名证书不是同一回事" class="headerlink" title="2. API Key 与签名证书不是同一回事"></a>2. API Key 与签名证书不是同一回事</h3><p>这是新手常混淆的点：</p>
+<ul>
+<li><code>match</code> 管理 <strong>Apple Developer 签名证书和 Provisioning Profile</strong>；</li>
+<li>App Store Connect API Key 管理 <strong>读取 TestFlight、上传构建、上传元数据、提交审核</strong> 的权限。</li>
+</ul>
+<p>一个解决“我能不能签出这个 IPA”，另一个解决“我能不能把 IPA 传到 App Store Connect”。两者都需要，但职责不能互相替代。</p>
+<h2 id="十二、上传-TestFlight：先上传，不自动外发"><a href="#十二、上传-TestFlight：先上传，不自动外发" class="headerlink" title="十二、上传 TestFlight：先上传，不自动外发"></a>十二、上传 TestFlight：先上传，不自动外发</h2><p>HabitPulse 的 <code>beta</code> lane 做的顺序是：计算下一个构建号 → 生成发布说明 → 安装 App Store 签名材料 → Release Archive → 验证 IPA&#x2F;dSYM&#x2F;Bundle ID → 上传 TestFlight。</p>
+<p>核心上传部分如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ruby">upload_to_testflight(<br>  <span class="hljs-symbol">ipa:</span> ipa_path,<br>  <span class="hljs-symbol">api_key:</span> lane_context[<span class="hljs-title class_">SharedValues</span><span class="hljs-symbol">:</span><span class="hljs-symbol">:APP_STORE_CONNECT_API_KEY</span>],<br>  <span class="hljs-symbol">app_identifier:</span> <span class="hljs-variable constant_">APP_IDENTIFIER</span>,<br>  <span class="hljs-symbol">changelog:</span> <span class="hljs-title class_">File</span>.read(notes_path),<br>  <span class="hljs-symbol">skip_submission:</span> <span class="hljs-literal">true</span>,<br>  <span class="hljs-symbol">distribute_external:</span> <span class="hljs-literal">false</span>,<br>  <span class="hljs-symbol">notify_external_testers:</span> <span class="hljs-literal">false</span>,<br>  <span class="hljs-symbol">skip_waiting_for_build_processing:</span> <span class="hljs-literal">false</span>,<br>  <span class="hljs-symbol">wait_processing_timeout_duration:</span> <span class="hljs-number">600</span><br>)<br></code></pre></td></tr></table></figure>
+
+<p>执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios beta<br></code></pre></td></tr></table></figure>
+
+<p>几个参数的含义：</p>
+<ul>
+<li><code>skip_submission: true</code>：不自动把构建提交给 Beta Review；</li>
+<li><code>distribute_external: false</code>：默认不外部分发；</li>
+<li><code>notify_external_testers: false</code>：不自动向外部测试者发通知；</li>
+<li><code>wait_processing_timeout_duration: 600</code>：最多等待十分钟处理状态，避免无限挂起。</li>
+</ul>
+<p>这种默认值更保守。第一次跑通 Fastlane 或新换 API Key 时，最适合先上传到 TestFlight、确认构建存在，再决定是否分发给外部测试人员。</p>
+<h3 id="上传前为什么要验证产物"><a href="#上传前为什么要验证产物" class="headerlink" title="上传前为什么要验证产物"></a>上传前为什么要验证产物</h3><p>归档成功不等于导出的东西完全正确。HabitPulse 在上传前会检查：</p>
+<ul>
+<li>IPA 文件是否存在；</li>
+<li>archive 是否存在；</li>
+<li>archive 中主 App 与 Widget 的 dSYM 是否齐全；</li>
+<li>导出的 IPA 是否为 distribution 签名；</li>
+<li>Team ID 和 Bundle ID 是否符合预期。</li>
+</ul>
+<p>这个额外步骤能把“上传后才发现签错包”的问题提前到本机解决。</p>
+<h2 id="十三、商店元数据、预检和截图"><a href="#十三、商店元数据、预检和截图" class="headerlink" title="十三、商店元数据、预检和截图"></a>十三、商店元数据、预检和截图</h2><p>Fastlane 的发布能力不只有传 IPA。App Store 名称、副标题、描述、关键词、支持链接、隐私链接、版权、年龄分级、截图等也可以作为版本化文件管理。</p>
+<h3 id="1-多语言元数据"><a href="#1-多语言元数据" class="headerlink" title="1. 多语言元数据"></a>1. 多语言元数据</h3><p>HabitPulse 将三种语言放在：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">fastlane/metadata/zh-Hans/<br>fastlane/metadata/en-US/<br>fastlane/metadata/fr-FR/<br></code></pre></td></tr></table></figure>
+
+<p>每个目录包含类似：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">name.txt<br>subtitle.txt<br>promotional_text.txt<br>description.txt<br>keywords.txt<br>support_url.txt<br>marketing_url.txt<br>privacy_url.txt<br>copyright.txt<br></code></pre></td></tr></table></figure>
+
+<p>本地校验 lane 检查文件是否完整、内容是否为空、URL 是否为 HTTPS、字符数是否超出 App Store 限制：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios metadata_validate<br></code></pre></td></tr></table></figure>
+
+<p>这个命令不需要上传，也不需要读取私钥，适合放进 PR 检查。</p>
+<h3 id="2-precheck-与-metadata-upload"><a href="#2-precheck-与-metadata-upload" class="headerlink" title="2. precheck 与 metadata_upload"></a>2. precheck 与 metadata_upload</h3><p>两者职责不同：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 与 App Store Connect 做预检查：不上传、不提交审核</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios precheck<br><br><span class="hljs-comment"># 只上传商店文案：不上传二进制、不传截图、不提交审核</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios metadata_upload<br></code></pre></td></tr></table></figure>
+
+<p>这样可以把“修改文案”和“上传一个新的 App 二进制”分开。真实实践中，App Store Connect 的首个版本审核详情接口偶尔可能返回空数据，导致元数据上传后出现非关键的清理异常。HabitPulse 的 lane 对已知、可确认的 <code>No data</code> 情况做了窄范围处理：确认元数据已经上传后跳过非必要的审核附件清理；其他错误仍然抛出，不能一概吞掉。</p>
+<h3 id="3-snapshot-自动截图"><a href="#3-snapshot-自动截图" class="headerlink" title="3. snapshot 自动截图"></a>3. snapshot 自动截图</h3><p>商店截图最适合由 UI Test 自动化：稳定、可重复、多语言和多尺寸不会漏。HabitPulse 的 <code>screenshots</code> lane：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 默认生成简体中文、英语、法语截图</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios screenshots<br><br><span class="hljs-comment"># 只生成英文和法语，便于调试</span><br>SCREENSHOT_LANGUAGES=en-US,fr-FR bundle <span class="hljs-built_in">exec</span> fastlane ios screenshots<br></code></pre></td></tr></table></figure>
+
+<p>它指定了 UI Test Target、设备、语言和启动参数：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ruby">snapshot(<br>  <span class="hljs-symbol">scheme:</span> <span class="hljs-variable constant_">SCHEME</span>,<br>  <span class="hljs-symbol">test_target_name:</span> <span class="hljs-string">&quot;HabitPulseUITests&quot;</span>,<br>  <span class="hljs-symbol">devices:</span> [<span class="hljs-string">&quot;iPhone 17 Pro&quot;</span>, <span class="hljs-string">&quot;iPad Pro 13-inch (M5)&quot;</span>],<br>  <span class="hljs-symbol">languages:</span> (<span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;SCREENSHOT_LANGUAGES&quot;</span>] |<span class="hljs-params"></span>| <span class="hljs-string">&quot;zh-Hans,en-US,fr-FR&quot;</span>).split(<span class="hljs-string">&quot;,&quot;</span>),<br>  <span class="hljs-symbol">launch_arguments:</span> [<span class="hljs-string">&quot;--ui-testing&quot;</span>, <span class="hljs-string">&quot;--skip-onboarding&quot;</span>],<br>  <span class="hljs-symbol">headless:</span> <span class="hljs-literal">true</span>,<br>  <span class="hljs-symbol">concurrent_simulators:</span> <span class="hljs-literal">false</span><br>)<br></code></pre></td></tr></table></figure>
+
+<p>截图自动化的重点不在 Fastlane 本身，而在你的 App 必须有可预测的 UI Test 状态：不要读取真实 iCloud 数据，不要在截图过程中弹不可控权限框，不要让首次引导随机出现。必要时给 App 增加仅限 UI Test 的启动参数和种子数据。</p>
+<h2 id="十四、正式审核提交：必须有安全闸门"><a href="#十四、正式审核提交：必须有安全闸门" class="headerlink" title="十四、正式审核提交：必须有安全闸门"></a>十四、正式审核提交：必须有安全闸门</h2><p>正式提交审核是外部状态变更，不能和普通 Archive 混在一起。HabitPulse 的 <code>release</code> lane 采取了两层保护：</p>
+<ol>
+<li>当前提交必须精确对应 <code>v&lt;version&gt;-build.&lt;build&gt;</code> tag；</li>
+<li>只有 <code>CONFIRM_RELEASE=true</code> 才真的上传 IPA、上传元数据、提交审核。</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 默认 dry-run：测试、归档、precheck，但不上传、不提交</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios release<br><br><span class="hljs-comment"># 显式确认后才允许外部动作</span><br>CONFIRM_RELEASE=<span class="hljs-literal">true</span> bundle <span class="hljs-built_in">exec</span> fastlane ios release<br></code></pre></td></tr></table></figure>
+
+<p>dry-run 不是摆设。HabitPulse 实测过：在没有正确发布 tag 的情况下，即使设置了 <code>CONFIRM_RELEASE=true</code>，lane 会在任何测试、归档、网络上传之前以退出码 1 阻断。</p>
+<p>真正调用 <code>deliver</code> 时还会保持：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-symbol">submit_for_review:</span> <span class="hljs-literal">true</span>,<br><span class="hljs-symbol">automatic_release:</span> <span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+
+<p>这表示提交审核可以自动化，但审核通过后仍需你在 App Store Connect 手动选择公开发布。对于大多数独立开发者和小团队，这个默认值既高效又稳妥。</p>
+<h2 id="十五、这次接入中遇到的真实问题与解决方案"><a href="#十五、这次接入中遇到的真实问题与解决方案" class="headerlink" title="十五、这次接入中遇到的真实问题与解决方案"></a>十五、这次接入中遇到的真实问题与解决方案</h2><p>下面这些不是“理论上可能发生”的问题，而是 HabitPulse 在接入 Fastlane 与后续 CI 时实际验证过或遇到过的情况。</p>
+<h3 id="问题-1：命令行构建时出现-Swift-宏找不到"><a href="#问题-1：命令行构建时出现-Swift-宏找不到" class="headerlink" title="问题 1：命令行构建时出现 Swift 宏找不到"></a>问题 1：命令行构建时出现 Swift 宏找不到</h3><p><strong>现象</strong></p>
+<p>命令行 <code>xcodebuild</code> 或 Fastlane 测试时出现大量类似错误：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">could not be found for macro &#x27;Model()&#x27;<br>swift-plugin-server produced malformed response<br></code></pre></td></tr></table></figure>
+
+<p><strong>原因</strong></p>
+<p>项目使用 SwiftData 的宏。当前命令行环境中，Swift 宏插件沙箱导致插件服务无法正常启动；Xcode IDE 内构建却可能正常，所以问题很容易被误判成代码问题。</p>
+<p><strong>解决方案</strong></p>
+<p>在所有命令行构建入口统一传递：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">SWIFT_SANDBOX_XCARGS</span> = <span class="hljs-string">&#x27;OTHER_SWIFT_FLAGS=&quot;-disable-sandbox&quot;&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>然后将它放进 <code>run_tests</code>、开发 Archive、App Store Archive、截图等所有需要 xcodebuild 的 lane。关键不是这一个参数本身，而是不要只在某一条命令里临时补上；否则本机测试通过、CI 或 release 又失败，问题会反复出现。</p>
+<h3 id="问题-2：构建工具链版本漂移"><a href="#问题-2：构建工具链版本漂移" class="headerlink" title="问题 2：构建工具链版本漂移"></a>问题 2：构建工具链版本漂移</h3><p><strong>现象</strong></p>
+<p>本地能跑，GitHub Actions 上找不到模拟器、Ruby 依赖不兼容，或者 Xcode 版本不满足项目要求。</p>
+<p><strong>原因</strong></p>
+<p>没有锁定 Xcode、Ruby、Fastlane 以及测试 Runtime；GitHub-hosted Runner 会更新，系统全局 Ruby&#x2F;Gem 也会变化。</p>
+<p><strong>解决方案</strong></p>
+<ul>
+<li>用 <code>Gemfile</code> 与 <code>Gemfile.lock</code> 固定 Ruby&#x2F;Fastlane&#x2F;Bundler；</li>
+<li>本机和 CI 都使用 <code>bundle exec</code>；</li>
+<li>Fastlane 固定测试设备和 Runtime；</li>
+<li>GitHub Actions 使用 <code>setup-xcode</code> 显式选择 Xcode 版本；</li>
+<li>升级 Xcode 前先在分支或 PR 流程验证。</li>
+</ul>
+<h3 id="问题-3：Widget-导致签名失败"><a href="#问题-3：Widget-导致签名失败" class="headerlink" title="问题 3：Widget 导致签名失败"></a>问题 3：Widget 导致签名失败</h3><p><strong>现象</strong></p>
+<p>主 App 看起来已经有证书和 Profile，但 Archive 报 Extension 没有合适的 Provisioning Profile，或导出时签名失败。</p>
+<p><strong>原因</strong></p>
+<p>只把主 App Bundle ID 配给了 match，漏了 Widget 的 Bundle ID；或者 Apple Developer 后台没有为 Extension 正确配置 App ID&#x2F;Capability。</p>
+<p><strong>解决方案</strong></p>
+<p>把所有需要签名的 Target 列成常量：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">APP_IDENTIFIERS</span> = [main_app_bundle_id, widget_bundle_id].freeze<br></code></pre></td></tr></table></figure>
+
+<p>并让 development&#x2F;appstore 两条 match lane 都使用同一列表。新增任何 Extension 时，把 Apple Developer、match、Fastfile、CI 签名检查这四处一起更新。</p>
+<h3 id="问题-4：TestFlight-提示构建号重复"><a href="#问题-4：TestFlight-提示构建号重复" class="headerlink" title="问题 4：TestFlight 提示构建号重复"></a>问题 4：TestFlight 提示构建号重复</h3><p><strong>现象</strong></p>
+<p>IPA 签名正确，但上传被 App Store Connect 拒绝，提示 build number 已存在。</p>
+<p><strong>原因</strong></p>
+<p>只从工程本地读取 <code>CURRENT_PROJECT_VERSION</code>，忽略了已经上传到 TestFlight 的构建号；或者并行构建时重复使用同一个号。</p>
+<p><strong>解决方案</strong></p>
+<p>在上传前查询 App Store Connect 的最新 build number，并与本地号比较取更大值的下一个数。对于频繁并行发布的团队，还应在发布流程中串行化或用外部构建号策略协调，避免两个 Job 同时算到相同结果。</p>
+<h3 id="问题-5：把-Fastlane-CLI-的-dry-run-当作业务-dry-run"><a href="#问题-5：把-Fastlane-CLI-的-dry-run-当作业务-dry-run" class="headerlink" title="问题 5：把 Fastlane CLI 的 --dry-run 当作业务 dry-run"></a>问题 5：把 Fastlane CLI 的 <code>--dry-run</code> 当作业务 dry-run</h3><p><strong>现象</strong></p>
+<p>尝试运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle <span class="hljs-built_in">exec</span> fastlane ios release --dry-run<br></code></pre></td></tr></table></figure>
+
+<p>结果失败或没有达到预期。</p>
+<p><strong>原因</strong></p>
+<p>“是否产生上传&#x2F;提交审核等外部副作用”是你的 release lane 的业务规则，不是 Fastlane CLI 自动知道的概念。</p>
+<p><strong>解决方案</strong></p>
+<p>在 Fastfile 内设计明确的确认变量，例如：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-keyword">unless</span> <span class="hljs-variable constant_">ENV</span>[<span class="hljs-string">&quot;CONFIRM_RELEASE&quot;</span>] == <span class="hljs-string">&quot;true&quot;</span><br>  <span class="hljs-variable constant_">UI</span>.important(<span class="hljs-string">&quot;dry-run：未上传 IPA、未上传元数据、未提交审核&quot;</span>)<br>  <span class="hljs-keyword">next</span><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>默认执行 <code>bundle exec fastlane ios release</code> 时只做测试、归档与预检；只有显式设置 <code>CONFIRM_RELEASE=true</code> 才进入 <code>deliver</code>。这才是可审计、可测试的 dry-run。</p>
+<h3 id="问题-6：Fastlane-把-README-自动重写"><a href="#问题-6：Fastlane-把-README-自动重写" class="headerlink" title="问题 6：Fastlane 把 README 自动重写"></a>问题 6：Fastlane 把 README 自动重写</h3><p><strong>现象</strong></p>
+<p>运行某些 Fastlane 命令或文档生成动作后，已跟踪的 <code>fastlane/README.md</code> 被生成内容覆盖，导致工作树出现不属于当前任务的改动。</p>
+<p><strong>原因</strong></p>
+<p>Fastlane 的默认文档生成行为会产出 lane 列表；如果你把 README 当成手写操作手册，两者会冲突。</p>
+<p><strong>解决方案</strong></p>
+<p>明确 README 的所有权：要么接受自动生成、不要手写；要么将手写使用说明放到独立文件并避免生成覆盖。HabitPulse 的实践是先检查 diff，确认它只是生成副作用后恢复到提交版本，避免把无关改动混进功能提交。</p>
+<h3 id="问题-7：商店预检出现版权字段警告"><a href="#问题-7：商店预检出现版权字段警告" class="headerlink" title="问题 7：商店预检出现版权字段警告"></a>问题 7：商店预检出现版权字段警告</h3><p><strong>现象</strong></p>
+<p>本地三语 <code>copyright.txt</code> 已包含年份，App Store Connect 的 <code>precheck</code> 仍给出版权相关警告。</p>
+<p><strong>原因</strong></p>
+<p>预检有时检查的是远端当前商店元数据或特定 App Store Connect 规则，未必等同于本地文本文件格式。</p>
+<p><strong>解决方案</strong></p>
+<p>先区分 warning 与 error：本地元数据校验是否已经通过？远端 warning 是否阻断提交？如果不阻断，不要为了消除一条远端提示盲目来回修改已经正确的本地文本。将它记录为非阻断项，等真正上传并同步远端元数据后再复查。</p>
+<h3 id="问题-8：审核联系信息在本机有，CI-却没有"><a href="#问题-8：审核联系信息在本机有，CI-却没有" class="headerlink" title="问题 8：审核联系信息在本机有，CI 却没有"></a>问题 8：审核联系信息在本机有，CI 却没有</h3><p><strong>现象</strong></p>
+<p>本机 <code>release</code> 能找到 <code>review_information.yml</code>，GitHub Actions 的正式 release 因缺少审核联系人、电话或审核备注失败。</p>
+<p><strong>原因</strong></p>
+<p>审核信息应该不提交到仓库，所以 CI Runner 天然没有这个文件。</p>
+<p><strong>解决方案</strong></p>
+<p>将审核信息作为受保护 Environment Secret 注入到 Runner 临时文件，或为 CI 单独配置受保护的安全文件路径；并让 lane 在缺失时明确报错。不要把真实电话、邮箱、登录说明直接提交进 <code>fastlane/</code>。</p>
+<h3 id="问题-9：Fastlane-的-lane-名与内置工具重名"><a href="#问题-9：Fastlane-的-lane-名与内置工具重名" class="headerlink" title="问题 9：Fastlane 的 lane 名与内置工具重名"></a>问题 9：Fastlane 的 lane 名与内置工具重名</h3><p><strong>现象</strong></p>
+<p>运行时出现类似提示：<code>Lane name &#39;precheck&#39; should not be used because it is the name of a fastlane tool</code>。</p>
+<p><strong>原因</strong></p>
+<p>lane 叫 <code>precheck</code>，同时 Fastlane 也有同名 action&#x2F;tool。多数情况下仍可运行，但可读性和未来兼容性都不好。</p>
+<p><strong>解决方案</strong></p>
+<p>更推荐使用语义明确且不冲突的命名，例如：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ruby">lane <span class="hljs-symbol">:store_precheck</span> <span class="hljs-keyword">do</span><br>  check_app_store_metadata(...)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>然后同步更新 README、CI 和团队命令。若历史项目暂时保留旧 lane，至少把这条 warning 记录下来，避免误认为是构建失败。</p>
+<h3 id="问题-10：证书仓库拉取失败或-GitHub-走错代理"><a href="#问题-10：证书仓库拉取失败或-GitHub-走错代理" class="headerlink" title="问题 10：证书仓库拉取失败或 GitHub 走错代理"></a>问题 10：证书仓库拉取失败或 GitHub 走错代理</h3><p><strong>现象</strong></p>
+<p><code>match</code> 无法 clone 私有证书仓库，或 GitHub 请求报 502、超时、SSH permission denied。</p>
+<p><strong>原因</strong></p>
+<p>可能是 SSH 私钥没有读取权限、Deploy Key 没加到正确仓库、<code>known_hosts</code> 缺 GitHub 指纹，或者本机透明代理配置错误。</p>
+<p><strong>解决方案</strong></p>
+<ul>
+<li>先用 <code>ssh -T git@github.com</code> 或对目标仓库做只读连接诊断；</li>
+<li>确保私钥权限是 <code>600</code>；</li>
+<li>CI 里显式设置 <code>GIT_SSH_COMMAND</code>，指定唯一的 Deploy Key；</li>
+<li>本机代理异常时，使用已验证可用的代理做一次性 Git 覆盖，不要永久污染全局配置；</li>
+<li>不要为了跳过问题把证书仓库改为公开。</li>
+</ul>
+<h2 id="十六、把-Fastlane-接进-GitHub-Actions-后，职责如何划分"><a href="#十六、把-Fastlane-接进-GitHub-Actions-后，职责如何划分" class="headerlink" title="十六、把 Fastlane 接进 GitHub Actions 后，职责如何划分"></a>十六、把 Fastlane 接进 GitHub Actions 后，职责如何划分</h2><p>Fastlane 接入完成后，GitHub Actions 不必重复实现构建逻辑，只需调用 lane。HabitPulse 最终采用三段式：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">PR workflow<br>  └── bundle exec fastlane ios metadata_validate<br>  └── bundle exec fastlane ios test<br><br>main archive workflow<br>  └── 设置临时 SSH / Keychain / match 密码<br>  └── bundle exec fastlane ios habitpulse_archive_appstore<br><br>manual release workflow<br>  └── 设置临时 SSH / Keychain / App Store Connect API Key<br>  └── bundle exec fastlane ios beta 或 release<br></code></pre></td></tr></table></figure>
+
+<p>这样 Fastlane 是能力层，GitHub Actions 是调度层。你仍然可以在本机执行同一条 lane；CI 的差别只是它从 Secret 注入凭据，并把产物上传成 Artifact。</p>
+<p>关于 GitHub Actions 的完整配置、Environment Secret 和临时 Keychain，可参阅同目录文章：<a href="%E5%A6%82%E4%BD%95%E5%B0%86iOS%E9%A1%B9%E7%9B%AE%E6%8E%A5%E5%85%A5GitHub%20Action.md">如何将 iOS 项目接入 GitHub Action</a>。</p>
+<h2 id="十七、一份可照着执行的日常清单"><a href="#十七、一份可照着执行的日常清单" class="headerlink" title="十七、一份可照着执行的日常清单"></a>十七、一份可照着执行的日常清单</h2><h3 id="日常开发"><a href="#日常开发" class="headerlink" title="日常开发"></a>日常开发</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh">bundle install<br>bundle <span class="hljs-built_in">exec</span> fastlane ios <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+
+<p>测试通过后再提交代码。不要等到发布日才第一次运行 Fastlane。</p>
+<h3 id="需要给测试人员一个包"><a href="#需要给测试人员一个包" class="headerlink" title="需要给测试人员一个包"></a>需要给测试人员一个包</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 仅本地归档，先检查产物</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_archive_appstore<br><br><span class="hljs-comment"># 需要上传 TestFlight 时</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios beta<br></code></pre></td></tr></table></figure>
+
+<h3 id="需要修改商店文案"><a href="#需要修改商店文案" class="headerlink" title="需要修改商店文案"></a>需要修改商店文案</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 先做本地格式校验</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios metadata_validate<br><br><span class="hljs-comment"># 再做 App Store Connect 预检</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios precheck<br><br><span class="hljs-comment"># 确认后只上传文案</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios metadata_upload<br></code></pre></td></tr></table></figure>
+
+<h3 id="准备正式审核"><a href="#准备正式审核" class="headerlink" title="准备正式审核"></a>准备正式审核</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 预览下一个构建号与发布说明</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios release_prepare<br><br><span class="hljs-comment"># 显式准备版本和 tag（会修改工程与 Git）</span><br>CONFIRM_RELEASE_PREPARE=<span class="hljs-literal">true</span> bundle <span class="hljs-built_in">exec</span> fastlane ios release_prepare<br><br><span class="hljs-comment"># 默认 dry-run：不上传、不提交审核</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios release<br><br><span class="hljs-comment"># 最后确认后才真正提交审核</span><br>CONFIRM_RELEASE=<span class="hljs-literal">true</span> bundle <span class="hljs-built_in">exec</span> fastlane ios release<br></code></pre></td></tr></table></figure>
+
+<p>正式提交前，还应确认：当前工作树干净、当前提交具有正确 tag、TestFlight 已验证、审核联系信息已准备好、隐私链接和商店元数据正确。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>Fastlane 最好的使用方式，不是追求“一条命令把所有事情都做掉”，而是把 iOS 交付里的每个高风险环节做成边界明确、可单独验证的 lane：</p>
+<ul>
+<li><code>test</code> 只负责可靠测试和报告；</li>
+<li><code>match</code> 只负责把受控签名材料安全地带到当前机器；</li>
+<li><code>build_app</code> 只负责稳定归档和导出；</li>
+<li><code>beta</code> 只负责 TestFlight；</li>
+<li><code>release</code> 在 tag 与显式确认之后才允许提交审核；</li>
+<li>GitHub Actions 只负责合适的时机调用这些能力，并不重写业务规则。</li>
+</ul>
+<p>当这些规则被写进仓库、被本机和 CI 共同执行后，发版就不再依赖某位同事记得住一套手工步骤。它变成了一条可阅读、可复现、可审计的工程流程——这才是 Fastlane 在 iOS 项目里真正长期有价值的地方。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+        <a href="/tags/Fastlane/" class="print-no-link">#Fastlane</a>
+      
+        <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" class="print-no-link">#自动化</a>
+      
+        <a href="/tags/%E8%AF%81%E4%B9%A6%E7%AD%BE%E5%90%8D/" class="print-no-link">#证书签名</a>
+      
+        <a href="/tags/TestFlight/" class="print-no-link">#TestFlight</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/09/07/%E5%A6%82%E4%BD%95%E5%B0%86iOS%E9%A1%B9%E7%9B%AE%E6%8E%A5%E5%85%A5GitHub%20Action/" title="如何将 iOS 项目接入 GitHub Action">
+                        <span class="hidden-mobile">如何将 iOS 项目接入 GitHub Action</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

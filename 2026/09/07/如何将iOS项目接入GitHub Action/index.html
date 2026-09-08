@@ -1,0 +1,1059 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.svg">
+  <link rel="icon" href="/img/favicon.svg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Sheldon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="如何将 iOS 项目接入 GitHub Action很多人第一次给 iOS 项目接 GitHub Actions，会以为就是“写一个 YAML，跑一下 xcodebuild test”。真开始做才会发现，真正麻烦的不是 YAML，而是签名证书、Provisioning Profile、App Store Connect API Key、TestFlight 上传权限，以及“怎样确保一次误操作不会直">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何将 iOS 项目接入 GitHub Action">
+<meta property="og:url" content="https://flametinary.github.io/2026/09/07/%E5%A6%82%E4%BD%95%E5%B0%86iOS%E9%A1%B9%E7%9B%AE%E6%8E%A5%E5%85%A5GitHub%20Action/index.html">
+<meta property="og:site_name" content="Sheldon&#39;s blog">
+<meta property="og:description" content="如何将 iOS 项目接入 GitHub Action很多人第一次给 iOS 项目接 GitHub Actions，会以为就是“写一个 YAML，跑一下 xcodebuild test”。真开始做才会发现，真正麻烦的不是 YAML，而是签名证书、Provisioning Profile、App Store Connect API Key、TestFlight 上传权限，以及“怎样确保一次误操作不会直">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-08T03:45:19.020Z">
+<meta property="article:author" content="Sheldon">
+<meta property="article:tag" content="CI-CD">
+<meta property="article:tag" content="Fastlane">
+<meta property="article:tag" content="GitHub-Actions">
+<meta property="article:tag" content="TestFlight">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>如何将 iOS 项目接入 GitHub Action - Sheldon&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"flametinary.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Sheldon's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sheldon&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="如何将 iOS 项目接入 GitHub Action"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-09-07 00:00" pubdate>
+          2026年9月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          117 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">如何将 iOS 项目接入 GitHub Action</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="如何将-iOS-项目接入-GitHub-Action"><a href="#如何将-iOS-项目接入-GitHub-Action" class="headerlink" title="如何将 iOS 项目接入 GitHub Action"></a>如何将 iOS 项目接入 GitHub Action</h1><p>很多人第一次给 iOS 项目接 GitHub Actions，会以为就是“写一个 YAML，跑一下 <code>xcodebuild test</code>”。真开始做才会发现，真正麻烦的不是 YAML，而是签名证书、Provisioning Profile、App Store Connect API Key、TestFlight 上传权限，以及“怎样确保一次误操作不会直接把包提交审核”。</p>
+<p>这篇文章以 HabitPulse 的真实落地过程为主线，讲清楚一个可发布 iOS 项目是怎样接入 GitHub Actions 的。它是一个 SwiftUI + SwiftData 项目，最低支持 iOS 17.6，包含主 App 和 Widget 扩展；构建和发布能力由 Fastlane 统一封装。文中所有仓库地址、Bundle ID、Team ID 和密钥均已脱敏。</p>
+<p>最终得到的不是一个大而全、什么都自动跑的工作流，而是三条职责明确的流水线：PR 做质量检查，<code>main</code> 做受保护归档，发布只能人工发起。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">创建或更新 PR<br>    ↓<br>PR 检查：工程校验 + 单元测试 + 测试报告<br>    ↓<br>合并到 main<br>    ↓<br>主干归档：获取签名材料 + Release Archive + 保存构建产物<br>    ↓<br>在 Actions 页面手动选择 beta / release<br>    ↓<br>上传 TestFlight 或提交 App Store 审核（不会自动公开发布）<br></code></pre></td></tr></table></figure>
+
+<h2 id="一、先定边界：GitHub-Actions-不该替代-Fastlane"><a href="#一、先定边界：GitHub-Actions-不该替代-Fastlane" class="headerlink" title="一、先定边界：GitHub Actions 不该替代 Fastlane"></a>一、先定边界：GitHub Actions 不该替代 Fastlane</h2><p>一个非常关键的分层是：<strong>Fastlane 负责“如何构建和发布”，GitHub Actions 负责“什么时候、在哪台机器上调用 Fastlane”。</strong></p>
+<p>如果把复杂的 <code>xcodebuild</code> 参数、签名逻辑、TestFlight 上传逻辑都塞进 YAML，后面你想在本机复现 CI 失败，往往会很痛苦。反过来，把这些动作都写成 Fastlane lane 后，本地和 CI 只需要执行同一条命令。</p>
+<p>例如 HabitPulse 里的核心命令是：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-comment"># 固定模拟器运行测试，并输出 JUnit、xcresult 与日志</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios <span class="hljs-built_in">test</span><br><br><span class="hljs-comment"># 使用 App Store 签名归档并导出 IPA、dSYM、archive；不上传</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios habitpulse_archive_appstore<br><br><span class="hljs-comment"># 上传 TestFlight</span><br>bundle <span class="hljs-built_in">exec</span> fastlane ios beta<br><br><span class="hljs-comment"># 正式提交审核；需要额外安全确认</span><br>CONFIRM_RELEASE=<span class="hljs-literal">true</span> bundle <span class="hljs-built_in">exec</span> fastlane ios release<br></code></pre></td></tr></table></figure>
+
+<p>这样做有三个直接好处：</p>
+<ul>
+<li>本地先跑通的命令，放到 CI 中通常也能跑通；</li>
+<li>workflow 文件更短，重点落在运行环境、权限和产物保存；</li>
+<li>发版规则不会只藏在 GitHub YAML 中，开发者在本机也能看见、验证和使用。</li>
+</ul>
+<p>本文后面的 YAML 都假设你已经有一个可在本机运行的 Fastlane 基础。至少应当锁定 Ruby 与 Bundler 版本，并将构建参数收进 <code>Fastfile</code>。</p>
+<h2 id="二、先把本地发布链路跑通"><a href="#二、先把本地发布链路跑通" class="headerlink" title="二、先把本地发布链路跑通"></a>二、先把本地发布链路跑通</h2><p>不要一上来就把问题交给 GitHub Actions。先在自己电脑上解决“能测试”“能归档”“能签名”这三件事，之后才值得把它搬到云端 Runner。</p>
+<h3 id="1-锁定工具版本"><a href="#1-锁定工具版本" class="headerlink" title="1. 锁定工具版本"></a>1. 锁定工具版本</h3><p>GitHub 的 macOS Runner 会更新，Xcode 也会更新。没有版本约束时，今天能过的构建下周可能因为 SDK、Swift 或 Ruby 变化突然失败。</p>
+<p>HabitPulse 实际固定了：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th align="right">CI 使用的版本</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Runner</td>
+<td align="right"><code>macos-15</code></td>
+<td>提供 macOS 构建环境</td>
+</tr>
+<tr>
+<td>Xcode</td>
+<td align="right"><code>26.3</code></td>
+<td>编译、测试、归档</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td align="right"><code>3.3</code></td>
+<td>运行 Bundler 和 Fastlane</td>
+</tr>
+<tr>
+<td>Bundler</td>
+<td align="right">由 <code>Gemfile.lock</code> 锁定</td>
+<td>保证 Fastlane 依赖一致</td>
+</tr>
+</tbody></table>
+<p>请按自己的工程调整 Xcode 与模拟器型号。尤其要注意：Xcode 版本必须包含你的 deployment target 所需的 SDK，以及 Fastlane 测试 lane 中指定的 iOS Simulator Runtime。</p>
+<h3 id="2-把测试、构建和归档变成-lane"><a href="#2-把测试、构建和归档变成-lane" class="headerlink" title="2. 把测试、构建和归档变成 lane"></a>2. 把测试、构建和归档变成 lane</h3><p>下面是简化后的思路。真实项目的 lane 通常还会包含日志、产物目录、参数校验和错误提示，但职责应该保持单一。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ruby">platform <span class="hljs-symbol">:ios</span> <span class="hljs-keyword">do</span><br>  lane <span class="hljs-symbol">:test</span> <span class="hljs-keyword">do</span><br>    run_tests(<br>      <span class="hljs-symbol">project:</span> <span class="hljs-string">&quot;HabitPulse.xcodeproj&quot;</span>,<br>      <span class="hljs-symbol">scheme:</span> <span class="hljs-string">&quot;HabitPulse&quot;</span>,<br>      <span class="hljs-symbol">device:</span> <span class="hljs-string">&quot;iPhone 17 Pro (26.3)&quot;</span>,<br>      <span class="hljs-symbol">result_bundle:</span> <span class="hljs-literal">true</span>,<br>      <span class="hljs-symbol">result_bundle_path:</span> <span class="hljs-string">&quot;fastlane/test_output/HabitPulseTests.xcresult&quot;</span>,<br>      <span class="hljs-symbol">output_types:</span> <span class="hljs-string">&quot;junit&quot;</span>,<br>      <span class="hljs-symbol">output_files:</span> <span class="hljs-string">&quot;HabitPulseTests.junit&quot;</span><br>    )<br>  <span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>HabitPulse 还有一个环境相关的细节：命令行执行 <code>xcodebuild</code> 时，Swift 宏插件在沙箱里可能启动失败，表现为 <code>could not be found for macro &#39;Model()&#39;</code> 或 <code>swift-plugin-server produced malformed response</code>。项目将下面的参数统一收进 Fastlane，避免本机和 CI 行为不一致：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">SWIFT_SANDBOX_XCARGS</span> = <span class="hljs-string">&#x27;OTHER_SWIFT_FLAGS=&quot;-disable-sandbox&quot;&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>这不是所有项目都需要照抄的配置。正确做法是：先确认自己的命令行构建问题和原因，再把必要参数固定在构建入口，而不是散落在各个 workflow 里。</p>
+<h3 id="3-使用-match-管理签名材料"><a href="#3-使用-match-管理签名材料" class="headerlink" title="3. 使用 match 管理签名材料"></a>3. 使用 match 管理签名材料</h3><p>iOS CI 最大的门槛通常是签名。开发证书、发布证书和 Profile 不能凭空出现在 GitHub Runner 上；而直接把 <code>.p12</code>、profile 文件放进业务仓库，既不安全也难维护。</p>
+<p>HabitPulse 使用 Fastlane match：</p>
+<ul>
+<li>签名证书和 Profile 存在一个独立、加密的私有 Git 仓库；</li>
+<li>业务项目只记录 match 仓库地址和两个 Bundle ID；</li>
+<li>CI 使用 <code>readonly: true</code>，只下载、解密和安装，绝不在云端新建或吊销证书；</li>
+<li>主 App 和 Widget 都必须写进 <code>app_identifier</code>，否则 Archive 时很容易出现“扩展没有 Profile”的错误。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable constant_">APP_IDENTIFIERS</span> = [<br>  <span class="hljs-string">&quot;com.example.HabitPulse&quot;</span>,<br>  <span class="hljs-string">&quot;com.example.HabitPulse.Widget&quot;</span><br>].freeze<br><br>lane <span class="hljs-symbol">:appstore_signing</span> <span class="hljs-keyword">do</span><br>  match(<br>    <span class="hljs-symbol">type:</span> <span class="hljs-string">&quot;appstore&quot;</span>,<br>    <span class="hljs-symbol">app_identifier:</span> <span class="hljs-variable constant_">APP_IDENTIFIERS</span>,<br>    <span class="hljs-symbol">git_url:</span> <span class="hljs-variable constant_">ENV</span>.fetch(<span class="hljs-string">&quot;MATCH_GIT_URL&quot;</span>),<br>    <span class="hljs-symbol">readonly:</span> <span class="hljs-literal">true</span><br>  )<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这里的 <code>readonly: true</code> 很重要。它让 CI 失败时只会失败，不会因为一次环境异常去重建或撤销团队的证书。</p>
+<h2 id="三、为什么要拆成三个-workflow"><a href="#三、为什么要拆成三个-workflow" class="headerlink" title="三、为什么要拆成三个 workflow"></a>三、为什么要拆成三个 workflow</h2><p>HabitPulse 没有用一个“万能 workflow”。它在 <code>.github/workflows/</code> 下有三个文件：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>触发条件</th>
+<th>做什么</th>
+<th>不做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pr.yml</code></td>
+<td>PR 的目标分支是 <code>main</code></td>
+<td>工程完整性检查、元数据校验、测试、上传报告</td>
+<td>不读取发布密钥，不签名，不上传</td>
+</tr>
+<tr>
+<td><code>main-archive.yml</code></td>
+<td>推送到 <code>main</code></td>
+<td>取回签名材料，生成 App Store archive，保存 IPA&#x2F;dSYM</td>
+<td>不上传 TestFlight，不提交审核</td>
+</tr>
+<tr>
+<td><code>manual-release.yml</code></td>
+<td>在 Actions 页面手动运行</td>
+<td>选择 TestFlight 或正式审核动作</td>
+<td>不会在普通 push 时自动运行</td>
+</tr>
+</tbody></table>
+<p>这个划分不是形式主义，而是权限分层。</p>
+<p>PR 来自开发分支，最需要的是快速反馈和低权限；<code>main</code> 代表已经合并的代码，可以生成一份可追溯的正式归档；真正会改变外部状态的动作，例如上传 TestFlight、提交审核，必须由人明确点击触发。</p>
+<h3 id="命令行直接合并会触发什么？"><a href="#命令行直接合并会触发什么？" class="headerlink" title="命令行直接合并会触发什么？"></a>命令行直接合并会触发什么？</h3><p>这是一个很常见的误会。下面这种操作：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">git checkout main<br>git merge --ff-only feature/my-change<br>git push origin main<br></code></pre></td></tr></table></figure>
+
+<p>触发的是 <code>push</code> 事件，因此会执行 <code>main-archive.yml</code>，<strong>不会</strong>执行只监听 <code>pull_request</code> 的 <code>pr.yml</code>。</p>
+<p>如果你希望每次合并前一定经过 PR 检查，应在 GitHub 仓库里给 <code>main</code> 设置 Branch protection rule，把对应的 PR check 设为必需检查。否则，拥有直接推送权限的人仍然可以绕过 PR 流程。</p>
+<h2 id="四、PR-工作流：只做验证，不碰发布凭据"><a href="#四、PR-工作流：只做验证，不碰发布凭据" class="headerlink" title="四、PR 工作流：只做验证，不碰发布凭据"></a>四、PR 工作流：只做验证，不碰发布凭据</h2><p>PR workflow 最好足够“干净”：即使来自 fork 的 PR，或者有人误改了分支，也不应接触发布证书、match 密码、App Store Connect 私钥。</p>
+<p>HabitPulse 的核心版本如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">iOS</span> <span class="hljs-string">PR</span><br><br><span class="hljs-attr">on:</span><br>  <span class="hljs-attr">pull_request:</span><br>    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]<br><br><span class="hljs-attr">permissions:</span><br>  <span class="hljs-attr">contents:</span> <span class="hljs-string">read</span><br><br><span class="hljs-attr">jobs:</span><br>  <span class="hljs-attr">test:</span><br>    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">macos-15</span><br>    <span class="hljs-attr">timeout-minutes:</span> <span class="hljs-number">30</span><br>    <span class="hljs-attr">steps:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">maxim-lobanov/setup-xcode@v1</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">xcode-version:</span> <span class="hljs-string">&#x27;26.3&#x27;</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">ruby/setup-ruby@v1</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">ruby-version:</span> <span class="hljs-string">&#x27;3.3&#x27;</span><br>          <span class="hljs-attr">bundler-cache:</span> <span class="hljs-literal">true</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Check</span> <span class="hljs-string">project</span> <span class="hljs-string">integrity</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">          ruby -c fastlane/Fastfile</span><br><span class="hljs-string">          xcodebuild -list -project HabitPulse.xcodeproj</span><br><span class="hljs-string">          bundle exec fastlane ios metadata_validate</span><br><span class="hljs-string"></span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">tests</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">bundle</span> <span class="hljs-string">exec</span> <span class="hljs-string">fastlane</span> <span class="hljs-string">ios</span> <span class="hljs-string">test</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Upload</span> <span class="hljs-string">test</span> <span class="hljs-string">reports</span><br>        <span class="hljs-attr">if:</span> <span class="hljs-string">always()</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/upload-artifact@v4</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">ios-pr-test-reports</span><br>          <span class="hljs-attr">if-no-files-found:</span> <span class="hljs-string">warn</span><br>          <span class="hljs-attr">path:</span> <span class="hljs-string">fastlane/test_output/</span><br></code></pre></td></tr></table></figure>
+
+<p>有几个小点很值得保留：</p>
+<ul>
+<li><code>permissions: contents: read</code> 是最小权限。没有写入仓库、创建 Release 或读取 Secret 的权限；</li>
+<li><code>timeout-minutes</code> 防止模拟器或依赖安装卡死，持续消耗 macOS Runner 时间；</li>
+<li><code>if: always()</code> 保证测试失败后仍上传 <code>.xcresult</code>、JUnit 和日志。否则最需要排查材料的时候，反而什么都拿不到；</li>
+<li><code>bundler-cache: true</code> 会缓存 Ruby gems，能明显减少重复安装 Fastlane 的时间。</li>
+</ul>
+<p>除了测试，HabitPulse 还执行 <code>ruby -c fastlane/Fastfile</code>、<code>xcodebuild -list</code> 和商店元数据校验。它们都很轻量，但能及早发现 Fastfile 写错、Xcode Scheme 丢失、上架文案文件缺失这些“测试未必能覆盖”的问题。</p>
+<h2 id="五、主干归档：有签名，但不发布"><a href="#五、主干归档：有签名，但不发布" class="headerlink" title="五、主干归档：有签名，但不发布"></a>五、主干归档：有签名，但不发布</h2><p>一旦代码进入 <code>main</code>，HabitPulse 会自动生成 App Store 归档。这里的目标不是马上发布，而是确保主干在一个干净的 macOS 环境中<strong>真的能被签名并导出</strong>。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">iOS</span> <span class="hljs-string">Main</span> <span class="hljs-string">Archive</span><br><br><span class="hljs-attr">on:</span><br>  <span class="hljs-attr">push:</span><br>    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]<br><br><span class="hljs-attr">permissions:</span><br>  <span class="hljs-attr">contents:</span> <span class="hljs-string">read</span><br><br><span class="hljs-attr">jobs:</span><br>  <span class="hljs-attr">archive:</span><br>    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">macos-15</span><br>    <span class="hljs-attr">timeout-minutes:</span> <span class="hljs-number">45</span><br>    <span class="hljs-attr">environment:</span> <span class="hljs-string">appstore</span><br>    <span class="hljs-attr">steps:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span><br>      <span class="hljs-comment"># 此处省略 Xcode、Ruby 安装步骤</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Configure</span> <span class="hljs-string">SSH</span> <span class="hljs-string">for</span> <span class="hljs-string">match</span><br>        <span class="hljs-comment"># 将 MATCH_DEPLOY_KEY 写入 Runner 的临时文件</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Configure</span> <span class="hljs-string">temporary</span> <span class="hljs-string">keychain</span><br>        <span class="hljs-comment"># 创建、解锁临时钥匙串，并写入 MATCH_PASSWORD</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Archive</span> <span class="hljs-string">App</span> <span class="hljs-string">Store</span> <span class="hljs-string">build</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">bundle</span> <span class="hljs-string">exec</span> <span class="hljs-string">fastlane</span> <span class="hljs-string">ios</span> <span class="hljs-string">habitpulse_archive_appstore</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Upload</span> <span class="hljs-string">archive</span> <span class="hljs-string">artifacts</span><br>        <span class="hljs-attr">if:</span> <span class="hljs-string">always()</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/upload-artifact@v4</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-为什么要用-GitHub-Environment"><a href="#1-为什么要用-GitHub-Environment" class="headerlink" title="1. 为什么要用 GitHub Environment"></a>1. 为什么要用 GitHub Environment</h3><p>workflow 中的：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">environment:</span> <span class="hljs-string">appstore</span><br></code></pre></td></tr></table></figure>
+
+<p>表示 Job 使用 GitHub 仓库的 <code>appstore</code> Environment。建议把发布相关 Secret 放在这里，而不是放在仓库级 Secrets：</p>
+<ul>
+<li>能把发布凭据和普通 CI 配置隔离开；</li>
+<li>可为 Environment 配置 required reviewers，使发布 Job 必须经过审批；</li>
+<li>后续有 staging、production 等不同环境时，扩展更自然；</li>
+<li>GitHub Actions 页面能清楚看到某次 Job 使用了哪个环境。</li>
+</ul>
+<p>在 GitHub 仓库中依次进入：<code>Settings → Environments → New environment</code>，创建 <code>appstore</code>；再进入这个 Environment 的 Secrets 页面添加后文的五个 Secret。</p>
+<h3 id="2-让-match-仓库可被-Runner-读取"><a href="#2-让-match-仓库可被-Runner-读取" class="headerlink" title="2. 让 match 仓库可被 Runner 读取"></a>2. 让 match 仓库可被 Runner 读取</h3><p>match 的证书仓库通常是私有仓库，Runner 需要一把专用 SSH Key 才能拉取它。workflow 会把密钥仅写入当前 Runner：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Configure</span> <span class="hljs-string">SSH</span> <span class="hljs-string">for</span> <span class="hljs-string">match</span><br>  <span class="hljs-attr">env:</span><br>    <span class="hljs-attr">MATCH_DEPLOY_KEY:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.MATCH_DEPLOY_KEY</span> <span class="hljs-string">&#125;&#125;</span><br>  <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">    install -d -m 700 ~/.ssh</span><br><span class="hljs-string">    printf &#x27;%s\n&#x27; &quot;$MATCH_DEPLOY_KEY&quot; &gt; ~/.ssh/match_deploy_key</span><br><span class="hljs-string">    chmod 600 ~/.ssh/match_deploy_key</span><br><span class="hljs-string">    ssh-keyscan github.com &gt;&gt; ~/.ssh/known_hosts</span><br><span class="hljs-string">    echo &#x27;GIT_SSH_COMMAND=ssh -i ~/.ssh/match_deploy_key -o IdentitiesOnly=yes&#x27; &gt;&gt; &quot;$GITHUB_ENV&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>IdentitiesOnly=yes</code> 的作用是让 SSH 只尝试这一把部署密钥，避免 Runner 上其他身份造成不确定性。<code>ssh-keyscan</code> 是为了预先写入 GitHub 主机指纹，避免非交互式执行卡在“是否信任主机”。</p>
+<h3 id="3-为什么还要临时-Keychain"><a href="#3-为什么还要临时-Keychain" class="headerlink" title="3. 为什么还要临时 Keychain"></a>3. 为什么还要临时 Keychain</h3><p>下载到 match 仓库的证书不是放到文件夹里就能用于 codesign。macOS 的签名工具需要从 Keychain 中找到证书和私钥。因此每个 Runner Job 建一个临时 Keychain：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Configure</span> <span class="hljs-string">temporary</span> <span class="hljs-string">keychain</span><br>  <span class="hljs-attr">env:</span><br>    <span class="hljs-attr">MATCH_PASSWORD:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.MATCH_PASSWORD</span> <span class="hljs-string">&#125;&#125;</span><br>  <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">    security create-keychain -p &quot;$MATCH_PASSWORD&quot; ci.keychain-db</span><br><span class="hljs-string">    security set-keychain-settings -lut 21600 ci.keychain-db</span><br><span class="hljs-string">    security unlock-keychain -p &quot;$MATCH_PASSWORD&quot; ci.keychain-db</span><br><span class="hljs-string">    security list-keychains -d user -s ci.keychain-db login.keychain-db</span><br><span class="hljs-string">    echo &quot;MATCH_PASSWORD=$MATCH_PASSWORD&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>这里把 Keychain 密码直接复用为 <code>MATCH_PASSWORD</code> 只是实践中方便的一种做法，不是硬性要求。更重要的原则是：它只在当前临时 Runner 存在，结束时删除。</p>
+<p>最后无论构建成功还是失败，都应清理：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Remove</span> <span class="hljs-string">temporary</span> <span class="hljs-string">credentials</span><br>  <span class="hljs-attr">if:</span> <span class="hljs-string">always()</span><br>  <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">    security delete-keychain ci.keychain-db || true</span><br><span class="hljs-string">    rm -f ~/.ssh/match_deploy_key</span><br></code></pre></td></tr></table></figure>
+
+<p>GitHub-hosted Runner 本身是临时的，但显式清理仍然值得保留：代码的意图更清楚，也便于未来迁移到 self-hosted Runner。</p>
+<h3 id="4-最隐蔽的-Keychain-坑：创建了临时钥匙串，不代表-match-会用它"><a href="#4-最隐蔽的-Keychain-坑：创建了临时钥匙串，不代表-match-会用它" class="headerlink" title="4. 最隐蔽的 Keychain 坑：创建了临时钥匙串，不代表 match 会用它"></a>4. 最隐蔽的 Keychain 坑：创建了临时钥匙串，不代表 match 会用它</h3><p>这是一次真实踩坑：workflow 已经创建并解锁了 <code>ci.keychain-db</code>，但 Fastlane <code>match</code> 没有被显式告知该钥匙串名称和密码。于是 match 退回使用 <code>login.keychain</code>。证书和 Profile 看起来都“安装成功”，但 match 无法为登录钥匙串中的私钥设置 partition list，日志会出现类似内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">Keychain password for .../login.keychain-db was not specified<br>Could not configure imported keychain item ... to prevent UI permission popup<br></code></pre></td></tr></table></figure>
+
+<p>随后 <code>codesign</code> 在签名 App 或 Extension（本例是 Widget）时等待钥匙串权限弹窗；GitHub-hosted Runner 没有桌面可点击，进程会一直挂起，最后只留下误导性的 <code>The operation was canceled</code>，实际是 job 达到超时后被 Actions 终止。</p>
+<p>修复的关键是把 Keychain 从 workflow 明确传递给 Fastlane，并由 <code>match</code> 显式使用它：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Configure</span> <span class="hljs-string">temporary</span> <span class="hljs-string">keychain</span><br>  <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">    security create-keychain -p &quot;$MATCH_PASSWORD&quot; ci.keychain-db</span><br><span class="hljs-string">    security unlock-keychain -p &quot;$MATCH_PASSWORD&quot; ci.keychain-db</span><br><span class="hljs-string">    security list-keychains -d user -s ci.keychain-db login.keychain-db</span><br><span class="hljs-string">    echo &quot;MATCH_KEYCHAIN_NAME=ci.keychain-db&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;</span><br><span class="hljs-string">    echo &quot;MATCH_KEYCHAIN_PASSWORD=$MATCH_PASSWORD&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs ruby">match(<br>  <span class="hljs-symbol">type:</span> <span class="hljs-string">&quot;appstore&quot;</span>,<br>  <span class="hljs-symbol">app_identifier:</span> <span class="hljs-variable constant_">APP_IDENTIFIERS</span>,<br>  <span class="hljs-symbol">readonly:</span> <span class="hljs-literal">true</span>,<br>  <span class="hljs-symbol">keychain_name:</span> <span class="hljs-variable constant_">ENV</span>.fetch(<span class="hljs-string">&quot;MATCH_KEYCHAIN_NAME&quot;</span>),<br>  <span class="hljs-symbol">keychain_password:</span> <span class="hljs-variable constant_">ENV</span>.fetch(<span class="hljs-string">&quot;MATCH_KEYCHAIN_PASSWORD&quot;</span>)<br>)<br></code></pre></td></tr></table></figure>
+
+<p>本机运行时不必强行复用 CI 临时钥匙串。一个实用做法是：只有环境变量存在时才传这两个参数；本机保留 match 默认的登录钥匙串，CI 则固定使用 <code>ci.keychain-db</code>。排查签名卡死时，优先看 match 最终摘要里的 <code>keychain_name</code>，并确认它与 workflow 创建的名称完全一致。</p>
+<h2 id="六、手动发布：把“可能产生外部影响”的动作锁起来"><a href="#六、手动发布：把“可能产生外部影响”的动作锁起来" class="headerlink" title="六、手动发布：把“可能产生外部影响”的动作锁起来"></a>六、手动发布：把“可能产生外部影响”的动作锁起来</h2><p>HabitPulse 的手动工作流只接受两个输入：选择 <code>beta</code> 或 <code>release</code>，再决定是否确认正式审核。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">on:</span><br>  <span class="hljs-attr">workflow_dispatch:</span><br>    <span class="hljs-attr">inputs:</span><br>      <span class="hljs-attr">lane:</span><br>        <span class="hljs-attr">description:</span> <span class="hljs-string">&#x27;选择发布动作&#x27;</span><br>        <span class="hljs-attr">required:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-attr">type:</span> <span class="hljs-string">choice</span><br>        <span class="hljs-attr">options:</span> [<span class="hljs-string">beta</span>, <span class="hljs-string">release</span>]<br>      <span class="hljs-attr">confirm_release:</span><br>        <span class="hljs-attr">description:</span> <span class="hljs-string">&#x27;仅正式审核选择 true；会上传并提交审核，不会自动公开发布&#x27;</span><br>        <span class="hljs-attr">required:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-attr">default:</span> <span class="hljs-literal">false</span><br>        <span class="hljs-attr">type:</span> <span class="hljs-string">boolean</span><br></code></pre></td></tr></table></figure>
+
+<p>这里分两层保护：</p>
+<ol>
+<li>GitHub Actions UI 要求你明确选择；</li>
+<li>Fastlane 的 <code>release</code> lane 还会检查 <code>CONFIRM_RELEASE=true</code>。</li>
+</ol>
+<p>也就是说，不能因为某次提交推到了 <code>main</code>，就自动把版本提交给 App Review。对于面向用户的应用，这种显式确认非常有价值。</p>
+<h3 id="beta-与-release-的区别"><a href="#beta-与-release-的区别" class="headerlink" title="beta 与 release 的区别"></a>beta 与 release 的区别</h3><table>
+<thead>
+<tr>
+<th>选择</th>
+<th>最终动作</th>
+<th>使用时机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>beta</code></td>
+<td>Archive、验证、上传到 TestFlight；默认不分发外部测试</td>
+<td>给内部人员或 TestFlight 测试</td>
+</tr>
+<tr>
+<td><code>release</code> + <code>confirm_release=true</code></td>
+<td>校验 tag、测试、Archive、precheck、上传二进制和元数据、提交审核</td>
+<td>TestFlight 验证完成后</td>
+</tr>
+</tbody></table>
+<p>HabitPulse 的正式 release 还固定了 <code>automatic_release: false</code>。这意味着审核通过也不会自动公开到 App Store，仍由开发者在 App Store Connect 中手动发布。这是我很推荐的默认值：少一次意外，就少一次深夜救火。</p>
+<h3 id="把-App-Store-Connect-的-p8-写到临时目录"><a href="#把-App-Store-Connect-的-p8-写到临时目录" class="headerlink" title="把 App Store Connect 的 .p8 写到临时目录"></a>把 App Store Connect 的 <code>.p8</code> 写到临时目录</h3><p>上传 TestFlight 与提交审核需要 App Store Connect API Key。<code>.p8</code> 是私钥，不能提交到仓库，也不应该放在固定工作路径。正确方式是从 GitHub Secret 恢复到 <code>$RUNNER_TEMP</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Configure</span> <span class="hljs-string">App</span> <span class="hljs-string">Store</span> <span class="hljs-string">Connect</span> <span class="hljs-string">credentials</span><br>  <span class="hljs-attr">env:</span><br>    <span class="hljs-attr">ASC_KEY:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.ASC_KEY_P8</span> <span class="hljs-string">&#125;&#125;</span><br>    <span class="hljs-attr">ASC_KEY_ID:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.ASC_KEY_ID</span> <span class="hljs-string">&#125;&#125;</span><br>    <span class="hljs-attr">ASC_ISSUER_ID:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.ASC_ISSUER_ID</span> <span class="hljs-string">&#125;&#125;</span><br>  <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">    install -d -m 700 &quot;$RUNNER_TEMP/appstore&quot;</span><br><span class="hljs-string">    printf &#x27;%s\n&#x27; &quot;$ASC_KEY&quot; &gt; &quot;$RUNNER_TEMP/appstore/AuthKey_$&#123;ASC_KEY_ID&#125;.p8&quot;</span><br><span class="hljs-string">    chmod 600 &quot;$RUNNER_TEMP/appstore/AuthKey_$&#123;ASC_KEY_ID&#125;.p8&quot;</span><br><span class="hljs-string">    echo &quot;ASC_KEY_FILEPATH=$RUNNER_TEMP/appstore/AuthKey_$&#123;ASC_KEY_ID&#125;.p8&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;</span><br><span class="hljs-string">    echo &quot;ASC_KEY_ID=$ASC_KEY_ID&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;</span><br><span class="hljs-string">    echo &quot;ASC_ISSUER_ID=$ASC_ISSUER_ID&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>Fastlane 则只从环境变量读取这三个值，并检查 Key ID 格式、Issuer ID 格式、文件是否存在以及文件权限是否过宽。换句话说：YAML 负责“把 Secret 安全地交给当前 Job”，Fastlane 负责“确认这些凭据看起来可用”。</p>
+<p>真实项目里临时目录叫 <code>dayvu</code> 还是 <code>appstore</code> 并不重要；重要的是它在 <code>$RUNNER_TEMP</code> 下，不被提交、上传或复用。</p>
+<h2 id="七、五个-Secret-到底从哪里来"><a href="#七、五个-Secret-到底从哪里来" class="headerlink" title="七、五个 Secret 到底从哪里来"></a>七、五个 Secret 到底从哪里来</h2><p>HabitPulse 的 <code>appstore</code> Environment 使用下面五个 Secret：</p>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>内容</th>
+<th>获取方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MATCH_DEPLOY_KEY</code></td>
+<td>读取 match 证书仓库的 SSH 私钥全文</td>
+<td>为 CI 单独生成 SSH key；把公钥作为证书仓库的 Deploy key（只读）或机器账户的 SSH key</td>
+</tr>
+<tr>
+<td><code>MATCH_PASSWORD</code></td>
+<td>match 加密密码</td>
+<td>初始化 match 时设定的密码；不是 Apple ID 密码</td>
+</tr>
+<tr>
+<td><code>ASC_KEY_ID</code></td>
+<td>App Store Connect API Key 的 Key ID</td>
+<td>App Store Connect → Users and Access → Integrations → Keys</td>
+</tr>
+<tr>
+<td><code>ASC_ISSUER_ID</code></td>
+<td>App Store Connect API 的 Issuer ID</td>
+<td>同一 Keys 页面顶部</td>
+</tr>
+<tr>
+<td><code>ASC_KEY_P8</code></td>
+<td><code>.p8</code> 私钥完整文本</td>
+<td>创建 API Key 时下载；通常只能下载一次，务必安全保存</td>
+</tr>
+</tbody></table>
+<h3 id="MATCH-DEPLOY-KEY-的推荐创建方式"><a href="#MATCH-DEPLOY-KEY-的推荐创建方式" class="headerlink" title="MATCH_DEPLOY_KEY 的推荐创建方式"></a><code>MATCH_DEPLOY_KEY</code> 的推荐创建方式</h3><p>不要把自己的个人 SSH 私钥直接塞进 CI。单独生成一把只给 CI 使用的 key：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">ssh-keygen -t ed25519 -C <span class="hljs-string">&quot;github-actions-match&quot;</span> -f ./github-actions-match<br></code></pre></td></tr></table></figure>
+
+<p>随后：</p>
+<ol>
+<li>将 <code>github-actions-match.pub</code> 添加到<strong>证书仓库</strong>的 Deploy keys；勾选只读即可；</li>
+<li>将没有 <code>.pub</code> 后缀的私钥文件完整内容添加为 <code>MATCH_DEPLOY_KEY</code>；</li>
+<li>不要把这两个文件提交到任何仓库；用完从当前目录删除或移到密码管理器。</li>
+</ol>
+<p>私钥内容应包含开头和结尾，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">-----BEGIN OPENSSH PRIVATE KEY-----<br>...多行密钥内容...<br>-----END OPENSSH PRIVATE KEY-----<br></code></pre></td></tr></table></figure>
+
+<h3 id="App-Store-Connect-API-Key-的权限"><a href="#App-Store-Connect-API-Key-的权限" class="headerlink" title="App Store Connect API Key 的权限"></a>App Store Connect API Key 的权限</h3><p>在 App Store Connect 创建 API Key 时，按实际操作授予最小权限。若 CI 需要上传 TestFlight 和提交审核，通常需要 App Manager 或能覆盖发布流程的适当角色；具体权限名称会随 Apple 后台演进。创建后立刻记录 Key ID、Issuer ID，并把 <code>.p8</code> 放进密码管理器。</p>
+<p>有两个坑特别常见：</p>
+<ul>
+<li><code>.p8</code> 一般只能下载一次。丢了不能重新下载同一把，需要撤销并新建 Key；</li>
+<li>GitHub Secret 必须保存 <code>.p8</code> 的<strong>完整多行内容</strong>，不是文件路径，也不是 Base64（除非你同时修改 workflow 进行解码）。</li>
+</ul>
+<h3 id="不要把-Secret-放错位置"><a href="#不要把-Secret-放错位置" class="headerlink" title="不要把 Secret 放错位置"></a>不要把 Secret 放错位置</h3><p>如果 workflow 写的是：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">environment:</span> <span class="hljs-string">appstore</span><br></code></pre></td></tr></table></figure>
+
+<p>那么最直观、也最符合本项目权限模型的做法，是把 Secret 放在 <code>Settings → Environments → appstore → Environment secrets</code>。如果你只放在仓库级 Secrets，可能也能通过 <code>secrets.xxx</code> 读取，但会失去 Environment 审批和隔离的意义。</p>
+<h2 id="八、Artifact-是-CI-的“事故现场”"><a href="#八、Artifact-是-CI-的“事故现场”" class="headerlink" title="八、Artifact 是 CI 的“事故现场”"></a>八、Artifact 是 CI 的“事故现场”</h2><p>CI 构建不应该只给你一个绿色或红色的小图标。发生失败时，最重要的是能拿到足够材料定位问题。</p>
+<p>HabitPulse 会上传：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">path:</span> <span class="hljs-string">|</span><br><span class="hljs-string">  fastlane/build_output/ios/habitpulse/appstore/</span><br><span class="hljs-string">  fastlane/test_output/</span><br><span class="hljs-string">  build/*.log</span><br></code></pre></td></tr></table></figure>
+
+<p>其中通常包含：</p>
+<ul>
+<li><code>.ipa</code>：可安装或提交的打包产物；</li>
+<li><code>.xcarchive</code>：用于检查签名、dSYM 和归档结构；</li>
+<li><code>.dSYM</code>：将来符号化崩溃日志需要；</li>
+<li><code>.xcresult</code>：Xcode 测试报告，可在 Xcode 中打开；</li>
+<li>JUnit 与 xcodebuild 日志：适合快速查 CI 报错。</li>
+</ul>
+<p>注意，Artifact 不等于长期制品仓库。它适合排错和短期下载；如果你有保留周期、访问控制或合规要求，应在仓库设置中明确配置 retention，或使用专门的制品存储方案。</p>
+<h2 id="九、从零配置到第一次成功的建议顺序"><a href="#九、从零配置到第一次成功的建议顺序" class="headerlink" title="九、从零配置到第一次成功的建议顺序"></a>九、从零配置到第一次成功的建议顺序</h2><p>下面是一个比较稳的实施顺序。每一步只增加一点复杂度，出问题时也更容易定位。</p>
+<ol>
+<li>本机执行 <code>bundle exec fastlane ios test</code>，直到稳定通过；</li>
+<li>本机执行 <code>bundle exec fastlane ios habitpulse_archive_appstore</code>，确认主 App 与所有 Extension 都能签名；</li>
+<li>提交 <code>pr.yml</code>，创建一个指向 <code>main</code> 的 PR，确认无 Secret 的测试工作流通过；</li>
+<li>创建 GitHub <code>appstore</code> Environment，添加 <code>MATCH_DEPLOY_KEY</code> 和 <code>MATCH_PASSWORD</code>；</li>
+<li>合并一个小改动到 <code>main</code>，确认 <code>main-archive.yml</code> 能完成 archive，并能下载 Artifact；</li>
+<li>再添加 <code>ASC_KEY_ID</code>、<code>ASC_ISSUER_ID</code>、<code>ASC_KEY_P8</code>；</li>
+<li>在 Actions 中手动运行 <code>iOS Manual Release</code>，选择 <code>beta</code>，确认 TestFlight 出现新构建；</li>
+<li>TestFlight 验证完成后，准备正确的版本 tag，再人工运行 <code>release</code> 并勾选确认；</li>
+<li>到 App Store Connect 检查构建、元数据、审核信息，审核通过后按自己的发布节奏手动公开。</li>
+</ol>
+<p>如果你刚开始搭建，强烈建议先跑 <code>beta</code>。不要把“第一次验证 API Key、match 和 CI 环境”的风险，和“提交 App Review”绑在同一次执行中。</p>
+<h2 id="十、几个真实踩过的坑"><a href="#十、几个真实踩过的坑" class="headerlink" title="十、几个真实踩过的坑"></a>十、几个真实踩过的坑</h2><h3 id="1-以为-push-到-main-会跑-PR-流程"><a href="#1-以为-push-到-main-会跑-PR-流程" class="headerlink" title="1. 以为 push 到 main 会跑 PR 流程"></a>1. 以为 push 到 main 会跑 PR 流程</h3><p>不会。<code>pull_request</code> 与 <code>push</code> 是不同事件。直接命令行合并并推送到 <code>main</code>，只会触发监听 <code>push</code> 的主干归档 workflow。要保证 PR 检查不被绕过，使用 GitHub 分支保护规则。</p>
+<h3 id="2-把所有动作塞进-main-的自动工作流"><a href="#2-把所有动作塞进-main-的自动工作流" class="headerlink" title="2. 把所有动作塞进 main 的自动工作流"></a>2. 把所有动作塞进 main 的自动工作流</h3><p>这是最危险的设计。主干自动归档很合理，自动上传 TestFlight 已经需要更谨慎，自动提交审核通常不值得。把发布留给 <code>workflow_dispatch</code>，并额外要求 <code>confirm_release</code>，能避免许多可预防的问题。</p>
+<h3 id="3-CI-里运行了-match，却没有临时-Keychain"><a href="#3-CI-里运行了-match，却没有临时-Keychain" class="headerlink" title="3. CI 里运行了 match，却没有临时 Keychain"></a>3. CI 里运行了 <code>match</code>，却没有临时 Keychain</h3><p>这样可能下载证书成功，但 <code>codesign</code> 找不到私钥或无法访问证书。match、Keychain 和 Profile 是一条链，缺一个都可能在 Archive 阶段失败。</p>
+<h3 id="4-忘记-Extension-的-Bundle-ID"><a href="#4-忘记-Extension-的-Bundle-ID" class="headerlink" title="4. 忘记 Extension 的 Bundle ID"></a>4. 忘记 Extension 的 Bundle ID</h3><p>iOS App 只要有 Widget、Share Extension、Notification Service Extension 等目标，就不能只配置主 App 的 Bundle ID。match、Apple Developer 后台的 App ID 和 Profile 都要覆盖所有需要签名的 Target。</p>
+<h3 id="5-让-CI-以写模式运行-match"><a href="#5-让-CI-以写模式运行-match" class="headerlink" title="5. 让 CI 以写模式运行 match"></a>5. 让 CI 以写模式运行 match</h3><p>CI 不该承担创建证书或 Profile 的责任。应使用 <code>readonly: true</code>。如果签名材料过期或缺失，让构建明确失败，然后由有权限的开发者在受控的本机环境处理。</p>
+<h3 id="6-测试失败后没有报告"><a href="#6-测试失败后没有报告" class="headerlink" title="6. 测试失败后没有报告"></a>6. 测试失败后没有报告</h3><p>没有 <code>if: always()</code> 时，失败步骤会跳过 Artifact 上传；最终你只能看到一句“Process completed with exit code 65”。保留 xcresult 和完整日志，会让排查效率有非常明显的差别。</p>
+<h3 id="7-把-p8、-p12-或-SSH-私钥提交进仓库"><a href="#7-把-p8、-p12-或-SSH-私钥提交进仓库" class="headerlink" title="7. 把 .p8、.p12 或 SSH 私钥提交进仓库"></a>7. 把 <code>.p8</code>、<code>.p12</code> 或 SSH 私钥提交进仓库</h3><p>这不是“之后再删掉就好”的问题。Git 历史里出现过的私钥应视为泄露，即使后来删除也应立即撤销并换新。正确位置是 GitHub Secret、密码管理器或专门的密钥管理系统。</p>
+<h3 id="8-没有检查-Runner-的-Xcode-与模拟器-Runtime"><a href="#8-没有检查-Runner-的-Xcode-与模拟器-Runtime" class="headerlink" title="8. 没有检查 Runner 的 Xcode 与模拟器 Runtime"></a>8. 没有检查 Runner 的 Xcode 与模拟器 Runtime</h3><p><code>macos-15</code> 不代表一定存在你随手写下的每个 Xcode 或 iOS Runtime。把 Xcode 版本、测试设备和 Runtime 当作一个整体维护；如果升级 Xcode，先在 PR workflow 验证。</p>
+<h2 id="十一、可以直接复用的最小工作流组合"><a href="#十一、可以直接复用的最小工作流组合" class="headerlink" title="十一、可以直接复用的最小工作流组合"></a>十一、可以直接复用的最小工作流组合</h2><p>如果你暂时不做 App Store 发布，可以只从 PR workflow 开始；如果需要正式签名归档和 TestFlight，则按本文的三段式结构扩展。</p>
+<p>最小但完整的职责图是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs text">Fastlane<br>├── test                       ← 模拟器测试、报告<br>├── archive_appstore           ← match readonly、Archive、导出 IPA<br>├── beta                       ← 调用 archive 后上传 TestFlight<br>└── release                    ← 额外检查与人工确认后提交审核<br><br>GitHub Actions<br>├── pr.yml                     ← 只调用 test<br>├── main-archive.yml           ← 只调用 archive_appstore<br>└── manual-release.yml         ← 只允许人工调用 beta / release<br></code></pre></td></tr></table></figure>
+
+<p>它的核心不是“自动化得越多越好”，而是把自动化放到合适的位置：高频、低风险的检查自动做；低频、会对外产生影响的发布动作由人明确确认。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>给 iOS 项目接 GitHub Actions，真正的完成标准不是“看到一次绿色勾”，而是下面几件事都成立：</p>
+<ul>
+<li>PR 能在不接触发布凭据的前提下稳定验证代码；</li>
+<li><code>main</code> 能在干净环境中稳定签名、归档并留下可下载的证据；</li>
+<li>发布凭据被隔离在 Environment Secret 中，且只在需要它们的 Job 出现；</li>
+<li>TestFlight 和 App Store 审核不会因为一次普通 push 被误触发；</li>
+<li>开发者能在本地用同一条 Fastlane 命令复现 CI 的关键动作。</li>
+</ul>
+<p>做到这些之后，GitHub Actions 才不只是“替你点了构建按钮”，而是成为一条可靠、可审计、能让团队放心交付的 iOS 工程流水线。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iOS/" class="print-no-link">#iOS</a>
+      
+        <a href="/tags/Fastlane/" class="print-no-link">#Fastlane</a>
+      
+        <a href="/tags/TestFlight/" class="print-no-link">#TestFlight</a>
+      
+        <a href="/tags/GitHub-Actions/" class="print-no-link">#GitHub-Actions</a>
+      
+        <a href="/tags/CI-CD/" class="print-no-link">#CI-CD</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/09/07/iOS%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5Fastlane/" title="iOS项目如何接入Fastlane">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iOS项目如何接入Fastlane</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/06/19/AI%E5%8D%8F%E4%BD%9C%E6%97%B6%E4%BB%A3%E7%9A%84%E6%96%87%E6%A1%A3%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" title="AI协作时代的文档驱动开发">
+                        <span class="hidden-mobile">AI协作时代的文档驱动开发</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
