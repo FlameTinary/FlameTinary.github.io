@@ -9,8 +9,6 @@ tags:
   - Fastlane
 ---
 
-# iOS开发证书与Provisioning Profile创建指南：从CSR到真机签名
-
 第一次给 iOS App 配真机签名时，Apple Developer 后台里会同时出现 Certificate、Identifier、Device、Profile、Capability 等好几个入口，很容易让人不知道先做什么、后做什么。
 
 其实这件事可以拆成一条清晰的链路：先让 Apple 认可你的 App 身份，再创建可用于签名的证书，最后用 Provisioning Profile 把“App、证书、能力和设备”组合在一起。本文以**手动签名**为主，带你从创建 CSR（Certificate Signing Request，证书签名请求）开始，完成 Development Certificate 和 Development Provisioning Profile 的创建，并说明它和 Xcode 自动签名、Fastlane match 的关系。
