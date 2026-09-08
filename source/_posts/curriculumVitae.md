@@ -92,6 +92,6 @@ table th:nth-of-type(1) {
 * [90秒](https://itunes.apple.com/cn/app/90%E7%A7%92/id1435124139?mt=8)、[Ai优惠](https://itunes.apple.com/cn/app/ai%E4%BC%98%E6%83%A0/id1396344295?mt=8)、[快淘优品](https://itunes.apple.com/cn/app/%E5%BF%AB%E6%B7%98%E4%BC%98%E5%93%81/id1383652396)、[惠拍优品]()、[闪电拍卖]()
 
 ## 社交主页
-* 个人博客：[Sheldon's blog](https://sheldon.top)
+* 个人博客：[汀屿・漫记](https://sheldon.top)
 * GitHub：[Sheldon](https://github.com/FlameTinary)
 * 简书：[搁浅的青蛙](https://www.jianshu.com/u/a1e222f75cc7)
