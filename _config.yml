@@ -30,6 +30,7 @@ skip_render:
   - support/**
   - dayvu/**
   - dayvu-support/**
+  - github-star-rank/**
 
 # Writing
 new_post_name: :title.md # File name of new posts
