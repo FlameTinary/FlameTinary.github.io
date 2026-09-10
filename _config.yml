@@ -30,6 +30,7 @@ skip_render:
   - support/**
   - dayvu/**
   - dayvu-support/**
+  - dayvu-privacy/**
   - github-star-rank/**
 
 # Writing
