@@ -1,42 +1,76 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GitHub 24小时 Star 增长榜</title>
 <style>
-body{font-family:-apple-system,'PingFang SC',Microsoft YaHei,sans-serif;background:#f6f8fa;color:#24292f;margin:0;padding:24px;}
+*{box-sizing:border-box;}
+body{font-family:-apple-system,'PingFang SC',Microsoft YaHei,sans-serif;background:#f6f8fa;color:#24292f;margin:0;padding:24px;-webkit-text-size-adjust:100%;}
 .wrap{max-width:1100px;margin:0 auto;background:#fff;border:1px solid #d0d7de;border-radius:8px;overflow:hidden;}
 .head{background:#24292f;color:#fff;padding:20px 28px;}
 .head h1{margin:0;font-size:20px;}
 .head p{margin:6px 0 0;font-size:12px;color:#c9ccd1;}
 .legend{padding:14px 28px;font-size:12px;color:#57606a;background:#f0f3f6;border-bottom:1px solid #d0d7de;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th{background:#eaeef2;text-align:left;padding:10px 12px;font-weight:600;}
-td{padding:10px 12px;border-bottom:1px solid #eaeef2;vertical-align:top;}
-tr:nth-child(even){background:#fafbfc;}
-.rank{width:34px;color:#57606a;}
-.name a{color:#0969da;text-decoration:none;font-weight:600;}
-.gain{color:#1a7f37;font-weight:700;font-variant-numeric:tabular-nums;}
-.desc{color:#57606a;max-width:360px;}
+.list{font-size:13px;}
+.trow{display:grid;grid-template-columns:44px minmax(150px,1.6fr) 92px 84px 96px minmax(180px,2.2fr) 108px minmax(120px,1fr);border-bottom:1px solid #eaeef2;}
+.trow:last-child{border-bottom:0;}
+.trow.thead{background:#eaeef2;font-weight:600;}
+.trow:nth-child(even){background:#fafbfc;}
+.cell{padding:10px 12px;min-width:0;}
+.stats{display:contents;}
+.c-rank{color:#57606a;font-variant-numeric:tabular-nums;}
+.c-name{font-weight:600;overflow-wrap:break-word;}
+.c-name a{color:#0969da;text-decoration:none;}
+.c-gain{color:#1a7f37;font-weight:700;font-variant-numeric:tabular-nums;}
+.c-star{font-variant-numeric:tabular-nums;}
+.c-lang,.c-author{color:#57606a;}
+.c-desc{color:#57606a;}
 .tag{display:inline-block;background:#ddf4ff;color:#0969da;border:1px solid #b6e3ff;border-radius:10px;padding:1px 8px;margin:1px 3px 1px 0;font-size:11px;}
 .foot{padding:14px 28px;font-size:11px;color:#57606a;border-top:1px solid #d0d7de;}
+@media (max-width:940px){
+body{padding:12px;}
+.head{padding:16px;}
+.head h1{font-size:17px;line-height:1.35;}
+.head p{font-size:11px;line-height:1.6;}
+.legend{padding:10px 16px;line-height:1.7;}
+.trow{grid-template-columns:auto minmax(0,1fr);grid-template-areas:"rank name" "stats author" "desc desc" "tags tags";row-gap:8px;column-gap:8px;padding:14px 16px;}
+.trow.thead{display:none;}
+.cell{padding:0;}
+.trow>.c-rank{align-self:start;background:#eaeef2;color:#57606a;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:600;}
+.c-rank{grid-area:rank;}
+.c-name{grid-area:name;font-size:14px;line-height:1.45;}
+.stats{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;grid-area:stats;font-size:12px;}
+.c-star{color:#57606a;}
+.c-star::before{content:"★ ";}
+.c-gain,.c-lang{font-size:12px;}
+.c-author{grid-area:author;text-align:right;font-size:11px;color:#8c959f;align-self:start;}
+.c-desc{grid-area:desc;color:#57606a;font-size:12.5px;line-height:1.65;}
+.c-tags{grid-area:tags;line-height:1.8;}
+.foot{padding:12px 16px;line-height:1.6;}
+}
+@media (max-width:480px){
+.trow{grid-template-areas:"rank name" "stats stats" "desc desc" "tags tags" "author author";}
+.c-author{text-align:left;}
+.c-author::before{content:"作者：";}
+}
 </style></head><body><div class="wrap">
 <div class="head"><h1>🔥 GitHub 24 小时 Star 增长榜</h1>
 <p>数据时间：2026-09-10 09:30 (CST) · 来源：GitHub Trending + SnailDev + OpenGithubs 交叉核对</p></div>
 <div class="legend">按 24h 新增 star 从高到低排序 · 已排除翻墙/敏感类项目 · 共 13 项</div>
-<table><thead><tr><th>#</th><th>项目名称</th><th>当前star</th><th>24h+</th><th>开发语言</th><th>中文简介</th><th>作者</th><th>标签</th></tr></thead>
-<tbody>
-<tr><td class="rank">1</td><td class="name"><a href="https://github.com/ayghri/i-have-adhd" target="_blank" rel="noopener">ayghri/i-have-adhd</a></td><td>34,692</td><td class="gain">+4,650</td><td>Python</td><td class="desc">让编码 Agent 不再把答案埋在长篇输出里的 Skill，回答风格对 ADHD 用户更友好。</td><td>ayghri</td><td><span class="tag">AI应用</span><span class="tag">Skill</span></td></tr>
-<tr><td class="rank">2</td><td class="name"><a href="https://github.com/cathrynlavery/diagram-design" target="_blank" rel="noopener">cathrynlavery/diagram-design</a></td><td>36,621</td><td class="gain">+2,249</td><td>HTML</td><td class="desc">面向 Claude Code、Codex、Pi 的 38 种编辑级图表模板，自包含 HTML + SVG，拒绝 Mermaid 味。</td><td>cathrynlavery</td><td><span class="tag">Web开发</span><span class="tag">AI应用</span><span class="tag">Skill</span></td></tr>
-<tr><td class="rank">3</td><td class="name"><a href="https://github.com/liquidslr/system-design-notes" target="_blank" rel="noopener">liquidslr/system-design-notes</a></td><td>18,018</td><td class="gain">+1,397</td><td>Other</td><td class="desc">《System Design Interview》一书的学习笔记整理，系统设计面试要点速查。</td><td>liquidslr</td><td><span class="tag">开发者工具</span></td></tr>
-<tr><td class="rank">4</td><td class="name"><a href="https://github.com/affaan-m/ECC" target="_blank" rel="noopener">affaan-m/ECC</a></td><td>255,192</td><td class="gain">+1,133</td><td>JavaScript</td><td class="desc">Agent harness 性能优化系统：为 Claude Code、Codex、Opencode、Cursor 等提供技能、本能、记忆、安全与科研优先的开发范式。</td><td>affaan-m</td><td><span class="tag">AI应用</span><span class="tag">Skill</span></td></tr>
-<tr><td class="rank">5</td><td class="name"><a href="https://github.com/freestylefly/awesome-gpt-image-2" target="_blank" rel="noopener">freestylefly/awesome-gpt-image-2</a></td><td>30,076</td><td class="gain">+705</td><td>JavaScript</td><td class="desc">「Prompt as Code」GPT-Image2 工业级提示词引擎与模板库：530+ 案例逆向工程、20+ 套工业级模板，并提炼为 Skills 持续更新。</td><td>freestylefly</td><td><span class="tag">大模型</span><span class="tag">Skill</span></td></tr>
-<tr><td class="rank">6</td><td class="name"><a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">obra/superpowers</a></td><td>284,040</td><td class="gain">+688</td><td>Shell</td><td class="desc">真正能跑通的 Agent 技能框架与软件开发方法论。</td><td>obra</td><td><span class="tag">大模型</span><span class="tag">AI应用</span><span class="tag">Skill</span></td></tr>
-<tr><td class="rank">7</td><td class="name"><a href="https://github.com/Tencent/teamai-cli" target="_blank" rel="noopener">Tencent/teamai-cli</a></td><td>3,003</td><td class="gain">+556</td><td>TypeScript</td><td class="desc">腾讯开源的团队 AI 原生化 CLI 工具，目标是让每个团队都具备 AI 原生能力。</td><td>Tencent</td><td><span class="tag">AI应用</span></td></tr>
-<tr><td class="rank">8</td><td class="name"><a href="https://github.com/openai/plugins" target="_blank" rel="noopener">openai/plugins</a></td><td>6,204</td><td class="gain">+498</td><td>JavaScript</td><td class="desc">OpenAI 官方插件仓库，提供插件规范与示例实现。</td><td>openai</td><td><span class="tag">AI应用</span></td></tr>
-<tr><td class="rank">9</td><td class="name"><a href="https://github.com/vastsa/PI-Desktop" target="_blank" rel="noopener">vastsa/PI-Desktop</a></td><td>1,676</td><td class="gain">+417</td><td>TypeScript</td><td class="desc">本地优先的 AI 编码 Agent 桌面端：Electron + Rust 宿主内核 + pi Agent Harness，支持用户自行安装插件。</td><td>vastsa</td><td><span class="tag">AI应用</span></td></tr>
-<tr><td class="rank">10</td><td class="name"><a href="https://github.com/TauricResearch/TradingAgents" target="_blank" rel="noopener">TauricResearch/TradingAgents</a></td><td>103,972</td><td class="gain">+367</td><td>Python</td><td class="desc">多智能体 LLM 金融交易框架，用大模型协作完成投研与交易决策。</td><td>TauricResearch</td><td><span class="tag">大模型</span><span class="tag">AI应用</span></td></tr>
-<tr><td class="rank">11</td><td class="name"><a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener">rohitg00/ai-engineering-from-scratch</a></td><td>53,711</td><td class="gain">+343</td><td>Python</td><td class="desc">从零开始的 AI 工程实践教程：学它、构建它、再交付给别人。</td><td>rohitg00</td><td><span class="tag">开源项目</span></td></tr>
-<tr><td class="rank">12</td><td class="name"><a href="https://github.com/earthtojake/text-to-cad" target="_blank" rel="noopener">earthtojake/text-to-cad</a></td><td>15,040</td><td class="gain">+124</td><td>Python</td><td class="desc">面向 CAD / CAE / CAM 的 Agent 技能库，用自然语言驱动工业设计。</td><td>earthtojake</td><td><span class="tag">AI应用</span><span class="tag">Skill</span></td></tr>
-<tr><td class="rank">13</td><td class="name"><a href="https://github.com/pascalorg/editor" target="_blank" rel="noopener">pascalorg/editor</a></td><td>22,940</td><td class="gain">+107</td><td>TypeScript</td><td class="desc">开源 3D 建筑编辑器，内置本地 CLI 与 MCP 工具，兼顾人类与 AI Agent 的工作流。</td><td>pascalorg</td><td><span class="tag">AI应用</span><span class="tag">开发者工具</span></td></tr>
-</tbody></table>
+<div class="list">
+<div class="trow thead"><div class="cell c-rank">#</div><div class="cell c-name">项目名称</div><div class="stats"><div class="cell c-star">当前star</div><div class="cell c-gain">24h+</div><div class="cell c-lang">开发语言</div></div><div class="cell c-desc">中文简介</div><div class="cell c-author">作者</div><div class="cell c-tags">标签</div></div>
+<div class="trow"><div class="cell c-rank">1</div><div class="cell c-name"><a href="https://github.com/ayghri/i-have-adhd" target="_blank" rel="noopener">ayghri/i-have-adhd</a></div><div class="stats"><div class="cell c-star">34,692</div><div class="cell c-gain">+4,650</div><div class="cell c-lang">Python</div></div><div class="cell c-desc">让编码 Agent 不再把答案埋在长篇输出里的 Skill，回答风格对 ADHD 用户更友好。</div><div class="cell c-author">ayghri</div><div class="cell c-tags"><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
+<div class="trow"><div class="cell c-rank">2</div><div class="cell c-name"><a href="https://github.com/cathrynlavery/diagram-design" target="_blank" rel="noopener">cathrynlavery/diagram-design</a></div><div class="stats"><div class="cell c-star">36,621</div><div class="cell c-gain">+2,249</div><div class="cell c-lang">HTML</div></div><div class="cell c-desc">面向 Claude Code、Codex、Pi 的 38 种编辑级图表模板，自包含 HTML + SVG，拒绝 Mermaid 味。</div><div class="cell c-author">cathrynlavery</div><div class="cell c-tags"><span class="tag">Web开发</span><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
+<div class="trow"><div class="cell c-rank">3</div><div class="cell c-name"><a href="https://github.com/liquidslr/system-design-notes" target="_blank" rel="noopener">liquidslr/system-design-notes</a></div><div class="stats"><div class="cell c-star">18,018</div><div class="cell c-gain">+1,397</div><div class="cell c-lang">Other</div></div><div class="cell c-desc">《System Design Interview》一书的学习笔记整理，系统设计面试要点速查。</div><div class="cell c-author">liquidslr</div><div class="cell c-tags"><span class="tag">开发者工具</span></div></div>
+<div class="trow"><div class="cell c-rank">4</div><div class="cell c-name"><a href="https://github.com/affaan-m/ECC" target="_blank" rel="noopener">affaan-m/ECC</a></div><div class="stats"><div class="cell c-star">255,192</div><div class="cell c-gain">+1,133</div><div class="cell c-lang">JavaScript</div></div><div class="cell c-desc">Agent harness 性能优化系统：为 Claude Code、Codex、Opencode、Cursor 等提供技能、本能、记忆、安全与科研优先的开发范式。</div><div class="cell c-author">affaan-m</div><div class="cell c-tags"><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
+<div class="trow"><div class="cell c-rank">5</div><div class="cell c-name"><a href="https://github.com/freestylefly/awesome-gpt-image-2" target="_blank" rel="noopener">freestylefly/awesome-gpt-image-2</a></div><div class="stats"><div class="cell c-star">30,076</div><div class="cell c-gain">+705</div><div class="cell c-lang">JavaScript</div></div><div class="cell c-desc">「Prompt as Code」GPT-Image2 工业级提示词引擎与模板库：530+ 案例逆向工程、20+ 套工业级模板，并提炼为 Skills 持续更新。</div><div class="cell c-author">freestylefly</div><div class="cell c-tags"><span class="tag">大模型</span><span class="tag">Skill</span></div></div>
+<div class="trow"><div class="cell c-rank">6</div><div class="cell c-name"><a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">obra/superpowers</a></div><div class="stats"><div class="cell c-star">284,040</div><div class="cell c-gain">+688</div><div class="cell c-lang">Shell</div></div><div class="cell c-desc">真正能跑通的 Agent 技能框架与软件开发方法论。</div><div class="cell c-author">obra</div><div class="cell c-tags"><span class="tag">大模型</span><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
+<div class="trow"><div class="cell c-rank">7</div><div class="cell c-name"><a href="https://github.com/Tencent/teamai-cli" target="_blank" rel="noopener">Tencent/teamai-cli</a></div><div class="stats"><div class="cell c-star">3,003</div><div class="cell c-gain">+556</div><div class="cell c-lang">TypeScript</div></div><div class="cell c-desc">腾讯开源的团队 AI 原生化 CLI 工具，目标是让每个团队都具备 AI 原生能力。</div><div class="cell c-author">Tencent</div><div class="cell c-tags"><span class="tag">AI应用</span></div></div>
+<div class="trow"><div class="cell c-rank">8</div><div class="cell c-name"><a href="https://github.com/openai/plugins" target="_blank" rel="noopener">openai/plugins</a></div><div class="stats"><div class="cell c-star">6,204</div><div class="cell c-gain">+498</div><div class="cell c-lang">JavaScript</div></div><div class="cell c-desc">OpenAI 官方插件仓库，提供插件规范与示例实现。</div><div class="cell c-author">openai</div><div class="cell c-tags"><span class="tag">AI应用</span></div></div>
+<div class="trow"><div class="cell c-rank">9</div><div class="cell c-name"><a href="https://github.com/vastsa/PI-Desktop" target="_blank" rel="noopener">vastsa/PI-Desktop</a></div><div class="stats"><div class="cell c-star">1,676</div><div class="cell c-gain">+417</div><div class="cell c-lang">TypeScript</div></div><div class="cell c-desc">本地优先的 AI 编码 Agent 桌面端：Electron + Rust 宿主内核 + pi Agent Harness，支持用户自行安装插件。</div><div class="cell c-author">vastsa</div><div class="cell c-tags"><span class="tag">AI应用</span></div></div>
+<div class="trow"><div class="cell c-rank">10</div><div class="cell c-name"><a href="https://github.com/TauricResearch/TradingAgents" target="_blank" rel="noopener">TauricResearch/TradingAgents</a></div><div class="stats"><div class="cell c-star">103,972</div><div class="cell c-gain">+367</div><div class="cell c-lang">Python</div></div><div class="cell c-desc">多智能体 LLM 金融交易框架，用大模型协作完成投研与交易决策。</div><div class="cell c-author">TauricResearch</div><div class="cell c-tags"><span class="tag">大模型</span><span class="tag">AI应用</span></div></div>
+<div class="trow"><div class="cell c-rank">11</div><div class="cell c-name"><a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener">rohitg00/ai-engineering-from-scratch</a></div><div class="stats"><div class="cell c-star">53,711</div><div class="cell c-gain">+343</div><div class="cell c-lang">Python</div></div><div class="cell c-desc">从零开始的 AI 工程实践教程：学它、构建它、再交付给别人。</div><div class="cell c-author">rohitg00</div><div class="cell c-tags"><span class="tag">开源项目</span></div></div>
+<div class="trow"><div class="cell c-rank">12</div><div class="cell c-name"><a href="https://github.com/earthtojake/text-to-cad" target="_blank" rel="noopener">earthtojake/text-to-cad</a></div><div class="stats"><div class="cell c-star">15,040</div><div class="cell c-gain">+124</div><div class="cell c-lang">Python</div></div><div class="cell c-desc">面向 CAD / CAE / CAM 的 Agent 技能库，用自然语言驱动工业设计。</div><div class="cell c-author">earthtojake</div><div class="cell c-tags"><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
+<div class="trow"><div class="cell c-rank">13</div><div class="cell c-name"><a href="https://github.com/pascalorg/editor" target="_blank" rel="noopener">pascalorg/editor</a></div><div class="stats"><div class="cell c-star">22,940</div><div class="cell c-gain">+107</div><div class="cell c-lang">TypeScript</div></div><div class="cell c-desc">开源 3D 建筑编辑器，内置本地 CLI 与 MCP 工具，兼顾人类与 AI Agent 的工作流。</div><div class="cell c-author">pascalorg</div><div class="cell c-tags"><span class="tag">AI应用</span><span class="tag">开发者工具</span></div></div>
+</div>
 <div class="foot">由 Hermes 定时任务每天 09:30 自动生成</div>
 </div></body></html>
