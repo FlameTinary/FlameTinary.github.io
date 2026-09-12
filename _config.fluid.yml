@@ -388,6 +388,7 @@ navbar:
     - { key: "tag", link: "/tags/", icon: "iconfont icon-tags-fill" }
     - { key: "about", link: "/about/", icon: "iconfont icon-user-fill" }
     - { key: "github-star-rank", link: "/github-star-rank/", icon: "iconfont icon-chart", name: "增长榜" }
+    - { key: "appstore-top-rank", link: "/appstore-top-rank/", icon: "iconfont icon-apple-fill", name: "每日app榜" }
     #- { key: "links", link: "/links/", icon: "iconfont icon-link-fill" }
 
 # 搜索功能，基于 hexo-generator-search 插件，若已安装其他搜索插件请关闭此功能，以避免生成多余的索引文件

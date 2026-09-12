@@ -32,6 +32,7 @@ skip_render:
   - dayvu-support/**
   - dayvu-privacy/**
   - github-star-rank/**
+  - appstore-top-rank/**
 
 # Writing
 new_post_name: :title.md # File name of new posts
