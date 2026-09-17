@@ -1,77 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8">
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GitHub 24小时 Star 增长榜</title>
+<title>已迁移：GitHub 增长榜 · TYPlatform</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://typlatform-web-production.tshot.workers.dev/rankings/github-star-rank">
+<meta http-equiv="refresh" content="0; url=https://typlatform-web-production.tshot.workers.dev/rankings/github-star-rank">
 <style>
-*{box-sizing:border-box;}
-body{font-family:-apple-system,'PingFang SC',Microsoft YaHei,sans-serif;background:#f6f8fa;color:#24292f;margin:0;padding:24px;-webkit-text-size-adjust:100%;}
-.wrap{max-width:1100px;margin:0 auto;background:#fff;border:1px solid #d0d7de;border-radius:8px;overflow:hidden;}
-.head{background:#24292f;color:#fff;padding:20px 28px;}
-.head h1{margin:0;font-size:20px;}
-.head p{margin:6px 0 0;font-size:12px;color:#c9ccd1;}
-.legend{padding:14px 28px;font-size:12px;color:#57606a;background:#f0f3f6;border-bottom:1px solid #d0d7de;}
-.list{font-size:13px;}
-.trow{display:grid;grid-template-columns:44px minmax(150px,1.6fr) 92px 84px 96px minmax(180px,2.2fr) 108px minmax(120px,1fr);border-bottom:1px solid #eaeef2;}
-.trow:last-child{border-bottom:0;}
-.trow.thead{background:#eaeef2;font-weight:600;}
-.trow:nth-child(even){background:#fafbfc;}
-.cell{padding:10px 12px;min-width:0;}
-.stats{display:contents;}
-.c-rank{color:#57606a;font-variant-numeric:tabular-nums;}
-.c-name{font-weight:600;overflow-wrap:break-word;}
-.c-name a{color:#0969da;text-decoration:none;}
-.c-gain{color:#1a7f37;font-weight:700;font-variant-numeric:tabular-nums;}
-.c-star{font-variant-numeric:tabular-nums;}
-.c-lang,.c-author{color:#57606a;}
-.c-desc{color:#57606a;}
-.tag{display:inline-block;background:#ddf4ff;color:#0969da;border:1px solid #b6e3ff;border-radius:10px;padding:1px 8px;margin:1px 3px 1px 0;font-size:11px;}
-.foot{padding:14px 28px;font-size:11px;color:#57606a;border-top:1px solid #d0d7de;}
-@media (max-width:940px){
-body{padding:12px;}
-.head{padding:16px;}
-.head h1{font-size:17px;line-height:1.35;}
-.head p{font-size:11px;line-height:1.6;}
-.legend{padding:10px 16px;line-height:1.7;}
-.trow{grid-template-columns:auto minmax(0,1fr);grid-template-areas:"rank name" "stats author" "desc desc" "tags tags";row-gap:8px;column-gap:8px;padding:14px 16px;}
-.trow.thead{display:none;}
-.cell{padding:0;}
-.trow>.c-rank{align-self:start;background:#eaeef2;color:#57606a;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:600;}
-.c-rank{grid-area:rank;}
-.c-name{grid-area:name;font-size:14px;line-height:1.45;}
-.stats{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;grid-area:stats;font-size:12px;}
-.c-star{color:#57606a;}
-.c-star::before{content:"★ ";}
-.c-gain,.c-lang{font-size:12px;}
-.c-author{grid-area:author;text-align:right;font-size:11px;color:#8c959f;align-self:start;}
-.c-desc{grid-area:desc;color:#57606a;font-size:12.5px;line-height:1.65;}
-.c-tags{grid-area:tags;line-height:1.8;}
-.foot{padding:12px 16px;line-height:1.6;}
-}
-@media (max-width:480px){
-.trow{grid-template-areas:"rank name" "stats stats" "desc desc" "tags tags" "author author";}
-.c-author{text-align:left;}
-.c-author::before{content:"作者：";}
-}
-</style></head><body><div class="wrap">
-<div class="head"><h1>🔥 GitHub 24 小时 Star 增长榜</h1>
-<p>数据时间：2026-09-17 09:30 (CST) · 来源：GitHub Trending + SnailDev + OpenGithubs 交叉核对</p></div>
-<div class="legend">按 24h 新增 star 从高到低排序 · 共 15 项 · 候选 21 个，已排除翻墙/代理类 0 个 · 另有 6 项超出 15 项上限未列入</div>
-<div class="list">
-<div class="trow thead"><div class="cell c-rank">#</div><div class="cell c-name">项目名称</div><div class="stats"><div class="cell c-star">当前star</div><div class="cell c-gain">24h+</div><div class="cell c-lang">开发语言</div></div><div class="cell c-desc">中文简介</div><div class="cell c-author">作者</div><div class="cell c-tags">标签</div></div>
-<div class="trow"><div class="cell c-rank">1</div><div class="cell c-name"><a href="https://github.com/alibaba/open-code-review" target="_blank" rel="noopener">alibaba/open-code-review</a></div><div class="stats"><div class="cell c-star">31950</div><div class="cell c-gain">+3231</div><div class="cell c-lang">Go</div></div><div class="cell c-desc">阿里巴巴大规模实战检验的代码审查工具：确定性流水线 + LLM Agent 混合架构，精确到行的评审意见，内置多语言规则集（NPE、线程安全、XSS、SQL 注入），兼容 OpenAI / Anthropic 接口。</div><div class="cell c-author">alibaba</div><div class="cell c-tags"><span class="tag">大模型</span><span class="tag">AI应用</span><span class="tag">开发者工具</span></div></div>
-<div class="trow"><div class="cell c-rank">2</div><div class="cell c-name"><a href="https://github.com/JustVugg/colibri" target="_blank" rel="noopener">JustVugg/colibri</a></div><div class="stats"><div class="cell c-star">35047</div><div class="cell c-gain">+1546</div><div class="cell c-lang">C</div></div><div class="cell c-desc">在你自己已有的硬件上跑前沿 MoE 大模型：纯 C 实现、零依赖，专家权重按需从磁盘流式加载，小引擎扛大模型。</div><div class="cell c-author">JustVugg</div><div class="cell c-tags"><span class="tag">大模型</span></div></div>
-<div class="trow"><div class="cell c-rank">3</div><div class="cell c-name"><a href="https://github.com/Tencent/WeKnora" target="_blank" rel="noopener">Tencent/WeKnora</a></div><div class="stats"><div class="cell c-star">25340</div><div class="cell c-gain">+1197</div><div class="cell c-lang">Go</div></div><div class="cell c-desc">腾讯开源的 LLM 知识平台：把原始文档变成可查询的 RAG、会自主推理的 Agent，以及能自我维护的 Wiki。</div><div class="cell c-author">Tencent</div><div class="cell c-tags"><span class="tag">大模型</span><span class="tag">AI应用</span></div></div>
-<div class="trow"><div class="cell c-rank">4</div><div class="cell c-name"><a href="https://github.com/abue-ammar/tinycast" target="_blank" rel="noopener">abue-ammar/tinycast</a></div><div class="stats"><div class="cell c-star">5610</div><div class="cell c-gain">+1179</div><div class="cell c-lang">Swift</div></div><div class="cell c-desc">极简的纯原生 macOS 启动器：一个热键搞定应用启动、快捷键与剪贴板历史，内存占用不到 100MB（Swift 原生、单人开发）。</div><div class="cell c-author">abue-ammar</div><div class="cell c-tags"><span class="tag">开发者工具</span></div></div>
-<div class="trow"><div class="cell c-rank">5</div><div class="cell c-name"><a href="https://github.com/NationalSecurityAgency/ghidra" target="_blank" rel="noopener">NationalSecurityAgency/ghidra</a></div><div class="stats"><div class="cell c-star">77823</div><div class="cell c-gain">+1059</div><div class="cell c-lang">Java</div></div><div class="cell c-desc">美国国家安全局开源的软件逆向工程（SRE）框架：反汇编、反编译、脚本化扩展与协作审计，安全研究领域事实上的标准工具。</div><div class="cell c-author">NationalSecurityAgency</div><div class="cell c-tags"><span class="tag">开源项目</span></div></div>
-<div class="trow"><div class="cell c-rank">6</div><div class="cell c-name"><a href="https://github.com/affaan-m/ECC" target="_blank" rel="noopener">affaan-m/ECC</a></div><div class="stats"><div class="cell c-star">260312</div><div class="cell c-gain">+1057</div><div class="cell c-lang">JavaScript</div></div><div class="cell c-desc">面向编码智能体的「性能优化底座」：为 Claude Code、Codex、Opencode、Cursor 等提供技能、直觉、记忆、安全与研究优先的开发范式。</div><div class="cell c-author">affaan-m</div><div class="cell c-tags"><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
-<div class="trow"><div class="cell c-rank">7</div><div class="cell c-name"><a href="https://github.com/alphaXiv/OpenResearch" target="_blank" rel="noopener">alphaXiv/OpenResearch</a></div><div class="stats"><div class="cell c-star">4433</div><div class="cell c-gain">+1017</div><div class="cell c-lang">Rust</div></div><div class="cell c-desc">用任意模型并行跑多个科研 Agent 的研究平台，把文献调研与实验探索并行化。</div><div class="cell c-author">alphaXiv</div><div class="cell c-tags"><span class="tag">AI应用</span></div></div>
-<div class="trow"><div class="cell c-rank">8</div><div class="cell c-name"><a href="https://github.com/cloudflare/security-audit-skill" target="_blank" rel="noopener">cloudflare/security-audit-skill</a></div><div class="stats"><div class="cell c-star">7314</div><div class="cell c-gain">+927</div><div class="cell c-lang">JavaScript</div></div><div class="cell c-desc">Cloudflare 出品的编码 Agent 技能：分阶段执行多轮安全审计，产出可机器读取、且经过独立复核的漏洞结论。</div><div class="cell c-author">cloudflare</div><div class="cell c-tags"><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
-<div class="trow"><div class="cell c-rank">9</div><div class="cell c-name"><a href="https://github.com/ever-co/ever-gauzy" target="_blank" rel="noopener">ever-co/ever-gauzy</a></div><div class="stats"><div class="cell c-star">7322</div><div class="cell c-gain">+778</div><div class="cell c-lang">TypeScript</div></div><div class="cell c-desc">Ever® Gauzy™ 开源企业经营管理平台，覆盖 ERP / CRM / HRM / ATS / 项目管理。</div><div class="cell c-author">ever-co</div><div class="cell c-tags"><span class="tag">企业软件</span></div></div>
-<div class="trow"><div class="cell c-rank">10</div><div class="cell c-name"><a href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">addyosmani/agent-skills</a></div><div class="stats"><div class="cell c-star">95469</div><div class="cell c-gain">+658</div><div class="cell c-lang">JavaScript</div></div><div class="cell c-desc">面向 AI 编程智能体的生产级工程技能集：把资深工程师的实践沉淀成可复用的技能模块，直接喂给编码 Agent 使用。</div><div class="cell c-author">addyosmani</div><div class="cell c-tags"><span class="tag">AI应用</span><span class="tag">Skill</span></div></div>
-<div class="trow"><div class="cell c-rank">11</div><div class="cell c-name"><a href="https://github.com/Lakr233/vphone-cli" target="_blank" rel="noopener">Lakr233/vphone-cli</a></div><div class="stats"><div class="cell c-star">13353</div><div class="cell c-gain">+547</div><div class="cell c-lang">Swift</div></div><div class="cell c-desc">在 Apple Silicon Mac 上借助 Apple Virtualization.framework 启动「虚拟 iPhone」的命令行工具（基于 PCC 研究虚拟机设施），面向 iOS 安全与逆向研究。</div><div class="cell c-author">Lakr233</div><div class="cell c-tags"><span class="tag">开源项目</span></div></div>
-<div class="trow"><div class="cell c-rank">12</div><div class="cell c-name"><a href="https://github.com/jamiepine/voicebox" target="_blank" rel="noopener">jamiepine/voicebox</a></div><div class="stats"><div class="cell c-star">54397</div><div class="cell c-gain">+417</div><div class="cell c-lang">TypeScript</div></div><div class="cell c-desc">开源 AI 语音工作室：声音克隆、语音听写与创作一体化。</div><div class="cell c-author">jamiepine</div><div class="cell c-tags"><span class="tag">AI应用</span></div></div>
-<div class="trow"><div class="cell c-rank">13</div><div class="cell c-name"><a href="https://github.com/SnailSploit/Claude-Red" target="_blank" rel="noopener">SnailSploit/Claude-Red</a></div><div class="stats"><div class="cell c-star">5781</div><div class="cell c-gain">+367</div><div class="cell c-lang">Python</div></div><div class="cell c-desc">面向 Claude Skills 体系整理的安全攻防技能库，每个 SKILL.md 覆盖一类攻击面——从 SQLi、Shellcode 到 EDR 规避与漏洞开发方法论。</div><div class="cell c-author">SnailSploit</div><div class="cell c-tags"><span class="tag">Skill</span></div></div>
-<div class="trow"><div class="cell c-rank">14</div><div class="cell c-name"><a href="https://github.com/multimodal-art-projection/YuE" target="_blank" rel="noopener">multimodal-art-projection/YuE</a></div><div class="stats"><div class="cell c-star">9379</div><div class="cell c-gain">+332</div><div class="cell c-lang">Python</div></div><div class="cell c-desc">YuE2 前沿音乐生成模型：符号化音乐规划、零样本翻唱与智能体式音乐编辑。</div><div class="cell c-author">multimodal-art-projection</div><div class="cell c-tags"><span class="tag">大模型</span><span class="tag">AI应用</span></div></div>
-<div class="trow"><div class="cell c-rank">15</div><div class="cell c-name"><a href="https://github.com/roboflow/supervision" target="_blank" rel="noopener">roboflow/supervision</a></div><div class="stats"><div class="cell c-star">50605</div><div class="cell c-gain">+260</div><div class="cell c-lang">Python</div></div><div class="cell c-desc">Roboflow 出品的可复用计算机视觉工具库：标注绘制、区域计数、目标追踪等常用 CV 后处理件一应俱全。</div><div class="cell c-author">roboflow</div><div class="cell c-tags"><span class="tag">开发者工具</span></div></div>
-<div class="foot">由 Hermes 定时任务每天 09:30 自动生成</div>
-</div></body></html>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center;
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+    color: #242642; background: radial-gradient(850px 580px at 3% 1%, #fceaf2a8, transparent 68%),
+    radial-gradient(900px 620px at 92% 4%, #e9eaffb8, transparent 72%), #f8f9fd; }
+  main { max-width: 520px; padding: 32px 34px; border-radius: 16px;
+    background: rgba(255,255,255,.63); border: 1px solid rgba(255,255,255,.92);
+    box-shadow: 0 7px 30px rgba(75,65,135,.08); }
+  h1 { font-size: 17px; margin: 0 0 10px; }
+  p { font-size: 13px; line-height: 1.8; color: #71738c; margin: 0 0 8px; }
+  a { color: #7c6cf0; word-break: break-all; }
+</style>
+</head>
+<body>
+<main>
+  <h1>GitHub 增长榜已迁移</h1>
+  <p>GitHub 24 小时 Star 增长榜已迁到 TYPlatform 排行榜，由采集任务每天更新。</p>
+  <p>正在跳转，若没有自动跳转请点这里：<br><a href="https://typlatform-web-production.tshot.workers.dev/rankings/github-star-rank">https://typlatform-web-production.tshot.workers.dev/rankings/github-star-rank</a></p>
+</main>
+</body>
+</html>
